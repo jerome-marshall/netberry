@@ -1,5 +1,6 @@
 import { type NextPage } from "next";
 import { api } from "../utils/api";
+import Layout from "../components/Layout";
 
 const Home: NextPage = () => {
   const { data } = api.site.getAll.useQuery();
@@ -8,16 +9,10 @@ const Home: NextPage = () => {
   });
   console.log("🚀 ~ file: index.tsx:6 ~ data", deployData);
   return (
-    <div>
-      <h1>Welcome to NetBerry</h1>
-      <div className="">
-        <h2 className="">Sites</h2>
-        <div className="sites">
-          {data?.map((site) => (
-            <p key={site.site_id}>{site.name}</p>
-          ))}
-        </div>
-      </div>
+    <div className="landing-page">
+      <Layout>
+        <h1>Sites</h1>
+      </Layout>
     </div>
   );
 };
