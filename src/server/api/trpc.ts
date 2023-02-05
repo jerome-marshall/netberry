@@ -31,7 +31,6 @@ const axiosInstance = axios.create({
   baseURL: "https://api.netlify.com/api/v1",
   headers: {
     "Content-Type": "application/json",
-    Authorization: "Bearer Qk2e4iPbdNgckQ7LAMZIkwjRtSTggsMj2vd8UndHNcA",
   },
 });
 /**

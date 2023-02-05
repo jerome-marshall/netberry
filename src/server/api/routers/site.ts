@@ -3,11 +3,20 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 import { handleError } from "./../../../utils/utils";
 
 export const siteRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: publicProcedure.query(async ({ ctx: { prisma, axios } }) => {
     try {
-      const res = await ctx.axios.get<NetlifySite[]>("/sites");
-      const data = res.data;
-      return data;
+      const accounts = await prisma.netlifyAccount.findMany();
+      if (accounts) {
+        const sites = accounts.map(async (account) => {
+          const res = await axios.get<NetlifySite[]>("/sites", {
+            headers: { Authorization: `Bearer ${account.token}` },
+          });
+          return { account, sites: res.data };
+        });
+
+        const resolvedSites = await Promise.all(sites);
+        return resolvedSites;
+      }
     } catch (error) {
       handleError(error);
     }
