@@ -21,10 +21,19 @@ import { type Session } from "next-auth";
 import { getServerAuthSession } from "../auth";
 import { prisma } from "../db";
 
+import axios from "axios";
+
 type CreateContextOptions = {
   session: Session | null;
 };
 
+const axiosInstance = axios.create({
+  baseURL: "https://api.netlify.com/api/v1",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer Qk2e4iPbdNgckQ7LAMZIkwjRtSTggsMj2vd8UndHNcA",
+  },
+});
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
  * it, you can export it from here.
@@ -39,6 +48,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
+    axios: axiosInstance,
   };
 };
 
