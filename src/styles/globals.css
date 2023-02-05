@@ -12,3 +12,13 @@
     @apply bg-background-primary text-text-primary;
   }
 }
+
+@layer utilities {
+  .divider {
+    @apply h-[2px] w-full bg-background-active;
+  }
+
+  .card-item {
+    @apply flex bg-background-secondary px-card_pad py-3 hover:bg-background-active;
+  }
+}

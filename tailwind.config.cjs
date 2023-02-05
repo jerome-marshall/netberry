@@ -3,7 +3,11 @@
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      padding: {
+        card_pad: "24px",
+      },
+    },
     container: {
       center: true,
       padding: {
@@ -23,7 +27,7 @@ module.exports = {
       gray: "#4c5257",
       text: {
         primary: "#e7eaed",
-        muted: "a3a7ac",
+        muted: "#a3a7ac",
       },
       blue: {
         lighter: "#a6bffd",

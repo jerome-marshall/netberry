@@ -2,6 +2,8 @@ export type NetlifySite = {
   id: string;
   site_id: string;
   name: string;
+  screenshot_url: string;
+  url: string;
 };
 
 export type NetlifyDeploy = {
