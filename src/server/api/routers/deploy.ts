@@ -15,4 +15,23 @@ export const deployRouter = createTRPCRouter({
         handleError(error);
       }
     }),
+
+  triggerBuild: publicProcedure
+    .input(
+      z.object({
+        clear_cache: z.boolean(),
+        site_id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx: { axios }, input: { clear_cache, site_id } }) => {
+      try {
+        const res = await axios.post(`/sites/${site_id}/builds`, {
+          clear_cache,
+        });
+        console.log("🚀 ~ file: deploy.ts:30 ~ .mutation ~ res", res);
+        return res;
+      } catch (error) {
+        handleError(error);
+      }
+    }),
 });

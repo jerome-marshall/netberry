@@ -4,6 +4,13 @@ export type NetlifySite = {
   name: string;
   screenshot_url: string;
   url: string;
+  build_settings: {
+    provider: string;
+    repo_url: string;
+  };
+  published_deploy: {
+    published_at: string;
+  };
 };
 
 export type NetlifyDeploy = {

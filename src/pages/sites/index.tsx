@@ -14,7 +14,8 @@ const SitesPage: NextPage = () => {
       </div>
       <div>
         {sites.map((site) => (
-          <div
+          <Link
+            href={`/sites/${site.id}`}
             key={site.id + site.name}
             className="card-item cursor-pointer gap-6"
           >
@@ -32,7 +33,7 @@ const SitesPage: NextPage = () => {
                 {site.url}
               </Link>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

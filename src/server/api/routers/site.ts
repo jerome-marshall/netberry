@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { NetlifySite } from "../../../types";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { handleError } from "./../../../utils/utils";
@@ -22,4 +23,19 @@ export const siteRouter = createTRPCRouter({
       handleError(error);
     }
   }),
+
+  getByID: publicProcedure
+    .input(
+      z.object({
+        site_id: z.string(),
+      })
+    )
+    .query(async ({ ctx: { axios }, input: { site_id } }) => {
+      try {
+        const res = await axios.get<NetlifySite>(`/sites/${site_id}`);
+        return res.data;
+      } catch (error) {
+        handleError(error);
+      }
+    }),
 });

@@ -37,7 +37,7 @@ module.exports = {
       teal: {
         lighter: "#84f3df",
         light: "#30c8c9",
-        dark: "032b3a",
+        dark: "#032b3a",
       },
     },
     fontFamily: {
