@@ -1,20 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
-import type { FC } from "react";
-import React from "react";
-import Card from "./Card";
-import type { NetlifySite } from "../types";
 import Link from "next/link";
+import { FC } from "react";
+import useSites from "../hooks/useSites";
+import Card from "./Card";
 
-interface SitesCardProps {
-  sites: NetlifySite[];
-}
+const SitesCard: FC = () => {
+  const { sites } = useSites();
+  console.log("🚀 ~ file: SitesCard.tsx:9 ~ sites", sites);
 
-const SitesCard: FC<SitesCardProps> = ({ sites }) => {
-  console.log("🚀 ~ file: SitesCard.tsx:10 ~ sites", sites);
   return (
     <Card title="Sites" titleLink="/">
       {sites.map((site) => (
-        <div key={site.id} className="card-item cursor-pointer gap-6">
+        <div
+          key={site.id + site.name}
+          className="card-item cursor-pointer gap-6"
+        >
           <img
             src={site.screenshot_url}
             alt=""

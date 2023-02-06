@@ -11,6 +11,10 @@
     font-family: "Noto Sans JP", sans-serif;
     @apply bg-background-primary text-text-primary;
   }
+
+  h1 {
+    @apply text-4xl font-medium;
+  }
 }
 
 @layer utilities {

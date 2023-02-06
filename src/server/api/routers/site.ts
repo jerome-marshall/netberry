@@ -11,7 +11,8 @@ export const siteRouter = createTRPCRouter({
           const res = await axios.get<NetlifySite[]>("/sites", {
             headers: { Authorization: `Bearer ${account.token}` },
           });
-          return { account, sites: res.data };
+          const { token, ...restAccount } = account;
+          return { account: restAccount, sites: res.data };
         });
 
         const resolvedSites = await Promise.all(sites);
