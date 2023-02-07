@@ -10,7 +10,6 @@ const SiteDetailPage = () => {
   const site_id = query.site_id as string;
 
   const { data, error, isLoading } = api.site.getByID.useQuery({ site_id });
-  console.log("🚀 ~ file: [site_id].tsx:13 ~ SiteDetailPage ~ data", data);
 
   if (isLoading) return <div>Loading...</div>;
 

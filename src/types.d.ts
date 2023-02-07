@@ -13,6 +13,16 @@ export type NetlifySite = {
   };
 };
 
+export type BuildTriggerRes =  {
+  id: string;
+  deploy_id: string;
+  done: boolean;
+  error: unknown;
+  created_at: string;
+  deploy_state: string;
+  deploy_pending_review_reason: string;
+}
+
 export type NetlifyDeploy = {
   id: string;
   site_id: string;

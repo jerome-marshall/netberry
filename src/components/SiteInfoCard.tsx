@@ -7,19 +7,20 @@ import { SiNetlify } from "react-icons/si";
 import { FaBolt } from "react-icons/fa";
 import { MdCleaningServices } from "react-icons/md";
 import { api } from "../utils/api";
+import SiteImg from "../assets/netlify-site.png";
+import Image from "next/image";
 
 type Props = {
   siteInfo: NetlifySite;
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
-  console.log("🚀 ~ file: SiteInfoCard.tsx:16 ~ siteInfo", siteInfo);
   const formatedDate = format(
     new Date(siteInfo.published_deploy.published_at),
     "LLL dd"
   );
 
-  const { mutate } = api.deploy.triggerBuild.useMutation();
+  const { mutate, data } = api.deploy.triggerBuild.useMutation();
 
   return (
     <div className="site-info-card max-w-2xl rounded-medium bg-background-secondary p-card_pad">
@@ -46,11 +47,27 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
           </p>
           <p className=" text-text-muted">Last published on {formatedDate}.</p>
         </div>
-        <img
-          src={siteInfo.screenshot_url}
-          alt="site-img"
-          className="h-[104px] w-[168px] rounded-medium"
-        />
+        <Link
+          href={siteInfo.url}
+          className="image-section relative h-[104px] w-[168px] overflow-hidden rounded-medium"
+        >
+          {siteInfo.screenshot_url ? (
+            <img
+              src={siteInfo.screenshot_url}
+              alt="site-img"
+              className="h-full w-full"
+            />
+          ) : (
+            <Image
+              src={SiteImg}
+              alt="site-img"
+              height={104}
+              width={168}
+              className="h-full w-full"
+            />
+          )}
+          <div className="absolute inset-0 h-full w-full bg-background-primary opacity-10 transition-all duration-200 hover:opacity-0"></div>
+        </Link>
       </div>
       <div className="mt-6 flex gap-4">
         <Link href={""} className="button flex items-center gap-2">
@@ -60,8 +77,8 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
         <button
           className="button flex items-center gap-2"
           onClick={() => {
-            const res = mutate({
-              clear_cache: true,
+            mutate({
+              clear_cache: false,
               site_id: siteInfo.id,
             });
           }}
@@ -69,10 +86,18 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
           <FaBolt />
           <span>Trigger build</span>
         </button>
-        <Link href={""} className="button flex items-center gap-2">
+        <button
+          className="button flex items-center gap-2"
+          onClick={() => {
+            mutate({
+              clear_cache: true,
+              site_id: siteInfo.id,
+            });
+          }}
+        >
           <MdCleaningServices />
           <span>Clear cache and build</span>
-        </Link>
+        </button>
       </div>
     </div>
   );

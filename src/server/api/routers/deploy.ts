@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { handleError } from "../../../utils/utils";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import type { NetlifyDeploy } from "./../../../types";
+import type { BuildTriggerRes, NetlifyDeploy } from "./../../../types";
 
 export const deployRouter = createTRPCRouter({
   getAll: publicProcedure
@@ -25,11 +25,10 @@ export const deployRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx: { axios }, input: { clear_cache, site_id } }) => {
       try {
-        const res = await axios.post(`/sites/${site_id}/builds`, {
+        const res = await axios.post<BuildTriggerRes>(`/sites/${site_id}/builds`, {
           clear_cache,
         });
-        console.log("🚀 ~ file: deploy.ts:30 ~ .mutation ~ res", res);
-        return res;
+        return res.data;
       } catch (error) {
         handleError(error);
       }
