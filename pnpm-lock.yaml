@@ -12,6 +12,7 @@ specifiers:
   '@types/prettier': ^2.7.2
   '@types/react': ^18.0.26
   '@types/react-dom': ^18.0.10
+  '@types/voca': ^1.4.2
   '@typescript-eslint/eslint-plugin': ^5.47.1
   '@typescript-eslint/parser': ^5.47.1
   autoprefixer: ^10.4.7
@@ -31,6 +32,7 @@ specifiers:
   superjson: 1.9.1
   tailwindcss: ^3.2.0
   typescript: ^4.9.4
+  voca: ^1.4.0
   zod: ^3.20.2
 
 dependencies:
@@ -41,6 +43,7 @@ dependencies:
   '@trpc/next': 10.10.0_ngwrfmgr4sjzncpabpxzk5etba
   '@trpc/react-query': 10.10.0_5mhyv2iryamqlilh5gtjpyz23q
   '@trpc/server': 10.10.0
+  '@types/voca': 1.4.2
   axios: 1.3.2
   date-fns: 2.29.3
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
@@ -49,6 +52,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.7.1_react@18.2.0
   superjson: 1.9.1
+  voca: 1.4.0
   zod: 3.20.2
 
 devDependencies:
@@ -431,6 +435,10 @@ packages:
   /@types/semver/7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
     dev: true
+
+  /@types/voca/1.4.2:
+    resolution: {integrity: sha512-Vmw8euGSdVlcDV69LoixtuervYUim5u6Vgp41PNxrHVGIo4vxSKMhW0I9MmBKbk3gtveNFzdHIVzyW1DpECzYw==}
+    dev: false
 
   /@typescript-eslint/eslint-plugin/5.50.0_go4drrxstycfikanvu45pi4vgq:
     resolution: {integrity: sha512-vwksQWSFZiUhgq3Kv7o1Jcj0DUNylwnIlGvKvLLYsq8pAWha6/WCnXUeaSoNNha/K7QSf2+jvmkxggC1u3pIwQ==}
@@ -2895,6 +2903,10 @@ packages:
   /uuid/8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
+    dev: false
+
+  /voca/1.4.0:
+    resolution: {integrity: sha512-8Xz4H3vhYRGbFupLtl6dHwMx0ojUcjt0HYkqZ9oBCfipd/5mD7Md58m2/dq7uPuZU/0T3Gb1m66KS9jn+I+14Q==}
     dev: false
 
   /which-boxed-primitive/1.0.2:

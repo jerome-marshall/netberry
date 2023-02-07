@@ -13,7 +13,7 @@ export type NetlifySite = {
   };
 };
 
-export type BuildTriggerRes =  {
+export type BuildTriggerRes = {
   id: string;
   deploy_id: string;
   done: boolean;
@@ -21,7 +21,7 @@ export type BuildTriggerRes =  {
   created_at: string;
   deploy_state: string;
   deploy_pending_review_reason: string;
-}
+};
 
 export type NetlifyDeploy = {
   id: string;
@@ -30,4 +30,8 @@ export type NetlifyDeploy = {
   published_at: string;
   ssl_url: string;
   state: string;
+  error_message: string;
+  title: string;
+  branch: string;
+  context: string;
 };

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NetlifySite } from "../../types";
 import { api } from "../../utils/api";
 import SiteInfoCard from "../../components/SiteInfoCard";
+import DeploysCard from "../../components/DeploysCard";
 
 const SiteDetailPage = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ const SiteDetailPage = () => {
   return (
     <div>
       <SiteInfoCard siteInfo={data} />
+      <DeploysCard site_id={site_id} />
     </div>
   );
 };

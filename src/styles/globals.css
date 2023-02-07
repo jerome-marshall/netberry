@@ -21,6 +21,14 @@
   .button {
     @apply cursor-pointer rounded-medium bg-gray px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-teal-dark;
   }
+
+  .status {
+    @apply rounded-medium px-1 text-xs font-bold capitalize leading-loose;
+  }
+
+  .status-grey {
+    @apply status bg-gray text-white;
+  }
 }
 
 @layer utilities {

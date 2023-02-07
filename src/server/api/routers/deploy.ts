@@ -8,7 +8,9 @@ export const deployRouter = createTRPCRouter({
     .input(z.object({ site_id: z.string() }))
     .query(async ({ ctx: { axios }, input: { site_id } }) => {
       try {
-        const res = await axios.get<NetlifyDeploy>(`/sites/${site_id}/deploys`);
+        const res = await axios.get<NetlifyDeploy[]>(
+          `/sites/${site_id}/deploys`
+        );
         const data = res.data;
         return data;
       } catch (error) {
@@ -25,9 +27,12 @@ export const deployRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx: { axios }, input: { clear_cache, site_id } }) => {
       try {
-        const res = await axios.post<BuildTriggerRes>(`/sites/${site_id}/builds`, {
-          clear_cache,
-        });
+        const res = await axios.post<BuildTriggerRes>(
+          `/sites/${site_id}/builds`,
+          {
+            clear_cache,
+          }
+        );
         return res.data;
       } catch (error) {
         handleError(error);
