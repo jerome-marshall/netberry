@@ -34,4 +34,5 @@ export type NetlifyDeploy = {
   title: string;
   branch: string;
   context: string;
+  deploy_url: string;
 };

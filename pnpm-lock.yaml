@@ -17,6 +17,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.47.1
   autoprefixer: ^10.4.7
   axios: ^1.3.2
+  clsx: ^1.2.1
   date-fns: ^2.29.3
   eslint: ^8.30.0
   eslint-config-next: 13.1.6
@@ -43,8 +44,8 @@ dependencies:
   '@trpc/next': 10.10.0_ngwrfmgr4sjzncpabpxzk5etba
   '@trpc/react-query': 10.10.0_5mhyv2iryamqlilh5gtjpyz23q
   '@trpc/server': 10.10.0
-  '@types/voca': 1.4.2
   axios: 1.3.2
+  clsx: 1.2.1
   date-fns: 2.29.3
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.19.2_3vryta7zmbcsw4rrqf4axjqggm
@@ -60,6 +61,7 @@ devDependencies:
   '@types/prettier': 2.7.2
   '@types/react': 18.0.27
   '@types/react-dom': 18.0.10
+  '@types/voca': 1.4.2
   '@typescript-eslint/eslint-plugin': 5.50.0_go4drrxstycfikanvu45pi4vgq
   '@typescript-eslint/parser': 5.50.0_4vsywjlpuriuw3tl5oq6zy5a64
   autoprefixer: 10.4.13_postcss@8.4.21
@@ -438,7 +440,7 @@ packages:
 
   /@types/voca/1.4.2:
     resolution: {integrity: sha512-Vmw8euGSdVlcDV69LoixtuervYUim5u6Vgp41PNxrHVGIo4vxSKMhW0I9MmBKbk3gtveNFzdHIVzyW1DpECzYw==}
-    dev: false
+    dev: true
 
   /@typescript-eslint/eslint-plugin/5.50.0_go4drrxstycfikanvu45pi4vgq:
     resolution: {integrity: sha512-vwksQWSFZiUhgq3Kv7o1Jcj0DUNylwnIlGvKvLLYsq8pAWha6/WCnXUeaSoNNha/K7QSf2+jvmkxggC1u3pIwQ==}
@@ -821,6 +823,11 @@ packages:
 
   /client-only/0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+    dev: false
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert/2.0.1:

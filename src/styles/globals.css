@@ -29,6 +29,15 @@
   .status-grey {
     @apply status bg-gray text-white;
   }
+  .status-gold {
+    @apply status bg-gold-dark text-gold-light;
+  }
+  .status-teal {
+    @apply status bg-teal-dark text-teal-lighter;
+  }
+  .status-red {
+    @apply status bg-red-dark text-red-light;
+  }
 }
 
 @layer utilities {
@@ -37,6 +46,6 @@
   }
 
   .card-item {
-    @apply flex bg-background-secondary px-card_pad py-3 hover:bg-background-active;
+    @apply flex bg-background-secondary px-card_pad py-3 transition-all duration-150 even:bg-background-active hover:bg-background-active;
   }
 }

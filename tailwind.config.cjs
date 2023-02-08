@@ -39,6 +39,14 @@ module.exports = {
         light: "#30c8c9",
         dark: "#032b3a",
       },
+      gold: {
+        light: "#ffcf50",
+        dark: "#4f2f03",
+      },
+      red: {
+        light: "#ff9987",
+        dark: "#470a1a",
+      },
     },
     fontFamily: {
       "noto-sans": ["Noto Sans JP", "sans-serif"],
