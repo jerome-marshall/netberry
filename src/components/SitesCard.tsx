@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FC } from "react";
 import useSites from "../hooks/useSites";
 import Card from "./Card";
+import { SitesLandingURL } from "../utils/urls";
 
 const SitesCard: FC = () => {
   const { sites } = useSites();
@@ -11,7 +12,8 @@ const SitesCard: FC = () => {
   return (
     <Card title="Sites" titleLink="/">
       {sites.map((site) => (
-        <div
+        <Link
+          href={`${SitesLandingURL}/${site.id}`}
           key={site.id + site.name}
           className="card-item cursor-pointer gap-6"
         >
@@ -29,7 +31,7 @@ const SitesCard: FC = () => {
               {site.url}
             </Link>
           </div>
-        </div>
+        </Link>
       ))}
     </Card>
   );

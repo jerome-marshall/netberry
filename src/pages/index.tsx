@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import { NetlifySite } from "../types";
 import { api } from "../utils/api";
 import SitesCard from "../components/SitesCard";
+import DeploysCard from "../components/DeploysCard";
 
 const Home: NextPage = () => {
   return (

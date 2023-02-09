@@ -46,6 +46,10 @@
   }
 
   .card-item {
-    @apply flex bg-background-secondary px-card_pad py-3 transition-all duration-150 even:bg-background-active hover:bg-background-active;
+    @apply flex bg-background-secondary px-card_pad py-3 transition-all duration-100 ease-in-out even:bg-background-active hover:bg-background-active;
+  }
+
+  .transition-custom {
+    @apply transition-all duration-100 ease-in-out;
   }
 }

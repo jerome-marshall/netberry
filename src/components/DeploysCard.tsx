@@ -10,6 +10,7 @@ import {
   getStatusTheme,
 } from "../utils/deployUtils";
 import clsx from "clsx";
+import { GoChevronRight } from "react-icons/go";
 
 type Props = {
   site_id: string;
@@ -32,7 +33,7 @@ const DeploysCard: FC<Props> = ({ site_id }) => {
             <div
               key={id}
               className={clsx(
-                "card-item cursor-pointer justify-between gap-6",
+                "card-item group cursor-pointer justify-between gap-6",
                 published_at && "card-item-muted"
               )}
             >
@@ -64,22 +65,29 @@ const DeploysCard: FC<Props> = ({ site_id }) => {
                   {getDeployMessage(deploy)}
                 </p>
               </div>
-              <div className="flex flex-col items-end justify-center">
-                <p
-                  className={clsx(
-                    "text-sm  ",
-                    published_at
-                      ? "font-bold text-white"
-                      : "font-normal text-text-muted"
-                  )}
-                >
-                  {getDeployTime(created_at)}
-                </p>
-                {published_at && (
-                  <p className="mt-1 text-xs text-text-muted">
-                    Deployed in {getDeployDuration(created_at, published_at)}
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col items-end justify-center">
+                  <p
+                    className={clsx(
+                      "text-sm  ",
+                      published_at
+                        ? "font-bold text-white"
+                        : "font-normal text-text-muted"
+                    )}
+                  >
+                    {getDeployTime(created_at)}
                   </p>
-                )}
+                  {published_at && (
+                    <p className="mt-1 text-xs text-text-muted">
+                      Deployed in {getDeployDuration(created_at, published_at)}
+                    </p>
+                  )}
+                </div>
+                <GoChevronRight
+                  className={clsx(
+                    "transition-custom h-3 w-3 text-text-muted group-hover:text-white"
+                  )}
+                />
               </div>
             </div>
           );

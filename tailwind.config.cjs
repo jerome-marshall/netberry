@@ -13,6 +13,10 @@ module.exports = {
       padding: {
         DEFAULT: "1.25rem",
       },
+      screens: {
+        "xl": "1240px",
+        "2xl": "1240px",
+      }
     },
     borderRadius: {
       medium: "8px",
