@@ -1,7 +1,8 @@
+import { formatAccount } from "./../../serverUtils";
 import { z } from "zod";
 import type { NetlifySite } from "../../../types";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { handleError } from "./../../../utils/utils";
+import { exclude, handleError } from "../../serverUtils";
 
 export const siteRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx: { prisma, axios } }) => {
@@ -12,8 +13,8 @@ export const siteRouter = createTRPCRouter({
           const res = await axios.get<NetlifySite[]>("/sites", {
             headers: { Authorization: `Bearer ${account.token}` },
           });
-          const { token, ...restAccount } = account;
-          return { account: restAccount, sites: res.data };
+          const frAccount = formatAccount(account);
+          return { account: frAccount, sites: res.data };
         });
 
         const resolvedSites = await Promise.all(sites);

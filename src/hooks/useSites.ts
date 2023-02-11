@@ -5,7 +5,7 @@ import { NetlifySite } from "./../types.d";
 const useSites = () => {
   const [sites, setSites] = useState<NetlifySite[]>([]);
 
-  const { data, error, isLoading } = api.site.getAll.useQuery();
+  const { data, error, isLoading } = api.sites.getAll.useQuery();
 
   useEffect(() => {
     if (data) {
@@ -24,7 +24,7 @@ const useSites = () => {
     }
   }, [data]);
 
-  return { sites, error, isLoading};
+  return { sites, error, isLoading };
 };
 
 export default useSites;

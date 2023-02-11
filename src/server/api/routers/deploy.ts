@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { handleError } from "../../../utils/utils";
+import { handleError } from "../../serverUtils";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import type { BuildTriggerRes, NetlifyDeploy } from "./../../../types";
 

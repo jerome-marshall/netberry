@@ -11,14 +11,14 @@ import {
 } from "../utils/deployUtils";
 import clsx from "clsx";
 import { GoChevronRight } from "react-icons/go";
+import RightArrow from "./RightArrow";
 
 type Props = {
   site_id: string;
 };
 
 const DeploysCard: FC<Props> = ({ site_id }) => {
-  const { data } = api.deploy.getAll.useQuery({ site_id });
-  console.log("🚀 ~ file: DeploysCard.tsx:10 ~ data", data);
+  const { data } = api.deploys.getAll.useQuery({ site_id });
 
   if (!data) return null;
   return (
@@ -83,11 +83,7 @@ const DeploysCard: FC<Props> = ({ site_id }) => {
                     </p>
                   )}
                 </div>
-                <GoChevronRight
-                  className={clsx(
-                    "transition-custom h-3 w-3 text-text-muted group-hover:text-white"
-                  )}
-                />
+                <RightArrow />
               </div>
             </div>
           );

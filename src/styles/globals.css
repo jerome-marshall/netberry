@@ -38,15 +38,15 @@
   .status-red {
     @apply status bg-red-dark text-red-light;
   }
+
+  .card-item {
+    @apply flex cursor-pointer items-center bg-background-secondary px-card_pad py-3 transition-all duration-100 ease-in-out even:bg-background-active hover:bg-background-active;
+  }
 }
 
 @layer utilities {
   .divider {
     @apply h-[2px] w-full bg-background-active;
-  }
-
-  .card-item {
-    @apply flex bg-background-secondary px-card_pad py-3 transition-all duration-100 ease-in-out even:bg-background-active hover:bg-background-active;
   }
 
   .transition-custom {

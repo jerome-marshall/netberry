@@ -4,7 +4,7 @@ export type NetlifySite = {
   name: string;
   screenshot_url: string;
   url: string;
-  build_settings: {
+  build_settings?: {
     provider: string;
     repo_url: string;
   };
@@ -35,4 +35,12 @@ export type NetlifyDeploy = {
   branch: string;
   context: string;
   deploy_url: string;
+};
+
+export type NetlifyAccountCustom = {
+  id: string;
+  name: string;
+  email: string;
+  slug?: string;
+  token?: string;
 };

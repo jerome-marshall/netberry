@@ -10,7 +10,7 @@ const SiteDetailPage = () => {
   const query = router.query;
   const site_id = query.site_id as string;
 
-  const { data, error, isLoading } = api.site.getByID.useQuery({ site_id });
+  const { data, error, isLoading } = api.sites.getByID.useQuery({ site_id });
 
   if (isLoading) return <div>Loading...</div>;
 
