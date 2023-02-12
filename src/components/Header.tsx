@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { FC, useEffect } from "react";
 import React from "react";
 import netberryLogo from "../assets/netberry.png";
 import Image from "next/image";
@@ -10,7 +10,11 @@ import clsx from "clsx";
 // }
 
 const Header: FC = () => {
-  const location = typeof window !== "undefined" && window.location;
+  const [location, setLocation] = React.useState<Location>();
+
+  useEffect(() => {
+    setLocation(window.location);
+  }, []);
 
   return (
     <div className="header flex items-center justify-between py-8">
