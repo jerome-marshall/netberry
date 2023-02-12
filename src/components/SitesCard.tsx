@@ -11,7 +11,7 @@ const SitesCard: FC = () => {
 
   return (
     <div className="col-span-8">
-      <Card title="Sites" titleLink="/">
+      <Card title="Sites" titleLink={SitesLandingURL}>
         {sites.map((site) => (
           <Link
             href={`${SitesLandingURL}/${site.id}`}
