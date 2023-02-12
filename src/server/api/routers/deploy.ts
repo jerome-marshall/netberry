@@ -9,7 +9,7 @@ export const deployRouter = createTRPCRouter({
     .query(async ({ ctx: { axios }, input: { site_id } }) => {
       try {
         const res = await axios.get<NetlifyDeploy[]>(
-          `/sites/${site_id}/deploys`
+          `/sites/${site_id}/deploys?per_page=10`
         );
         const data = res.data;
         return data;

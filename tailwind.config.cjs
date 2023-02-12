@@ -14,9 +14,9 @@ module.exports = {
         DEFAULT: "1.25rem",
       },
       screens: {
-        "xl": "1240px",
+        xl: "1240px",
         "2xl": "1240px",
-      }
+      },
     },
     borderRadius: {
       medium: "8px",
@@ -26,6 +26,7 @@ module.exports = {
         primary: "#070b0d",
         secondary: "#151a1e",
         active: "#1e2327",
+        active_hover: "#21272b",
       },
       white: "#ffffff",
       gray: "#4c5257",

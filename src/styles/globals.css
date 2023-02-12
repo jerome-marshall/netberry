@@ -40,7 +40,7 @@
   }
 
   .card-item {
-    @apply flex cursor-pointer items-center bg-background-secondary px-card_pad py-3 transition-all duration-100 ease-in-out even:bg-background-active hover:bg-background-active;
+    @apply flex cursor-pointer items-center bg-background-secondary px-card_pad py-3 transition-all duration-100 ease-in-out even:bg-background-active hover:bg-background-active_hover;
   }
 }
 

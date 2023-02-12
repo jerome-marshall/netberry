@@ -8,9 +8,11 @@ export type NetlifySite = {
     provider: string;
     repo_url: string;
   };
+  repo_url: string;
   published_deploy: {
     published_at: string;
   };
+  admin_url: string;
 };
 
 export type BuildTriggerRes = {

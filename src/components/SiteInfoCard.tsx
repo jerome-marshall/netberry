@@ -20,8 +20,15 @@ type Props = {
 
 const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
   console.log("🚀 ~ file: SiteInfoCard.tsx:18 ~ siteInfo", siteInfo);
-  const { published_deploy, url, name, screenshot_url, id, build_settings } =
-    siteInfo;
+  const {
+    published_deploy,
+    url,
+    name,
+    screenshot_url,
+    id,
+    admin_url,
+    repo_url,
+  } = siteInfo;
   const formatedDate = format(
     new Date(published_deploy?.published_at),
     "LLL dd"
@@ -40,20 +47,15 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
           >
             {url}
           </Link>
-          {!_.isEmpty(build_settings) && (
+          {
             <p className=" text-text-muted">
               Deploys from{" "}
-              <Link
-                href={build_settings.repo_url}
-                className="underline hover:text-white"
-              >
-                {build_settings.provider === "github"
-                  ? "GitHub"
-                  : build_settings.provider}
+              <Link href={repo_url} className="underline hover:text-white">
+                GitHub
               </Link>
               .
             </p>
-          )}
+          }
           <p className=" text-text-muted">Last published on {formatedDate}.</p>
         </div>
         <Link
@@ -79,7 +81,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
         </Link>
       </div>
       <div className="mt-6 flex gap-4">
-        <Link href={""} className="button flex items-center gap-2">
+        <Link href={admin_url} className="button flex items-center gap-2">
           <SiNetlify />
           <span>Open in Netlify</span>
         </Link>

@@ -1,8 +1,6 @@
-import React, { FC } from "react";
+import type { FC } from "react";
 import { api } from "../utils/api";
 import Card from "./Card";
-import { GoChevronRight } from "react-icons/go";
-import clsx from "clsx";
 import RightArrow from "./RightArrow";
 
 const AccountsCard: FC = () => {
