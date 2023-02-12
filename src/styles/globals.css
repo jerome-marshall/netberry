@@ -42,6 +42,14 @@
   .card-item {
     @apply flex cursor-pointer items-center bg-background-secondary px-card_pad py-3 transition-all duration-100 ease-in-out even:bg-background-active hover:bg-background-active_hover;
   }
+
+  .nav-item {
+    @apply border-b-2 border-b-transparent text-sm uppercase tracking-wider transition-all duration-200 hover:border-b-teal-light;
+  }
+
+  .nav-item-active {
+    @apply border-b-teal-light;
+  }
 }
 
 @layer utilities {

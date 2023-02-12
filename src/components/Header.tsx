@@ -3,12 +3,15 @@ import React from "react";
 import netberryLogo from "../assets/netberry.png";
 import Image from "next/image";
 import Link from "next/link";
-
+import { AccountsLandingURL, SitesLandingURL } from "../utils/urls";
+import clsx from "clsx";
 // interface HeaderProps {
 //   children: React.ReactNode;
 // }
 
 const Header: FC = () => {
+  const location = typeof window !== "undefined" && window.location;
+
   return (
     <div className="header flex items-center justify-between py-8">
       <Link href="/" className="flex items-center gap-4">
@@ -23,11 +26,32 @@ const Header: FC = () => {
           <span className="font-bold">Net</span>Berry
         </p>
       </Link>
-      <div className="flex">
-        <button className="button bg-blue-lighter px-4 py-2 text-blue-dark hover:bg-blue-light">
-          Login
-        </button>
-      </div>
+      {location && (
+        <div className="flex items-center gap-8">
+          <Link
+            href={SitesLandingURL}
+            className={clsx(
+              "nav-item",
+              location?.pathname?.includes(SitesLandingURL) && "nav-item-active"
+            )}
+          >
+            Sites
+          </Link>
+          <Link
+            href={AccountsLandingURL}
+            className={clsx(
+              "nav-item",
+              location?.pathname?.includes(AccountsLandingURL) &&
+                "nav-item-active"
+            )}
+          >
+            Accounts
+          </Link>
+          <button className="button bg-teal-light px-4 py-2 text-teal-dark hover:bg-teal-dark hover:text-teal-lighter">
+            Login
+          </button>
+        </div>
+      )}
     </div>
   );
 };

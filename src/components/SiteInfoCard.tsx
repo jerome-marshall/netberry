@@ -81,7 +81,11 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
         </Link>
       </div>
       <div className="mt-6 flex gap-4">
-        <Link href={admin_url} className="button flex items-center gap-2">
+        <Link
+          href={admin_url}
+          target="_blank"
+          className="button flex items-center gap-2"
+        >
           <SiNetlify />
           <span>Open in Netlify</span>
         </Link>

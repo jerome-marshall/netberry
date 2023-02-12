@@ -52,6 +52,7 @@ module.exports = {
         light: "#ff9987",
         dark: "#470a1a",
       },
+      transparent: "transparent",
     },
     fontFamily: {
       "noto-sans": ["Noto Sans JP", "sans-serif"],
