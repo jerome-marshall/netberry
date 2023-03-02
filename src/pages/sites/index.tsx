@@ -5,10 +5,15 @@ import Link from "next/link";
 
 const SitesPage: NextPage = () => {
   const { sites } = useSites();
+  console.log("🚀 ~ file: index.tsx:8 ~ sites:", sites);
+
+  if (!sites) {
+    return <div>loading...</div>;
+  }
 
   return (
     <div className="sites-page bg-background-secondary py-card_pad">
-      <div className="px-card_pad">
+      <div className="px-card_pad pb-card_pad">
         <h1>Sites</h1>
         <div className="search-section"></div>
       </div>
