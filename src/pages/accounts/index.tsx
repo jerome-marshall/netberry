@@ -31,9 +31,7 @@ const AccountsPage: FC = () => {
                 <p className="text-base font-semibold text-white">
                   {account.name}
                 </p>
-                <p className="text-sm text-text-muted hover:underline ">
-                  {account.slug}
-                </p>
+                <p className="text-sm text-text-muted">{account.email}</p>
               </div>
               <div className=" flex items-center gap-6">
                 <p className="relative -top-[1px] text-xs text-text-muted">
