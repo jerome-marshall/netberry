@@ -3,7 +3,7 @@ import { api } from "../utils/api";
 import { NetlifySite } from "./../types.d";
 
 const useSites = () => {
-  const [sites, setSites] = useState<NetlifySite[]>([]);
+  const [sites, setSites] = useState<NetlifySite[] | undefined>();
 
   const { data, error, isLoading } = api.sites.getAll.useQuery();
 

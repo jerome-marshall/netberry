@@ -7,7 +7,7 @@ import { HiOutlineArrowSmRight } from "react-icons/hi";
 interface CardProps {
   children: React.ReactNode;
   title: string;
-  titleLink: string;
+  titleLink?: string;
 }
 const Card: FC<CardProps> = ({ children, title, titleLink }) => {
   return (

@@ -4,16 +4,16 @@ import Card from "./Card";
 import RightArrow from "./RightArrow";
 
 const AccountsCard: FC = () => {
-  const { data } = api.accounts.getAll.useQuery();
+  const { data, isLoading } = api.accounts.getAll.useQuery();
   console.log("🚀 ~ file: AccountsCard.tsx:7 ~ data", data);
-  if (!data) return <div>Loading...</div>;
+  if (!data || isLoading) return <LoadingAccountsCard />;
   return (
     <div className="col-span-4">
       <Card title="Accounts" titleLink="/">
         {data.map((account) => (
           <div
             key={account.id}
-            className="card-item group justify-between gap-6 px-4"
+            className="card-item group justify-between gap-6"
           >
             <div className="">
               <p className="text-base font-semibold text-white">
@@ -29,5 +29,26 @@ const AccountsCard: FC = () => {
     </div>
   );
 };
+
+const LoadingAccountsCard: FC = () => (
+  <div className="col-span-4">
+    <Card title="Accounts">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          className="card-item group justify-between"
+          key={i.toString() + "Accounts"}
+        >
+          <div className="flex w-full gap-6">
+            <div className="flex w-full flex-col justify-center">
+              <div className="h-5 w-[60%] animate-pulse rounded-[4px] bg-background-active_hover" />
+              <div className="mt-2 h-4 w-[40%] animate-pulse rounded-[4px] bg-background-active_hover" />
+            </div>
+          </div>
+          <RightArrow />
+        </div>
+      ))}
+    </Card>
+  </div>
+);
 
 export default AccountsCard;

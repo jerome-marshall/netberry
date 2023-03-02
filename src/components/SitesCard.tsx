@@ -5,9 +5,12 @@ import useSites from "../hooks/useSites";
 import Card from "./Card";
 import { SitesLandingURL } from "../utils/urls";
 import RightArrow from "./RightArrow";
+import ShimmerText from "./shimmer/elements/ShimmerText";
 
 const SitesCard: FC = () => {
-  const { sites } = useSites();
+  const { sites, isLoading } = useSites();
+
+  if (isLoading || !sites) return <LoadingSitesCard />;
 
   return (
     <div className="col-span-8">
@@ -43,5 +46,27 @@ const SitesCard: FC = () => {
     </div>
   );
 };
+
+const LoadingSitesCard: FC = () => (
+  <div className="col-span-8">
+    <Card title="Sites">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          className="card-item group justify-between"
+          key={i.toString() + "site"}
+        >
+          <div className="flex w-full gap-6">
+            <div className="h-16 w-36 animate-pulse rounded-medium bg-background-active_hover" />
+            <div className="flex w-full flex-col justify-center">
+              <ShimmerText height="md" width="md" />
+              <ShimmerText height="sm" width="sm" className="mt-2" />
+            </div>
+          </div>
+          <RightArrow />
+        </div>
+      ))}
+    </Card>
+  </div>
+);
 
 export default SitesCard;
