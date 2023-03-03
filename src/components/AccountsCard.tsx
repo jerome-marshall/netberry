@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { FC } from "react";
 import { api } from "../utils/api";
 import { AccountsLandingURL } from "../utils/urls";
@@ -12,7 +13,8 @@ const AccountsCard: FC = () => {
     <div className="col-span-4">
       <Card title="Accounts" titleLink={AccountsLandingURL}>
         {data.map((account) => (
-          <div
+          <Link
+            href={AccountsLandingURL + "/" + account.slug}
             key={account.id}
             className="card-item group justify-between gap-6"
           >
@@ -24,7 +26,7 @@ const AccountsCard: FC = () => {
             </div>
 
             <RightArrow />
-          </div>
+          </Link>
         ))}
       </Card>
     </div>
