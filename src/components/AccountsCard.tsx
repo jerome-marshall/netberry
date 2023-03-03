@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { api } from "../utils/api";
+import { AccountsLandingURL } from "../utils/urls";
 import Card from "./Card";
 import RightArrow from "./RightArrow";
 
@@ -9,7 +10,7 @@ const AccountsCard: FC = () => {
   if (!data || isLoading) return <LoadingAccountsCard />;
   return (
     <div className="col-span-4">
-      <Card title="Accounts" titleLink="/">
+      <Card title="Accounts" titleLink={AccountsLandingURL}>
         {data.map((account) => (
           <div
             key={account.id}

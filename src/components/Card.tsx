@@ -8,10 +8,16 @@ interface CardProps {
   children: React.ReactNode;
   title: string;
   titleLink?: string;
+  className?: string;
 }
-const Card: FC<CardProps> = ({ children, title, titleLink }) => {
+const Card: FC<CardProps> = ({ children, title, titleLink, className }) => {
   return (
-    <div className="flex flex-col rounded-medium bg-background-secondary py-card_pad">
+    <div
+      className={clsx(
+        "flex flex-col rounded-medium bg-background-secondary py-card_pad",
+        className
+      )}
+    >
       <div className="card-header px-card_pad">
         <div
           className={clsx(
@@ -19,7 +25,12 @@ const Card: FC<CardProps> = ({ children, title, titleLink }) => {
             titleLink && "cursor-pointer"
           )}
         >
-          <h3 className="text-2xl font-medium leading-none decoration-1 group-hover:underline">
+          <h3
+            className={clsx(
+              "text-2xl font-medium leading-none decoration-1",
+              titleLink && "group-hover:underline"
+            )}
+          >
             {titleLink ? (
               <>
                 <Link href={titleLink}>{title}</Link>
@@ -28,7 +39,9 @@ const Card: FC<CardProps> = ({ children, title, titleLink }) => {
               title
             )}
           </h3>
-          <HiOutlineArrowSmRight className="relative top-[2px] left-0 h-6 w-6 transition-all duration-200 group-hover:left-1" />
+          {titleLink && (
+            <HiOutlineArrowSmRight className="relative top-[2px] left-0 h-6 w-6 transition-all duration-200 group-hover:left-1" />
+          )}{" "}
         </div>
         <div className="divider"></div>
       </div>

@@ -50,5 +50,6 @@ export function addSlug<T, K extends keyof T>(
 
 export const formatAccount = (account: NetlifyAccountCustom) => {
   const accountNoToken = exclude(account, ["token"]);
-  return addSlug(accountNoToken, "name");
+  // return addSlug(accountNoToken, "name");
+  return accountNoToken;
 };

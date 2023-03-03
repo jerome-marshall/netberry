@@ -24,6 +24,7 @@ model NetlifyAccount {
   id    String @id @default(cuid())
   name  String
   email String @unique
+  slug  String @unique
   token String
 }
 

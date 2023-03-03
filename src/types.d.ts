@@ -43,6 +43,8 @@ export type NetlifyAccountCustom = {
   id: string;
   name: string;
   email: string;
-  slug?: string;
+  slug: string;
   token?: string;
 };
+
+export type NetlifyAccountNoToken = Omit<NetlifyAccountCustom, "token">;

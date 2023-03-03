@@ -5,6 +5,7 @@ import { api } from "../../utils/api";
 
 const AccountsPage: FC = () => {
   const { data, isLoading } = api.sites.getAll.useQuery();
+  console.log("🚀 ~ file: index.tsx:8 ~ data:", data);
 
   if (!data || isLoading) {
     return <div>Loading...</div>;
