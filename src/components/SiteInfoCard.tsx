@@ -19,7 +19,6 @@ type Props = {
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
-  console.log("🚀 ~ file: SiteInfoCard.tsx:18 ~ siteInfo", siteInfo);
   const {
     published_deploy,
     url,

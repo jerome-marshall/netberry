@@ -7,7 +7,6 @@ import RightArrow from "./RightArrow";
 
 const AccountsCard: FC = () => {
   const { data, isLoading } = api.accounts.getAll.useQuery();
-  console.log("🚀 ~ file: AccountsCard.tsx:7 ~ data", data);
   if (!data || isLoading) return <LoadingAccountsCard />;
   return (
     <div className="col-span-4">

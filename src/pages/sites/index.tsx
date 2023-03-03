@@ -6,7 +6,6 @@ import SitesListItemDetail from "../../components/SitesListItemDetail";
 
 const SitesPage: NextPage = () => {
   const { sites } = useSites();
-  console.log("🚀 ~ file: index.tsx:8 ~ sites:", sites);
 
   if (!sites) {
     return <div>loading...</div>;
