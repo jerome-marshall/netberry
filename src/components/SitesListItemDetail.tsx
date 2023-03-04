@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import React, { FC } from "react";
-import { NetlifyAccountNoToken, NetlifySite } from "../types";
+import { AccountNoToken, Site } from "../types";
 
 type Props = {
-  site: NetlifySite;
+  site: Site;
 };
 
 const SitesListItemDetail: FC<Props> = ({ site }) => {

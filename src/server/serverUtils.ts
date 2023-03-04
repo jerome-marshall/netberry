@@ -2,15 +2,17 @@ import { TRPCError } from "@trpc/server";
 import axios from "axios";
 import _ from "lodash";
 import _slugify from "slugify";
-import type { NetlifyAccountCustom, NetlifySite } from "../types";
-import type { NetlifyAccountNoToken } from "./../types.d";
+import type { AccountCustom, Site } from "../types";
+import type { AccountNoToken } from "./../types.d";
+import { axiosInstance } from "./api/trpc";
 import { prisma } from "./db";
 
 export const getAllAccounts = async () => {
   const accounts = await prisma.netlifyAccount.findMany();
-  const formattedAccs = accounts.map((account) => formatAccount(account));
-  if (!_.isEmpty(formattedAccs)) {
-    return formattedAccs;
+
+  if (!_.isEmpty(accounts)) {
+    const accountsNoToken = accounts.map((account) => formatAccount(account));
+    return { accounts, accountsNoToken };
   } else {
     throw new TRPCError({
       code: "NOT_FOUND",
@@ -19,19 +21,46 @@ export const getAllAccounts = async () => {
   }
 };
 
-export const getAccountBySlug = async (slug: string) => {
+export const getAccountBySlug = async ({ slug }: { slug: string }) => {
   const account = await prisma.netlifyAccount.findUnique({
     where: { slug },
   });
+
   if (account) {
-    const frAccount = formatAccount(account);
-    return frAccount;
+    const account_token = account.token;
+    const accountNoToken = formatAccount(account);
+
+    return { account_token, accountNoToken };
   } else {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: "Account not found",
     });
   }
+};
+
+export const getAllSites = async ({
+  account_token,
+}: {
+  account_token: string;
+}) => {
+  const res = await axiosInstance.get<Site[]>("/sites", {
+    headers: { Authorization: `Bearer ${account_token}` },
+  });
+  return res.data;
+};
+
+export const getSiteByID = async ({
+  site_id,
+  account_token,
+}: {
+  site_id: string;
+  account_token: string;
+}) => {
+  const res = await axiosInstance.get<Site>(`/sites/${site_id}`, {
+    headers: { Authorization: `Bearer ${account_token}` },
+  });
+  return res.data;
 };
 
 export const handleError = (error: unknown) => {
@@ -79,10 +108,8 @@ export function addSlug<T, K extends keyof T>(
   return { ...obj, slug };
 }
 
-export const formatAccount = (
-  account: NetlifyAccountCustom
-): NetlifyAccountNoToken => {
-  const accountNoToken = exclude(account, ["token"]);
+export const formatAccount = (account: AccountCustom): AccountNoToken => {
+  const accountNoToken = exclude(_.cloneDeep(account), ["token"]);
   // return addSlug(accountNoToken, "name");
   return accountNoToken;
 };

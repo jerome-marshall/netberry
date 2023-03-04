@@ -1,18 +1,18 @@
+import { z } from "zod";
+import type { SiteWithAccount } from "../../../types";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
-  formatAccount,
+  getAccountBySlug,
   getAllAccounts,
+  getAllSites,
   handleError,
 } from "./../../serverUtils";
-import { z } from "zod";
-import type { NetlifySite } from "../../../types";
-import { createTRPCRouter, publicProcedure } from "../trpc";
-import { addSlug, exclude } from "../../serverUtils";
 
 export const accountRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async ({ ctx: { prisma, axios } }) => {
+  getAll: publicProcedure.query(async () => {
     try {
-      const accounts = await getAllAccounts();
-      return accounts;
+      const { accountsNoToken } = await getAllAccounts();
+      return accountsNoToken;
     } catch (error) {
       handleError(error);
     }
@@ -24,19 +24,19 @@ export const accountRouter = createTRPCRouter({
         account_slug: z.string(),
       })
     )
-    .query(async ({ ctx: { prisma, axios }, input: { account_slug } }) => {
+    .query(async ({ input: { account_slug } }) => {
       try {
-        const account = await prisma.netlifyAccount.findUnique({
-          where: { slug: account_slug },
+        const { account_token, accountNoToken } = await getAccountBySlug({
+          slug: account_slug,
         });
-        if (account) {
-          const res = await axios.get<NetlifySite[]>("/sites", {
-            headers: { Authorization: `Bearer ${account.token}` },
-          });
+        const sites = await getAllSites({ account_token });
 
-          const frAccount = formatAccount(account);
-          return { account: frAccount, sites: res.data };
-        }
+        const sitesWithAccount: SiteWithAccount[] = sites.map((site) => ({
+          ...site,
+          account: accountNoToken,
+        }));
+
+        return { account: accountNoToken, sites: sitesWithAccount };
       } catch (error) {
         handleError(error);
       }

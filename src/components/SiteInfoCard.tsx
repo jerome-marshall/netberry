@@ -4,7 +4,7 @@
 import Link from "next/link";
 import type { FC } from "react";
 import React from "react";
-import type { NetlifySite } from "../types";
+import type { Site, SiteWithAccount } from "../types";
 import { format } from "date-fns";
 import { SiNetlify } from "react-icons/si";
 import { FaBolt } from "react-icons/fa";
@@ -16,7 +16,7 @@ import _ from "lodash";
 import { getRepoProviderText } from "../common/utils";
 
 type Props = {
-  siteInfo: NetlifySite;
+  siteInfo: SiteWithAccount;
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo }) => {

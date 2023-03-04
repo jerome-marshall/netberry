@@ -27,7 +27,7 @@ type CreateContextOptions = {
   session: Session | null;
 };
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: "https://api.netlify.com/api/v1",
   headers: {
     "Content-Type": "application/json",

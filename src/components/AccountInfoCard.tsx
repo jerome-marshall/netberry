@@ -1,9 +1,9 @@
 import Link from "next/link";
 import React, { FC } from "react";
-import { NetlifyAccountCustom, NetlifyAccountNoToken } from "../types";
+import { AccountCustom, AccountNoToken } from "../types";
 
 type Props = {
-  account: NetlifyAccountNoToken;
+  account: AccountNoToken;
   sitesCount: number;
 };
 

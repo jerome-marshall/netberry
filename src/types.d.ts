@@ -22,7 +22,7 @@ export type NetlifyDeploy = {
   deploy_url: string;
 };
 
-export type NetlifyAccountCustom = {
+export type AccountCustom = {
   id: string;
   name: string;
   email: string;
@@ -30,10 +30,9 @@ export type NetlifyAccountCustom = {
   token?: string;
 };
 
-export type NetlifyAccountNoToken = Omit<NetlifyAccountCustom, "token">;
+export type AccountNoToken = Omit<AccountCustom, "token">;
 
-export type NetlifySite = {
-  account: NetlifyAccountNoToken;
+export type Site = {
   id: string;
   site_id: string;
   name: string;
@@ -50,4 +49,8 @@ export type NetlifySite = {
     published_at: string;
   };
   admin_url: string;
+};
+
+export type SiteWithAccount = Site & {
+  account: AccountNoToken;
 };

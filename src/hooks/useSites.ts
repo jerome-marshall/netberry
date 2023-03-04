@@ -1,25 +1,15 @@
 import { useEffect, useState } from "react";
 import { api } from "../utils/api";
-import { NetlifySite } from "./../types.d";
+import { Site, SiteWithAccount } from "./../types.d";
 
 const useSites = () => {
-  const [sites, setSites] = useState<NetlifySite[] | undefined>();
+  const [sites, setSites] = useState<SiteWithAccount[] | undefined>();
 
   const { data, error, isLoading } = api.sites.getAll.useQuery();
 
   useEffect(() => {
     if (data) {
-      const siteData = data
-        .map((datum) => {
-          const account = datum.account;
-          const sites = datum.sites;
-          const sitesWithAccounts = sites.map((site) => ({
-            ...site,
-            account: { ...account },
-          }));
-          return sitesWithAccounts;
-        })
-        .flat();
+      const siteData = data.map((datum) => datum.sites).flat();
       setSites(siteData);
     }
   }, [data]);

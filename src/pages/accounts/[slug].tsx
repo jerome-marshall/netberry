@@ -24,7 +24,7 @@ const AccountsDetailPage: FC = () => {
       <AccountInfoCard account={account} sitesCount={sites.length} />
       <Card title="Sites" className="mt-6">
         {sites.map((site) => (
-          <SitesListItemDetail site={{ ...site, account }} key={site.id} />
+          <SitesListItemDetail site={{ ...site }} key={site.id} />
         ))}
       </Card>
     </div>

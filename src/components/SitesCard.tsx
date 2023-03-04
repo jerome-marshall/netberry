@@ -2,14 +2,13 @@
 import Link from "next/link";
 import { FC } from "react";
 import useSites from "../hooks/useSites";
-import Card from "./Card";
 import { SitesLandingURL } from "../utils/urls";
+import Card from "./Card";
 import RightArrow from "./RightArrow";
 import ShimmerText from "./shimmer/elements/ShimmerText";
 
 const SitesCard: FC = () => {
-  const { sites, isLoading } = useSites();
-
+  const { sites, isLoading, error } = useSites();
   if (isLoading || !sites) return <LoadingSitesCard />;
 
   return (
