@@ -20,7 +20,8 @@ type Props = {
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
-  const { mutate, data } = api.deploys.triggerBuild.useMutation();
+  const { mutate, data, error } = api.deploys.triggerBuild.useMutation();
+  console.log("🚀 ~ file: SiteInfoCard.tsx:24 ~ error:", error);
 
   const {
     published_deploy,
@@ -39,6 +40,14 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
     new Date(published_deploy?.published_at),
     "LLL dd"
   );
+
+  const triggerBuild = ({ clearCache }: { clearCache: boolean }) => {
+    mutate({
+      clear_cache: clearCache,
+      site_id: id,
+      account_slug: siteInfo.account.slug,
+    });
+  };
 
   return (
     <div className="site-info-card max-w-2xl rounded-medium bg-background-secondary p-card_pad">
@@ -95,24 +104,14 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
         </Link>
         <button
           className="button flex items-center gap-2"
-          onClick={() => {
-            mutate({
-              clear_cache: false,
-              site_id: id,
-            });
-          }}
+          onClick={() => triggerBuild({ clearCache: false })}
         >
           <FaBolt />
           <span>Trigger build</span>
         </button>
         <button
           className="button flex items-center gap-2"
-          onClick={() => {
-            mutate({
-              clear_cache: true,
-              site_id: id,
-            });
-          }}
+          onClick={() => triggerBuild({ clearCache: true })}
         >
           <MdCleaningServices />
           <span>Clear cache and build</span>

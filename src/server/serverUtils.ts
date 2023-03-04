@@ -1,21 +1,51 @@
-import { NetlifyAccountNoToken } from "./../types.d";
 import { TRPCError } from "@trpc/server";
 import axios from "axios";
+import _ from "lodash";
 import _slugify from "slugify";
-import { NetlifyAccountCustom } from "../types";
+import type { NetlifyAccountCustom, NetlifySite } from "../types";
+import type { NetlifyAccountNoToken } from "./../types.d";
+import { prisma } from "./db";
+
+export const getAllAccounts = async () => {
+  const accounts = await prisma.netlifyAccount.findMany();
+  const formattedAccs = accounts.map((account) => formatAccount(account));
+  if (!_.isEmpty(formattedAccs)) {
+    return formattedAccs;
+  } else {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "No accounts found",
+    });
+  }
+};
+
+export const getAccountBySlug = async (slug: string) => {
+  const account = await prisma.netlifyAccount.findUnique({
+    where: { slug },
+  });
+  if (account) {
+    const frAccount = formatAccount(account);
+    return frAccount;
+  } else {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Account not found",
+    });
+  }
+};
 
 export const handleError = (error: unknown) => {
   if (axios.isAxiosError(error)) {
     if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
+      console.error(error.response.data);
+      console.error(error.response.status);
+      console.error(error.response.headers);
     } else if (error.request) {
-      console.log(error.request);
+      console.error(error.request);
     } else {
-      console.log("Error", error.message);
+      console.error("Error", error.message);
     }
-    console.log(error.config);
+    console.error(error.config);
   }
   throw new TRPCError({
     code: "INTERNAL_SERVER_ERROR",

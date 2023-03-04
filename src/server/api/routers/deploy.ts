@@ -23,6 +23,7 @@ export const deployRouter = createTRPCRouter({
       z.object({
         clear_cache: z.boolean(),
         site_id: z.string(),
+        account_slug: z.string(),
       })
     )
     .mutation(async ({ ctx: { axios }, input: { clear_cache, site_id } }) => {
