@@ -1,20 +1,3 @@
-export type NetlifySite = {
-  id: string;
-  site_id: string;
-  name: string;
-  screenshot_url: string;
-  url: string;
-  build_settings?: {
-    provider: string;
-    repo_url: string;
-  };
-  repo_url: string;
-  published_deploy: {
-    published_at: string;
-  };
-  admin_url: string;
-};
-
 export type BuildTriggerRes = {
   id: string;
   deploy_id: string;
@@ -48,3 +31,23 @@ export type NetlifyAccountCustom = {
 };
 
 export type NetlifyAccountNoToken = Omit<NetlifyAccountCustom, "token">;
+
+export type NetlifySite = {
+  account: NetlifyAccountNoToken;
+  id: string;
+  site_id: string;
+  name: string;
+  screenshot_url: string;
+  url: string;
+  build_settings?: {
+    provider: string;
+    repo_url: string;
+    repo_branch: string;
+    repo_path: string;
+  };
+  repo_url: string;
+  published_deploy: {
+    published_at: string;
+  };
+  admin_url: string;
+};

@@ -17,7 +17,7 @@ const SitesCard: FC = () => {
       <Card title="Sites" titleLink={SitesLandingURL}>
         {sites.map((site) => (
           <Link
-            href={`${SitesLandingURL}/${site.id}`}
+            href={`${site.account.slug}/${site.id}`}
             key={site.id + site.name}
             className="card-item group justify-between"
           >

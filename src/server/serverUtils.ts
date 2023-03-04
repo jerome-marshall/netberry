@@ -1,3 +1,4 @@
+import { NetlifyAccountNoToken } from "./../types.d";
 import { TRPCError } from "@trpc/server";
 import axios from "axios";
 import _slugify from "slugify";
@@ -48,7 +49,9 @@ export function addSlug<T, K extends keyof T>(
   return { ...obj, slug };
 }
 
-export const formatAccount = (account: NetlifyAccountCustom) => {
+export const formatAccount = (
+  account: NetlifyAccountCustom
+): NetlifyAccountNoToken => {
   const accountNoToken = exclude(account, ["token"]);
   // return addSlug(accountNoToken, "name");
   return accountNoToken;

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import React, { FC } from "react";
-import { NetlifySite } from "../types";
+import { NetlifyAccountNoToken, NetlifySite } from "../types";
 
 type Props = {
   site: NetlifySite;
@@ -10,7 +10,7 @@ type Props = {
 const SitesListItemDetail: FC<Props> = ({ site }) => {
   return (
     <Link
-      href={`/sites/${site.id}`}
+      href={`/${site.account.slug}/${site.id}`}
       key={site.id + site.name}
       className="card-item cursor-pointer gap-6"
     >

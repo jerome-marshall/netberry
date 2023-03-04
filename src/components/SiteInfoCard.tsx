@@ -13,12 +13,15 @@ import { api } from "../utils/api";
 import SiteImg from "../assets/netlify-site.png";
 import Image from "next/image";
 import _ from "lodash";
+import { getRepoProviderText } from "../common/utils";
 
 type Props = {
   siteInfo: NetlifySite;
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
+  const { mutate, data } = api.deploys.triggerBuild.useMutation();
+
   const {
     published_deploy,
     url,
@@ -27,13 +30,15 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
     id,
     admin_url,
     repo_url,
+    build_settings,
   } = siteInfo;
+
+  const repoUrl = build_settings?.repo_url || repo_url;
+
   const formatedDate = format(
     new Date(published_deploy?.published_at),
     "LLL dd"
   );
-
-  const { mutate, data } = api.deploys.triggerBuild.useMutation();
 
   return (
     <div className="site-info-card max-w-2xl rounded-medium bg-background-secondary p-card_pad">
@@ -46,15 +51,15 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
           >
             {url}
           </Link>
-          {
+          {repoUrl && (
             <p className=" text-text-muted">
               Deploys from{" "}
-              <Link href={repo_url} className="underline hover:text-white">
-                GitHub
+              <Link href={repoUrl} className="underline hover:text-white">
+                {getRepoProviderText(build_settings?.provider)}
               </Link>
               .
             </p>
-          }
+          )}
           <p className=" text-text-muted">Last published on {formatedDate}.</p>
         </div>
         <Link

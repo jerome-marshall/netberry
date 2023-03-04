@@ -39,4 +39,30 @@ export const siteRouter = createTRPCRouter({
         handleError(error);
       }
     }),
+
+  getByAccount: publicProcedure
+    .input(
+      z.object({
+        account_slug: z.string(),
+        site_id: z.string(),
+      })
+    )
+    .query(
+      async ({ ctx: { axios, prisma }, input: { account_slug, site_id } }) => {
+        try {
+          const account = await prisma.netlifyAccount.findUnique({
+            where: { slug: account_slug },
+          });
+          if (account) {
+            const res = await axios.get<NetlifySite>(`/sites/${site_id}`, {
+              headers: { Authorization: `Bearer ${account.token}` },
+            });
+            const frAccount = formatAccount(account);
+            return { account: frAccount, site: res.data };
+          }
+        } catch (error) {
+          handleError(error);
+        }
+      }
+    ),
 });
