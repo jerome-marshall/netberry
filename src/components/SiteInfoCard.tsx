@@ -18,11 +18,13 @@ import EnvModal from "./EnvModal";
 import Shimmer from "./Shimmer";
 
 type Props = {
-  siteInfo: SiteWithAccount;
+  siteInfo: SiteWithAccount | undefined;
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
   const { mutate, data, error } = api.deploys.triggerBuild.useMutation();
+
+  if (!siteInfo) return <SiteInfoLoader />;
 
   const {
     published_deploy,
@@ -54,7 +56,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
   const envs = siteInfo.build_settings?.env;
 
   return (
-    <div className="site-info-card min-w-2xl max-w-fit rounded-medium bg-background-secondary p-card_pad">
+    <div className="site-info-card max-w-fit rounded-medium bg-background-secondary p-card_pad">
       <div className="flex justify-between">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-white">{name}</h1>
@@ -130,14 +132,24 @@ export default SiteInfoCard;
 
 export const SiteInfoLoader = () => {
   return (
-    <div className="site-info-card min-w-2xl max-w-fit rounded-medium bg-background-secondary p-card_pad">
+    <div className="site-info-card max-w-fit rounded-medium bg-background-secondary p-card_pad">
       <div className="flex justify-between">
         <div className="flex flex-col gap-2">
-          <Shimmer className="h-2 w-20" height="lg" width="lg" />
+          <Shimmer className="h-8 w-[300px]" />
+          <Shimmer className="h-5 w-[300px]" />
+          <Shimmer className="h-4 w-[240px]" />
+          <Shimmer className="h-4 w-[240px]" />
         </div>
-        <div className="image-section relative h-[104px] w-[168px] overflow-hidden rounded-medium"></div>
+        <div className="image-section relative h-[104px] w-[168px] overflow-hidden rounded-medium">
+          <Shimmer className="h-[104px] w-[168px]" />
+        </div>
       </div>
-      <div className="mt-6 flex gap-4"></div>
+      <div className="mt-6 flex gap-4">
+        <Shimmer className="h-8 w-[140px]" />
+        <Shimmer className="h-8 w-[140px]" />
+        <Shimmer className="h-8 w-[140px]" />
+        <Shimmer className="h-8 w-[140px]" />
+      </div>
     </div>
   );
 };

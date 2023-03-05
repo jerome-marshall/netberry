@@ -1,7 +1,8 @@
-import React, { FC } from "react";
-import { api } from "../utils/api";
-import Card from "./Card";
+import clsx from "clsx";
 import Link from "next/link";
+import { FC } from "react";
+import { SiteWithAccount } from "../types";
+import { api } from "../utils/api";
 import {
   getDeployDuration,
   getDeployMessage,
@@ -9,16 +10,17 @@ import {
   getDeployTime,
   getStatusTheme,
 } from "../utils/deployUtils";
-import clsx from "clsx";
-import { GoChevronRight } from "react-icons/go";
+import Card from "./Card";
 import RightArrow from "./RightArrow";
-import { SiteWithAccount } from "../types";
+import Shimmer from "./Shimmer";
 
 type Props = {
-  siteInfo: SiteWithAccount;
+  siteInfo: SiteWithAccount | undefined;
 };
 
 const DeploysCard: FC<Props> = ({ siteInfo }) => {
+  if (!siteInfo) return <DeploysCardLoader />;
+
   const {
     account: { slug },
     site_id,
@@ -26,8 +28,7 @@ const DeploysCard: FC<Props> = ({ siteInfo }) => {
 
   const { data } = api.deploys.getAll.useQuery({ site_id, account_slug: slug });
 
-  if (!data) return null;
-  console.log("🚀 ~ file: DeploysCard.tsx:26 ~ siteInfo:", siteInfo, data);
+  if (!data) return <DeploysCardLoader />;
 
   return (
     <div className="mt-6">
@@ -109,3 +110,37 @@ const DeploysCard: FC<Props> = ({ siteInfo }) => {
 };
 
 export default DeploysCard;
+
+export const DeploysCardLoader = () => {
+  return (
+    <div className="mt-6">
+      <Card title="Production Deploys" titleLink="">
+        {Array(7)
+          .fill(0)
+          .map((_, i) => {
+            return (
+              <div
+                key={"deployitem" + i.toString()}
+                className={clsx(
+                  "card-item group cursor-pointer justify-between gap-6"
+                )}
+              >
+                <div className="">
+                  <div className="flex gap-2">
+                    <Shimmer className="h-4 w-[260px]" />
+                  </div>
+                  <Shimmer className="mt-2 h-3 w-[160px]" />
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex flex-col items-end justify-center">
+                    <Shimmer className=" h-4 w-[160px]" />
+                    <Shimmer className="mt-2 h-4 w-[100px]" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+      </Card>
+    </div>
+  );
+};
