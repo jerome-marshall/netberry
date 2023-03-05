@@ -12,7 +12,7 @@ export const STATUS_THEME = {
   red: "red",
   grey: "grey",
   gold: "gold",
-};
+} as const;
 
 // deploy state from Netlify API
 export const DEPLOY_STATE = {
@@ -23,7 +23,8 @@ export const DEPLOY_STATE = {
   ready: "ready",
   enqueued: "enqueued",
   uploading: "uploading",
-};
+  processing: "processing",
+} as const;
 
 // deploy status to display
 export const DEPLOY_STATUS = {
@@ -36,7 +37,7 @@ export const DEPLOY_STATUS = {
   building: "building",
   waiting: "waiting",
   skipped: "skipped",
-};
+} as const;
 
 export const DEPLOY_STATUS_THEME = {
   published: {
@@ -78,7 +79,10 @@ export const DEPLOY_STATUS_THEME = {
 };
 
 export const getDeployStatus = (deploy: NetlifyDeploy) => {
-  let status = DEPLOY_STATUS_THEME.unknown;
+  let status: {
+    status: keyof typeof DEPLOY_STATUS;
+    theme: keyof typeof STATUS_THEME;
+  } = DEPLOY_STATUS_THEME.unknown;
 
   const { state, error_message } = deploy;
 
@@ -100,6 +104,15 @@ export const getDeployStatus = (deploy: NetlifyDeploy) => {
       break;
     case DEPLOY_STATE.building:
       status = DEPLOY_STATUS_THEME.building;
+      break;
+    case DEPLOY_STATE.enqueued:
+      status = DEPLOY_STATUS_THEME.enqueued;
+      break;
+    case DEPLOY_STATE.uploading:
+      status = DEPLOY_STATUS_THEME.uploading;
+      break;
+    case DEPLOY_STATE.processing:
+      status = DEPLOY_STATUS_THEME.uploading;
       break;
 
     default:

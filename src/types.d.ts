@@ -47,6 +47,7 @@ export type Site = {
   repo_url: string;
   published_deploy: {
     published_at: string;
+    id: string;
   };
   admin_url: string;
 };

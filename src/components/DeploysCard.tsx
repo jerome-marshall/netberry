@@ -25,14 +25,20 @@ const DeploysCard: FC<Props> = ({ siteInfo }) => {
   } = siteInfo;
 
   const { data } = api.deploys.getAll.useQuery({ site_id, account_slug: slug });
-  console.log("🚀 ~ file: DeploysCard.tsx:28 ~ data:", data);
 
   if (!data) return null;
+  console.log("🚀 ~ file: DeploysCard.tsx:26 ~ siteInfo:", siteInfo, data);
+
   return (
     <div className="mt-6">
       <Card title="Production Deploys" titleLink="">
         {data.map((deploy) => {
           const { status: deployStatus, theme } = getDeployStatus(deploy);
+
+          const showStatus =
+            (siteInfo.published_deploy?.id === deploy.id &&
+              deployStatus === "published") ||
+            deployStatus !== "published";
 
           const { id, context, branch, created_at, published_at, deploy_url } =
             deploy;
@@ -66,7 +72,9 @@ const DeploysCard: FC<Props> = ({ siteInfo }) => {
                       HEAD
                     </Link>
                   </p>
-                  <p className={getStatusTheme(theme)}>{deployStatus}</p>
+                  {showStatus && (
+                    <p className={getStatusTheme(theme)}>{deployStatus}</p>
+                  )}{" "}
                 </div>
                 <p className=" text-sm text-text-muted">
                   {getDeployMessage(deploy)}
