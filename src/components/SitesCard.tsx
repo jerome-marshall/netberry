@@ -21,11 +21,13 @@ const SitesCard: FC = () => {
             className="card-item group justify-between"
           >
             <div className="flex gap-6">
-              <img
-                src={site.screenshot_url}
-                alt=""
-                className="max-h-16 rounded-medium"
-              />
+              {site.screenshot_url && (
+                <img
+                  src={site.screenshot_url}
+                  alt=""
+                  className="max-h-16 rounded-medium"
+                />
+              )}
               <div className="flex flex-col justify-center">
                 <p className="text-base font-semibold text-white">
                   {site.name}

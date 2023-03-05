@@ -14,6 +14,7 @@ import SiteImg from "../assets/netlify-site.png";
 import Image from "next/image";
 import _ from "lodash";
 import { getRepoProviderText } from "../common/utils";
+import EnvModal from "./EnvModal";
 
 type Props = {
   siteInfo: SiteWithAccount;
@@ -32,6 +33,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
     repo_url,
     build_settings,
   } = siteInfo;
+  console.log("🚀 ~ file: SiteInfoCard.tsx:35 ~ siteInfo:", siteInfo);
 
   const repoUrl = build_settings?.repo_url || repo_url;
 
@@ -48,8 +50,10 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
     });
   };
 
+  const envs = siteInfo.build_settings?.env;
+
   return (
-    <div className="site-info-card max-w-2xl rounded-medium bg-background-secondary p-card_pad">
+    <div className="site-info-card min-w-2xl max-w-fit rounded-medium bg-background-secondary p-card_pad">
       <div className="flex justify-between">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-white">{name}</h1>
@@ -115,6 +119,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
           <MdCleaningServices />
           <span>Clear cache and build</span>
         </button>
+        {envs && <EnvModal envs={envs} />}
       </div>
     </div>
   );

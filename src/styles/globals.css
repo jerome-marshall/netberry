@@ -20,6 +20,10 @@
 @layer components {
   .button {
     @apply cursor-pointer rounded-medium bg-gray px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-teal-dark;
+
+    svg {
+      @apply h-4 w-4;
+    }
   }
 
   .status {
@@ -49,6 +53,23 @@
 
   .nav-item-active {
     @apply border-b-teal-light;
+  }
+
+  .env-section {
+    @apply flex-1;
+
+    .variable,
+    .value {
+      @apply -mx-6 break-all py-2 px-6 text-text-muted even:bg-background-active_hover last-of-type:-mb-2;
+    }
+
+    .variable {
+      @apply font-semibold;
+    }
+
+    .value {
+      @apply font-normal;
+    }
   }
 }
 

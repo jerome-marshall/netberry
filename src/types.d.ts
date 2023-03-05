@@ -36,13 +36,14 @@ export type Site = {
   id: string;
   site_id: string;
   name: string;
-  screenshot_url: string;
+  screenshot_url?: string;
   url: string;
   build_settings?: {
     provider: string;
     repo_url: string;
     repo_branch: string;
     repo_path: string;
+    env: Record<string, string>;
   };
   repo_url: string;
   published_deploy: {
