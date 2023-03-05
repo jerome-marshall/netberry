@@ -1,10 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import React, { FC } from "react";
-import { AccountNoToken, Site } from "../types";
+import { FC } from "react";
+import { SiteWithAccount } from "../types";
+import Shimmer from "./Shimmer";
 
 type Props = {
-  site: Site;
+  site: SiteWithAccount;
 };
 
 const SitesListItemDetail: FC<Props> = ({ site }) => {
@@ -33,3 +34,24 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
 };
 
 export default SitesListItemDetail;
+
+export const SitesListItemDetailLoader: FC = () => {
+  return (
+    <>
+      {Array(5)
+        .fill(0)
+        .map((_, i) => (
+          <div
+            className="card-item cursor-auto gap-6"
+            key={"SitesListItemDetailLoader" + i.toString()}
+          >
+            <Shimmer className="h-16 w-[102px]" />
+            <div className="flex flex-1 flex-col justify-center">
+              <Shimmer className="h-5 w-[60%]" />
+              <Shimmer className="mt-2 h-4 w-[40%]" />
+            </div>
+          </div>
+        ))}
+    </>
+  );
+};

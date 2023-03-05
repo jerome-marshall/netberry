@@ -1,15 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { NextPage } from "next";
+import SitesListItemDetail, {
+  SitesListItemDetailLoader,
+} from "../../components/SitesListItemDetail";
 import useSites from "../../hooks/useSites";
-import Link from "next/link";
-import SitesListItemDetail from "../../components/SitesListItemDetail";
 
 const SitesPage: NextPage = () => {
   const { sites } = useSites();
-
-  if (!sites) {
-    return <div>loading...</div>;
-  }
 
   return (
     <div className="sites-page bg-background-secondary py-card_pad">
@@ -18,9 +15,11 @@ const SitesPage: NextPage = () => {
         <div className="search-section"></div>
       </div>
       <div>
-        {sites.map((site) => (
-          <SitesListItemDetail key={site.id} site={site} />
-        ))}
+        {sites ? (
+          sites.map((site) => <SitesListItemDetail key={site.id} site={site} />)
+        ) : (
+          <SitesListItemDetailLoader />
+        )}
       </div>
     </div>
   );

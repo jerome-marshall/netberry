@@ -15,6 +15,7 @@ import Image from "next/image";
 import _ from "lodash";
 import { getRepoProviderText } from "../common/utils";
 import EnvModal from "./EnvModal";
+import Shimmer from "./Shimmer";
 
 type Props = {
   siteInfo: SiteWithAccount;
@@ -126,3 +127,17 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
 };
 
 export default SiteInfoCard;
+
+export const SiteInfoLoader = () => {
+  return (
+    <div className="site-info-card min-w-2xl max-w-fit rounded-medium bg-background-secondary p-card_pad">
+      <div className="flex justify-between">
+        <div className="flex flex-col gap-2">
+          <Shimmer className="h-2 w-20" height="lg" width="lg" />
+        </div>
+        <div className="image-section relative h-[104px] w-[168px] overflow-hidden rounded-medium"></div>
+      </div>
+      <div className="mt-6 flex gap-4"></div>
+    </div>
+  );
+};

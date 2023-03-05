@@ -5,7 +5,7 @@ import useSites from "../hooks/useSites";
 import { SitesLandingURL } from "../utils/urls";
 import Card from "./Card";
 import RightArrow from "./RightArrow";
-import ShimmerText from "./shimmer/elements/ShimmerText";
+import Shimmer from "./Shimmer";
 
 const SitesCard: FC = () => {
   const { sites, isLoading, error } = useSites();
@@ -59,8 +59,8 @@ const LoadingSitesCard: FC = () => (
           <div className="flex w-full gap-6">
             <div className="h-16 w-36 animate-pulse rounded-medium bg-background-active_hover" />
             <div className="flex w-full flex-col justify-center">
-              <ShimmerText height="md" width="md" />
-              <ShimmerText height="sm" width="sm" className="mt-2" />
+              <Shimmer height="md" width="md" />
+              <Shimmer height="sm" width="sm" className="mt-2" />
             </div>
           </div>
           <RightArrow />
