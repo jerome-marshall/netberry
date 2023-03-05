@@ -2,7 +2,12 @@ import { TRPCError } from "@trpc/server";
 import axios from "axios";
 import _ from "lodash";
 import _slugify from "slugify";
-import type { AccountCustom, Site } from "../types";
+import type {
+  AccountCustom,
+  BuildTriggerRes,
+  NetlifyDeploy,
+  Site,
+} from "../types";
 import type { AccountNoToken } from "./../types.d";
 import { axiosInstance } from "./api/trpc";
 import { prisma } from "./db";
@@ -60,6 +65,42 @@ export const getSiteByID = async ({
   const res = await axiosInstance.get<Site>(`/sites/${site_id}`, {
     headers: { Authorization: `Bearer ${account_token}` },
   });
+  return res.data;
+};
+
+export const getAllDeploys = async ({
+  site_id,
+  account_token,
+}: {
+  site_id: string;
+  account_token: string;
+}) => {
+  const res = await axiosInstance.get<NetlifyDeploy[]>(
+    `/sites/${site_id}/deploys?per_page=10`,
+    { headers: { Authorization: `Bearer ${account_token}` } }
+  );
+  const data = res.data;
+  return data;
+};
+
+export const triggerBuild = async ({
+  clear_cache,
+  site_id,
+  account_token,
+}: {
+  clear_cache: boolean;
+  site_id: string;
+  account_token: string;
+}) => {
+  const res = await axiosInstance.post<BuildTriggerRes>(
+    `/sites/${site_id}/builds`,
+    {
+      clear_cache,
+    },
+    {
+      headers: { Authorization: `Bearer ${account_token}` },
+    }
+  );
   return res.data;
 };
 

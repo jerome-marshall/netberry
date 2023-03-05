@@ -12,13 +12,20 @@ import {
 import clsx from "clsx";
 import { GoChevronRight } from "react-icons/go";
 import RightArrow from "./RightArrow";
+import { SiteWithAccount } from "../types";
 
 type Props = {
-  site_id: string;
+  siteInfo: SiteWithAccount;
 };
 
-const DeploysCard: FC<Props> = ({ site_id }) => {
-  const { data } = api.deploys.getAll.useQuery({ site_id });
+const DeploysCard: FC<Props> = ({ siteInfo }) => {
+  const {
+    account: { slug },
+    site_id,
+  } = siteInfo;
+
+  const { data } = api.deploys.getAll.useQuery({ site_id, account_slug: slug });
+  console.log("🚀 ~ file: DeploysCard.tsx:28 ~ data:", data);
 
   if (!data) return null;
   return (

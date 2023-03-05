@@ -1,17 +1,21 @@
+import {
+  getAccountBySlug,
+  getAllDeploys,
+  triggerBuild,
+} from "./../../serverUtils";
 import { z } from "zod";
 import { handleError } from "../../serverUtils";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import type { BuildTriggerRes, NetlifyDeploy } from "./../../../types";
 
 export const deployRouter = createTRPCRouter({
   getAll: publicProcedure
-    .input(z.object({ site_id: z.string() }))
-    .query(async ({ ctx: { axios }, input: { site_id } }) => {
+    .input(z.object({ site_id: z.string(), account_slug: z.string() }))
+    .query(async ({ input: { site_id, account_slug } }) => {
       try {
-        const res = await axios.get<NetlifyDeploy[]>(
-          `/sites/${site_id}/deploys?per_page=10`
-        );
-        const data = res.data;
+        const { account_token } = await getAccountBySlug({
+          slug: account_slug,
+        });
+        const data = await getAllDeploys({ site_id, account_token });
         return data;
       } catch (error) {
         handleError(error);
@@ -26,15 +30,17 @@ export const deployRouter = createTRPCRouter({
         account_slug: z.string(),
       })
     )
-    .mutation(async ({ ctx: { axios }, input: { clear_cache, site_id } }) => {
+    .mutation(async ({ input: { clear_cache, site_id, account_slug } }) => {
       try {
-        const res = await axios.post<BuildTriggerRes>(
-          `/sites/${site_id}/builds`,
-          {
-            clear_cache,
-          }
-        );
-        return res.data;
+        const { account_token } = await getAccountBySlug({
+          slug: account_slug,
+        });
+        const res = await triggerBuild({
+          clear_cache,
+          site_id,
+          account_token,
+        });
+        return res;
       } catch (error) {
         handleError(error);
       }

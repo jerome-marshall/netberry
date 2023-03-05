@@ -14,25 +14,38 @@ export const STATUS_THEME = {
   gold: "gold",
 };
 
+// deploy state from Netlify API
+export const DEPLOY_STATE = {
+  error: "error",
+  new: "new",
+  unknown: "unknown",
+  building: "building",
+  ready: "ready",
+  enqueued: "enqueued",
+  uploading: "uploading",
+};
+
+// deploy status to display
 export const DEPLOY_STATUS = {
   cancelled: "cancelled",
   failed: "failed",
   unknown: "unknown",
   new: "new",
   published: "published",
-};
-
-export const DEPLOY_STATE = {
-  error: "error",
-  new: "new",
-  unknown: "unknown",
-  ready: "ready",
+  publishing: "publishing",
+  building: "building",
+  waiting: "waiting",
+  skipped: "skipped",
 };
 
 export const DEPLOY_STATUS_THEME = {
   published: {
     status: DEPLOY_STATUS.published,
     theme: STATUS_THEME.teal,
+  },
+  building: {
+    status: DEPLOY_STATUS.building,
+    theme: STATUS_THEME.gold,
   },
   cancelled: {
     status: DEPLOY_STATUS.cancelled,
@@ -45,6 +58,18 @@ export const DEPLOY_STATUS_THEME = {
   new: {
     status: DEPLOY_STATUS.new,
     theme: STATUS_THEME.gold,
+  },
+  enqueued: {
+    status: DEPLOY_STATUS.waiting,
+    theme: STATUS_THEME.gold,
+  },
+  uploading: {
+    status: DEPLOY_STATUS.publishing,
+    theme: STATUS_THEME.gold,
+  },
+  skipped: {
+    status: DEPLOY_STATUS.skipped,
+    theme: STATUS_THEME.grey,
   },
   unknown: {
     status: DEPLOY_STATUS.unknown,
@@ -61,6 +86,8 @@ export const getDeployStatus = (deploy: NetlifyDeploy) => {
     case DEPLOY_STATE.error:
       if (error_message === "Canceled build") {
         status = DEPLOY_STATUS_THEME.cancelled;
+      } else if (error_message === "Skipped") {
+        status = DEPLOY_STATUS_THEME.skipped;
       } else {
         status = DEPLOY_STATUS_THEME.failed;
       }
@@ -70,6 +97,9 @@ export const getDeployStatus = (deploy: NetlifyDeploy) => {
       break;
     case DEPLOY_STATE.ready:
       status = DEPLOY_STATUS_THEME.published;
+      break;
+    case DEPLOY_STATE.building:
+      status = DEPLOY_STATUS_THEME.building;
       break;
 
     default:

@@ -24,7 +24,7 @@ const SiteDetailPage = () => {
   return (
     <div>
       <SiteInfoCard siteInfo={site} />
-      <DeploysCard site_id={site_id} />
+      <DeploysCard siteInfo={site} />
     </div>
   );
 };

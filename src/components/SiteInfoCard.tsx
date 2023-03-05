@@ -21,7 +21,6 @@ type Props = {
 
 const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
   const { mutate, data, error } = api.deploys.triggerBuild.useMutation();
-  console.log("🚀 ~ file: SiteInfoCard.tsx:24 ~ error:", error);
 
   const {
     published_deploy,
