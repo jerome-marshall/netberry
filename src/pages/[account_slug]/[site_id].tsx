@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
 import DeploysCard from "../../components/DeploysCard";
 import SiteInfoCard from "../../components/SiteInfoCard";
 import { api } from "../../utils/api";
@@ -16,10 +17,16 @@ const SiteDetailPage = () => {
 
   const site = data?.site;
 
+  const [refetchDeploys, setRefetchDeploys] = useState(() => null);
+  console.log(
+    "🚀 ~ file: [site_id].tsx:21 ~ SiteDetailPage ~ refetchDeploys:",
+    refetchDeploys
+  );
+
   return (
     <div>
-      <SiteInfoCard siteInfo={site} />
-      <DeploysCard siteInfo={site} />
+      <SiteInfoCard siteInfo={site} refetchDeploys={refetchDeploys} />
+      <DeploysCard siteInfo={site} setRefetchDeploys={setRefetchDeploys} />
     </div>
   );
 };

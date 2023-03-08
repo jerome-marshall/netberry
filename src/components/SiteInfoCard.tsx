@@ -19,9 +19,10 @@ import Shimmer from "./Shimmer";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
+  refetchDeploys: (() => void | undefined) | null;
 };
 
-const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
+const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
   const { mutate, data, error } = api.deploys.triggerBuild.useMutation();
 
   if (!siteInfo) return <SiteInfoLoader />;
@@ -51,6 +52,10 @@ const SiteInfoCard: FC<Props> = ({ siteInfo }) => {
       site_id: id,
       account_slug: siteInfo.account.slug,
     });
+
+    setTimeout(() => {
+      refetchDeploys && refetchDeploys();
+    }, 1000);
   };
 
   const envs = siteInfo.build_settings?.env;

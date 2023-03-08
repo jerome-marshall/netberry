@@ -1,7 +1,8 @@
 import clsx from "clsx";
 import Link from "next/link";
-import { FC } from "react";
-import { SiteWithAccount } from "../types";
+import type { Dispatch, FC, SetStateAction } from "react";
+import { useEffect } from "react";
+import type { SiteWithAccount } from "../types";
 import { api } from "../utils/api";
 import {
   getDeployDuration,
@@ -16,19 +17,32 @@ import Shimmer from "./Shimmer";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
+  setRefetchDeploys:
+    | Dispatch<SetStateAction<null>>
+    | Dispatch<SetStateAction<() => unknown>>;
 };
 
-const DeploysCard: FC<Props> = ({ siteInfo }) => {
-  if (!siteInfo) return <DeploysCardLoader />;
+const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
+  const site_id = siteInfo?.site_id as string;
+  const slug = siteInfo?.account?.slug as string;
 
-  const {
-    account: { slug },
-    site_id,
-  } = siteInfo;
+  const { data, refetch } = api.deploys.getAll.useQuery(
+    { site_id, account_slug: slug },
+    {
+      // refetchInterval: 1000,
+      enabled: !!siteInfo,
+    }
+  );
 
-  const { data } = api.deploys.getAll.useQuery({ site_id, account_slug: slug });
+  useEffect(() => {
+    setRefetchDeploys &&
+      setRefetchDeploys(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+        () => refetch as any
+      );
+  }, [refetch, setRefetchDeploys]);
 
-  if (!data) return <DeploysCardLoader />;
+  if (!siteInfo || !data) return <DeploysCardLoader />;
 
   return (
     <div className="mt-6">
