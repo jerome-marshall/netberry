@@ -2,9 +2,10 @@ import clsx from "clsx";
 import Link from "next/link";
 import type { Dispatch, FC, SetStateAction } from "react";
 import { useEffect } from "react";
-import type { SiteWithAccount } from "../types";
+import type { NetlifyDeploy, SiteWithAccount } from "../types";
 import { api } from "../utils/api";
 import {
+  getDeplayStatusText,
   getDeployDuration,
   getDeployMessage,
   getDeployStatus,
@@ -14,6 +15,16 @@ import {
 import Card from "./Card";
 import RightArrow from "./RightArrow";
 import Shimmer from "./Shimmer";
+
+import { AiOutlineLink } from "react-icons/ai";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./Dialog";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
@@ -55,67 +66,101 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
               deployStatus === "published") ||
             deployStatus !== "published";
 
-          const { id, context, branch, created_at, published_at, deploy_url } =
-            deploy;
+          const {
+            id,
+            context,
+            branch,
+            created_at,
+            published_at,
+            deploy_url,
+            links,
+          } = deploy;
+
+          console.log(
+            "🚀 ~ file: DeploysCard.tsx:164 ~ {data.map ~ deploy:",
+            deploy
+          );
+
           return (
-            <div
-              key={id}
-              className={clsx(
-                "card-item group cursor-pointer justify-between gap-6",
-                published_at && "card-item-muted"
-              )}
-            >
-              <div className="">
-                <div className="flex gap-2">
-                  <p className="text-sm">
-                    {published_at ? (
-                      <Link
-                        href={deploy_url}
-                        className="font-semibold capitalize text-white underline decoration-text-muted hover:decoration-white hover:decoration-2"
-                      >
-                        {context}
-                      </Link>
-                    ) : (
-                      <span className="capitalize">{context}</span>
-                    )}
-                    {": "}
-                    {branch}@
-                    <Link
-                      href={""}
-                      className="text-[80%] underline decoration-text-muted hover:text-white hover:decoration-white"
+            <Dialog key={id}>
+              <DialogTrigger
+                className={clsx(
+                  "card-item group w-full cursor-pointer justify-between gap-6",
+                  published_at && "card-item-muted"
+                )}
+              >
+                <div className="flex flex-col">
+                  <div className="flex gap-2">
+                    <GitInfo deploy={deploy} className="text-sm" />
+                    {showStatus && (
+                      <p className={getStatusTheme(theme)}>{deployStatus}</p>
+                    )}{" "}
+                  </div>
+                  <p className=" text-left text-sm text-text-muted">
+                    {getDeployMessage(deploy)}
+                  </p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex flex-col items-end justify-center">
+                    <p
+                      className={clsx(
+                        "text-sm  ",
+                        published_at
+                          ? "font-bold text-white"
+                          : "font-normal text-text-muted"
+                      )}
                     >
-                      HEAD
-                    </Link>
-                  </p>
-                  {showStatus && (
-                    <p className={getStatusTheme(theme)}>{deployStatus}</p>
-                  )}{" "}
-                </div>
-                <p className=" text-sm text-text-muted">
-                  {getDeployMessage(deploy)}
-                </p>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex flex-col items-end justify-center">
-                  <p
-                    className={clsx(
-                      "text-sm  ",
-                      published_at
-                        ? "font-bold text-white"
-                        : "font-normal text-text-muted"
-                    )}
-                  >
-                    {getDeployTime(created_at)}
-                  </p>
-                  {published_at && (
-                    <p className="mt-1 text-xs text-text-muted">
-                      Deployed in {getDeployDuration(created_at, published_at)}
+                      {getDeployTime(created_at)}
                     </p>
-                  )}
+                    {published_at && (
+                      <p className="mt-1 text-xs text-text-muted">
+                        Deployed in{" "}
+                        {getDeployDuration(created_at, published_at)}
+                      </p>
+                    )}
+                  </div>
+                  <RightArrow />
                 </div>
-                <RightArrow />
-              </div>
-            </div>
+              </DialogTrigger>
+              <DialogContent className="w-auto min-w-[500px] !max-w-[900px]">
+                <DialogHeader>
+                  <DialogTitle>Deploy Details</DialogTitle>
+                  <DialogDescription>
+                    <div className="mt-4">
+                      <div className="flex justify-between">
+                        <p className="text-2xl">
+                          Deploy {getDeplayStatusText(deployStatus)}
+                        </p>
+                        <p className=" text-text-muted">
+                          {getDeployTime(created_at)}
+                        </p>
+                      </div>
+                      {deployStatus === "published" && (
+                        <p className="mt-2 text-base text-text-muted">
+                          Deployed in{" "}
+                          {getDeployDuration(created_at, published_at)}
+                        </p>
+                      )}
+                      <GitInfo
+                        deploy={deploy}
+                        className="mt-2 text-text-muted"
+                      />
+                      {links?.permalink && deployStatus === "published" && (
+                        <a
+                          href={links?.permalink}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="button-teal mt-6 flex w-fit items-center text-base"
+                        >
+                          <span>Open permalink</span>
+                          <AiOutlineLink className="ml-3 !h-5 !w-5" />
+                        </a>
+                      )}
+                    </div>
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           );
         })}
       </Card>
@@ -124,6 +169,40 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
 };
 
 export default DeploysCard;
+
+const GitInfo = ({
+  deploy,
+  className,
+}: {
+  deploy: NetlifyDeploy;
+  className?: string;
+}) => {
+  const { id, context, branch, created_at, published_at, deploy_url } = deploy;
+
+  return (
+    <p className={className}>
+      {published_at ? (
+        <Link
+          href={deploy_url}
+          className="font-semibold capitalize underline decoration-text-muted hover:text-white hover:decoration-white hover:decoration-2"
+        >
+          {context}
+        </Link>
+      ) : (
+        <span className="capitalize">{context}</span>
+      )}
+      {": "}
+      {branch}
+      {/* @
+      <Link
+        href={""}
+        className="text-[80%] underline decoration-text-muted hover:text-white hover:decoration-white"
+      >
+        HEAD
+      </Link> */}
+    </p>
+  );
+};
 
 export const DeploysCardLoader = () => {
   return (

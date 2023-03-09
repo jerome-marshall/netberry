@@ -123,6 +123,31 @@ export const getDeployStatus = (deploy: NetlifyDeploy) => {
   return status;
 };
 
+export const getDeplayStatusText = (status: string) => {
+  switch (status) {
+    case DEPLOY_STATUS.published:
+      return "successful";
+    case DEPLOY_STATUS.building:
+      return "building";
+    case DEPLOY_STATUS.cancelled:
+      return "cancelled";
+    case DEPLOY_STATUS.failed:
+      return "failed";
+    case DEPLOY_STATUS.new:
+      return "not started";
+    case DEPLOY_STATUS.waiting:
+      return "waiting";
+    case DEPLOY_STATUS.publishing:
+      return "publishing";
+    case DEPLOY_STATUS.skipped:
+      return "skipped";
+    case DEPLOY_STATUS.unknown:
+      return "unknown";
+    default:
+      return "Unknown";
+  }
+};
+
 export const getStatusTheme = (theme: string) => {
   if (theme === STATUS_THEME.gold) return "status-gold";
   if (theme === STATUS_THEME.red) return "status-red";

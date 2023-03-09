@@ -19,11 +19,15 @@
 
 @layer components {
   .button {
-    @apply cursor-pointer rounded-medium bg-gray px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-teal-dark;
+    @apply flex cursor-pointer items-center rounded-medium bg-gray px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-teal-dark disabled:cursor-not-allowed disabled:opacity-75;
 
     svg {
       @apply h-4 w-4;
     }
+  }
+
+  .button-teal {
+    @apply button bg-teal-light px-4 py-2 text-teal-dark hover:bg-teal-dark hover:text-teal-lighter;
   }
 
   .status {

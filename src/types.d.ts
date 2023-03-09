@@ -20,6 +20,9 @@ export type NetlifyDeploy = {
   branch: string;
   context: string;
   deploy_url: string;
+  links?: {
+    permalink?: string;
+  };
 };
 
 export type AccountCustom = {

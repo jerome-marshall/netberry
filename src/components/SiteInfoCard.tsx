@@ -151,17 +151,13 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
         </Link>
       </div>
       <div className="mt-6 flex gap-4">
-        <Link
-          href={admin_url}
-          target="_blank"
-          className={clsx("button flex items-center gap-2")}
-        >
+        <Link href={admin_url} target="_blank" className={clsx("button gap-2")}>
           <SiNetlify />
           <span>Open in Netlify</span>
         </Link>
         <button
           className={clsx(
-            "button flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-75",
+            "button gap-2",
             toastId && "cursor-not-allowed bg-blue-light"
           )}
           onClick={() => triggerBuild({ clearCache: false })}
@@ -171,9 +167,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
           <span>Trigger build</span>
         </button>
         <button
-          className={clsx(
-            "button flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-75"
-          )}
+          className={clsx("button gap-2 ")}
           onClick={() => triggerBuild({ clearCache: true })}
           disabled={trigerring}
         >

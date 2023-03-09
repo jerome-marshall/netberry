@@ -51,9 +51,7 @@ const Header: FC = () => {
           >
             Accounts
           </Link>
-          <button className="button bg-teal-light px-4 py-2 text-teal-dark hover:bg-teal-dark hover:text-teal-lighter">
-            Login
-          </button>
+          <button className="button-teal">Login</button>
         </div>
       )}
     </div>
