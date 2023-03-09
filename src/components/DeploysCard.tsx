@@ -141,10 +141,16 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
                           {getDeployDuration(created_at, published_at)}
                         </p>
                       )}
+
                       <GitInfo
                         deploy={deploy}
                         className="mt-2 text-text-muted"
                       />
+                      {deployStatus === "failed" && (
+                        <p className="mt-2 text-base text-text-muted">
+                          Error message: {getDeployMessage(deploy)}
+                        </p>
+                      )}
                       {links?.permalink && deployStatus === "published" && (
                         <a
                           href={links?.permalink}
