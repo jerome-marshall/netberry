@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import axios from "axios";
 import _ from "lodash";
@@ -110,11 +111,64 @@ export const handleError = (error: unknown) => {
       console.error(error.response.data);
       console.error(error.response.status);
       console.error(error.response.headers);
+
+      if (error.response.status === 401) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Unauthorized",
+        });
+      }
+
+      if (error.response.status === 404) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Not Found",
+        });
+      }
+
+      if (error.response.status === 500) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Server Error",
+        });
+      }
+
+      if (error.response.status === 502) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Bad Gateway",
+        });
+      }
+
+      if (error.response.status === 503) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Service Unavailable",
+        });
+      }
+
+      if (error.response.status === 504) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Gateway Timeout",
+        });
+      }
     } else if (error.request) {
       console.error(error.request);
-    } else {
-      console.error("Error", error.message);
+
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Server Error",
+      });
+    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.error(error.message);
+
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Server Error - Prisma - " + error.message,
+      });
     }
+
     console.error(error.config);
   }
   throw new TRPCError({

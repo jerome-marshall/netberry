@@ -1,11 +1,11 @@
+import { z } from "zod";
+import { handleError } from "../../serverUtils";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
   getAccountBySlug,
   getAllDeploys,
   triggerBuild,
 } from "./../../serverUtils";
-import { z } from "zod";
-import { handleError } from "../../serverUtils";
-import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const deployRouter = createTRPCRouter({
   getAll: publicProcedure

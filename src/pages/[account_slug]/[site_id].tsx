@@ -18,10 +18,6 @@ const SiteDetailPage = () => {
   const site = data?.site;
 
   const [refetchDeploys, setRefetchDeploys] = useState(() => null);
-  console.log(
-    "🚀 ~ file: [site_id].tsx:21 ~ SiteDetailPage ~ refetchDeploys:",
-    refetchDeploys
-  );
 
   return (
     <div>

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import type { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import React from "react";
 import type { Site, SiteWithAccount } from "../types";
 import { format } from "date-fns";
@@ -16,6 +16,9 @@ import _ from "lodash";
 import { getRepoProviderText } from "../common/utils";
 import EnvModal from "./EnvModal";
 import Shimmer from "./Shimmer";
+import { Id, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import clsx from "clsx";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
@@ -23,7 +26,53 @@ type Props = {
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
-  const { mutate, data, error } = api.deploys.triggerBuild.useMutation();
+  let toastId: Id | null = null;
+
+  const [trigerring, setTrigerring] = useState(false);
+
+  const { mutate, data, error } = api.deploys.triggerBuild.useMutation({
+    onMutate(variables) {
+      console.log(
+        "🚀 ~ file: SiteInfoCard.tsx:39 ~ onMutate ~ variables:",
+        variables
+      );
+
+      const id = toast.loading("Please wait...");
+      toastId = id;
+    },
+    onSuccess() {
+      setTimeout(() => {
+        toastId &&
+          toast.update(toastId, {
+            render: "Build triggered successfully",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+
+        toastId = null;
+        setTrigerring(false);
+      }, 1000);
+    },
+    onError() {
+      setTimeout(() => {
+        toastId &&
+          toast.update(toastId, {
+            render: "Something went wrong",
+            type: "error",
+            isLoading: false,
+            autoClose: 2000,
+          });
+
+        toastId = null;
+        setTrigerring(false);
+      }, 1000);
+    },
+
+    onSettled() {
+      refetchDeploys?.();
+    },
+  });
 
   if (!siteInfo) return <SiteInfoLoader />;
 
@@ -37,7 +86,6 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     repo_url,
     build_settings,
   } = siteInfo;
-  console.log("🚀 ~ file: SiteInfoCard.tsx:35 ~ siteInfo:", siteInfo);
 
   const repoUrl = build_settings?.repo_url || repo_url;
 
@@ -53,9 +101,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
       account_slug: siteInfo.account.slug,
     });
 
-    setTimeout(() => {
-      refetchDeploys && refetchDeploys();
-    }, 1000);
+    setTrigerring(true);
   };
 
   const envs = siteInfo.build_settings?.env;
@@ -108,21 +154,28 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
         <Link
           href={admin_url}
           target="_blank"
-          className="button flex items-center gap-2"
+          className={clsx("button flex items-center gap-2")}
         >
           <SiNetlify />
           <span>Open in Netlify</span>
         </Link>
         <button
-          className="button flex items-center gap-2"
+          className={clsx(
+            "button flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-75",
+            toastId && "cursor-not-allowed bg-blue-light"
+          )}
           onClick={() => triggerBuild({ clearCache: false })}
+          disabled={trigerring}
         >
           <FaBolt />
           <span>Trigger build</span>
         </button>
         <button
-          className="button flex items-center gap-2"
+          className={clsx(
+            "button flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-75"
+          )}
           onClick={() => triggerBuild({ clearCache: true })}
+          disabled={trigerring}
         >
           <MdCleaningServices />
           <span>Clear cache and build</span>
