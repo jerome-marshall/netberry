@@ -7,6 +7,9 @@ module.exports = {
       padding: {
         card_pad: "24px",
       },
+      borderRadius: {
+        medium: "8px",
+      },
     },
     container: {
       center: true,
@@ -18,9 +21,7 @@ module.exports = {
         "2xl": "1240px",
       },
     },
-    borderRadius: {
-      medium: "8px",
-    },
+
     colors: {
       background: {
         primary: "#070b0d",
