@@ -1,7 +1,7 @@
 import { accountRouter } from "./routers/account";
+import { deployRouter } from "./routers/deploy";
 import { siteRouter } from "./routers/site";
 import { createTRPCRouter } from "./trpc";
-import { deployRouter } from "./routers/deploy";
 
 /**
  * This is the primary router for your server.

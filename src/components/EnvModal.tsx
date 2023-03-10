@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import type { FC } from "react";
+import { HiOutlineKey } from "react-icons/hi";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./Dialog";
-import { HiOutlineKey } from "react-icons/hi";
 
 type Props = {
   envs: Record<string, string>;

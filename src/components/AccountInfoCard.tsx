@@ -1,6 +1,5 @@
-import Link from "next/link";
-import React, { FC } from "react";
-import { AccountCustom, AccountNoToken } from "../types";
+import type { FC } from "react";
+import type { AccountNoToken } from "../types";
 
 type Props = {
   account: AccountNoToken;

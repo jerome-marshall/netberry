@@ -1,5 +1,6 @@
 import Link from "next/link";
-import React, { FC } from "react";
+import type { FC } from "react";
+import React from "react";
 import RightArrow from "../../components/RightArrow";
 import { api } from "../../utils/api";
 

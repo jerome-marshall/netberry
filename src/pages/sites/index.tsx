@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import SitesListItemDetail, {
   SitesListItemDetailLoader,
 } from "../../components/SitesListItemDetail";

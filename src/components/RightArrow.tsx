@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import React from "react";
 import { GoChevronRight } from "react-icons/go";
 
 const RightArrow = ({ className }: { className?: string }) => {

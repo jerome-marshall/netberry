@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { FC } from "react";
+import type { FC } from "react";
 import useSites from "../hooks/useSites";
 import { SitesLandingURL } from "../utils/urls";
 import Card from "./Card";

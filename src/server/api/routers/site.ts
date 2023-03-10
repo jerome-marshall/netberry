@@ -1,8 +1,8 @@
-import type { AccountNoToken } from "./../../../types.d";
 import { z } from "zod";
 import type { SiteWithAccount } from "../../../types";
 import { getAllAccounts, getAllSites, handleError } from "../../serverUtils";
 import { createTRPCRouter, publicProcedure } from "../trpc";
+import type { AccountNoToken } from "./../../../types.d";
 import { getAccountBySlug, getSiteByID } from "./../../serverUtils";
 
 export const siteRouter = createTRPCRouter({

@@ -1,8 +1,8 @@
-import { FC, useEffect } from "react";
-import React from "react";
-import Header from "./Header";
+import { signIn, useSession } from "next-auth/react";
+import type { FC } from "react";
+import React, { useEffect } from "react";
 import Footer from "./Footer";
-import { useSession, signIn, signOut } from "next-auth/react";
+import Header from "./Header";
 
 interface LayoutProps {
   children: React.ReactNode;

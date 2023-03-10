@@ -1,8 +1,7 @@
-import type { FC } from "react";
-import React from "react";
-import starberryLogo from "../assets/starberry-landscape-logo-white.png";
 import Image from "next/image";
 import Link from "next/link";
+import type { FC } from "react";
+import starberryLogo from "../assets/starberry-landscape-logo-white.png";
 
 // interface HeaderProps {
 //   children: React.ReactNode;

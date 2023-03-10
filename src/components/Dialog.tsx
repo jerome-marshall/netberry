@@ -1,5 +1,5 @@
-import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import * as React from "react";
 import { IoCloseSharp } from "react-icons/io5";
 
 import cn from "clsx";

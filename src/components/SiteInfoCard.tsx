@@ -1,24 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
-import { FC, useEffect, useState } from "react";
-import React from "react";
-import type { Site, SiteWithAccount } from "../types";
+import clsx from "clsx";
 import { format } from "date-fns";
-import { SiNetlify } from "react-icons/si";
+import _ from "lodash";
+import Image from "next/image";
+import Link from "next/link";
+import type { FC } from "react";
+import { useState } from "react";
 import { FaBolt } from "react-icons/fa";
 import { MdCleaningServices } from "react-icons/md";
-import { api } from "../utils/api";
+import { SiNetlify } from "react-icons/si";
+import type { Id } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import SiteImg from "../assets/netlify-site.png";
-import Image from "next/image";
-import _ from "lodash";
 import { getRepoProviderText } from "../common/utils";
+import type { SiteWithAccount } from "../types";
+import { api } from "../utils/api";
 import EnvModal from "./EnvModal";
 import Shimmer from "./Shimmer";
-import { Id, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import clsx from "clsx";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;

@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import { type } from "os";
-import React, { FC } from "react";
+import type { FC } from "react";
 
 type Props = {
   className?: string;

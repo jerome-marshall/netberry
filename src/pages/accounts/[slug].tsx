@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
-import React, { FC } from "react";
+import type { FC } from "react";
 import AccountInfoCard from "../../components/AccountInfoCard";
 import Card from "../../components/Card";
 import SitesListItemDetail from "../../components/SitesListItemDetail";
 import { api } from "../../utils/api";
-import { SitesLandingURL } from "../../utils/urls";
 
 const AccountsDetailPage: FC = () => {
   const router = useRouter();

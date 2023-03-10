@@ -1,11 +1,6 @@
 import { type NextPage } from "next";
-import { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import { Site } from "../types";
-import { api } from "../utils/api";
-import SitesCard from "../components/SitesCard";
-import DeploysCard from "../components/DeploysCard";
 import AccountsCard from "../components/AccountsCard";
+import SitesCard from "../components/SitesCard";
 
 const Home: NextPage = () => {
   return (

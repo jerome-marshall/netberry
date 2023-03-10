@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { FC } from "react";
-import { SiteWithAccount } from "../types";
+import type { FC } from "react";
+import type { SiteWithAccount } from "../types";
 import Shimmer from "./Shimmer";
 
 type Props = {
