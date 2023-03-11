@@ -25,7 +25,6 @@ const Header: FC = () => {
   const isAuthenticated = status === "authenticated";
 
   const userImage = data?.user?.image;
-  console.log("🚀 ~ file: Header.tsx:28 ~ data:", data);
 
   return (
     <div className="header flex items-center justify-between py-8">

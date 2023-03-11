@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import Link from "next/link";
-import type { Dispatch, FC, SetStateAction } from "react";
-import { useEffect } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import type { NetlifyDeploy, SiteWithAccount } from "../types";
 import { api } from "../utils/api";
 import {
@@ -17,6 +16,7 @@ import RightArrow from "./RightArrow";
 import Shimmer from "./Shimmer";
 
 import { AiOutlineLink } from "react-icons/ai";
+import usePagination from "../hooks/usePagination";
 import {
   Dialog,
   DialogContent,
@@ -25,7 +25,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./Dialog";
-import usePagination from "../hooks/usePagination";
 import Pagination from "./Pagination";
 
 type Props = {
@@ -36,16 +35,36 @@ type Props = {
 };
 
 const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
+  const [refetchInterval, setRefetchInterval] = useState(0);
+
   const site_id = siteInfo?.site_id as string;
   const slug = siteInfo?.account?.slug as string;
 
   const { data, refetch } = api.deploys.getAll.useQuery(
     { site_id, account_slug: slug },
     {
-      // refetchInterval: 1000,
+      refetchInterval,
       enabled: !!siteInfo,
     }
   );
+
+  useEffect(() => {
+    if (data) {
+      const shouldRefetch = data.some(
+        (deploy) =>
+          deploy.state === "building" ||
+          deploy.state === "enqueued" ||
+          deploy.state === "uploading" ||
+          deploy.state === "processing"
+      );
+
+      if (shouldRefetch) {
+        setRefetchInterval(5000);
+      } else {
+        setRefetchInterval(0);
+      }
+    }
+  }, [data]);
 
   useEffect(() => {
     setRefetchDeploys &&
@@ -75,11 +94,6 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
               deployStatus !== "published";
 
             const { id, created_at, published_at, links } = deploy;
-
-            console.log(
-              "🚀 ~ file: DeploysCard.tsx:164 ~ {data.map ~ deploy:",
-              deploy
-            );
 
             return (
               <Dialog key={id}>

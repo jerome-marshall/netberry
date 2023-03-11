@@ -33,11 +33,6 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
 
   const { mutate, data, error } = api.deploys.triggerBuild.useMutation({
     onMutate(variables) {
-      console.log(
-        "🚀 ~ file: SiteInfoCard.tsx:39 ~ onMutate ~ variables:",
-        variables
-      );
-
       const id = toast.loading("Please wait...");
       toastId = id;
     },
