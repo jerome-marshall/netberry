@@ -81,6 +81,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     admin_url,
     repo_url,
     build_settings,
+    account,
   } = siteInfo;
 
   const repoUrl = build_settings?.repo_url || repo_url;
@@ -109,6 +110,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
           <h1 className="text-2xl font-semibold text-white">{name}</h1>
           <Link
             href={url}
+            target="_blank"
             className="mt-1 text-base text-teal-light underline-offset-2 hover:underline"
           >
             {url}
@@ -116,12 +118,17 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
           {repoUrl && (
             <p className=" text-text-muted">
               Deploys from{" "}
-              <Link href={repoUrl} className="underline hover:text-white">
+              <Link
+                href={repoUrl}
+                target="_blank"
+                className="underline hover:text-white"
+              >
                 {getRepoProviderText(build_settings?.provider)}
               </Link>
               .
             </p>
           )}
+          <p className=" text-text-muted">Hosted at {account.email}. </p>
           <p className=" text-text-muted">Last published on {formatedDate}.</p>
         </div>
         <Link
@@ -185,6 +192,7 @@ export const SiteInfoLoader = () => {
         <div className="flex flex-col gap-2">
           <Shimmer className="h-8 w-[300px]" />
           <Shimmer className="h-5 w-[300px]" />
+          <Shimmer className="h-4 w-[240px]" />
           <Shimmer className="h-4 w-[240px]" />
           <Shimmer className="h-4 w-[240px]" />
         </div>
