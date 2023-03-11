@@ -41,7 +41,7 @@ const Pagination = ({
   if (totalPageNumbers < 2) return null;
 
   return (
-    <div className="pagination-container mx-auto mt-6 flex items-center gap-6">
+    <div className="pagination-container mx-auto mt-6 flex items-center justify-center gap-6">
       <button
         onClick={() => handlePageChange("back")}
         className={`button button-secondary pagination-button button-back ${

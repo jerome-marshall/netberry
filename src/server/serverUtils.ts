@@ -77,7 +77,7 @@ export const getAllDeploys = async ({
   account_token: string;
 }) => {
   const res = await axiosInstance.get<NetlifyDeploy[]>(
-    `/sites/${site_id}/deploys?per_page=10`,
+    `/sites/${site_id}/deploys`,
     { headers: { Authorization: `Bearer ${account_token}` } }
   );
   const data = res.data;
