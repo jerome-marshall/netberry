@@ -9,6 +9,7 @@ import Shimmer from "./Shimmer";
 
 const SitesCard: FC = () => {
   const { sites, isLoading, error } = useSites();
+  console.log("🚀 ~ file: SitesCard.tsx:12 ~ sites:", sites);
   if (isLoading || !sites) return <LoadingSitesCard />;
 
   return (
@@ -33,10 +34,11 @@ const SitesCard: FC = () => {
                   {site.name}
                 </p>
                 <Link
-                  href={site.url}
+                  href={site.ssl_url || site.url}
+                  target="_blank"
                   className="text-sm text-text-muted hover:underline "
                 >
-                  {site.url}
+                  {site.ssl_url || site.url}
                 </Link>
               </div>
             </div>

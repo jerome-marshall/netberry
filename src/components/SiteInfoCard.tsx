@@ -75,6 +75,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
   const {
     published_deploy,
     url,
+    ssl_url,
     name,
     screenshot_url,
     id,
@@ -109,11 +110,11 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-white">{name}</h1>
           <Link
-            href={url}
+            href={ssl_url || url}
             target="_blank"
             className="mt-1 text-base text-teal-light underline-offset-2 hover:underline"
           >
-            {url}
+            {ssl_url || url}
           </Link>
           {repoUrl && (
             <p className=" text-text-muted">

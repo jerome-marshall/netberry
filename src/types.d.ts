@@ -41,6 +41,7 @@ export type Site = {
   name: string;
   screenshot_url?: string;
   url: string;
+  ssl_url?: string;
   build_settings?: {
     provider: string;
     repo_url: string;
