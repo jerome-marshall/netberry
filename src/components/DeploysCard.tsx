@@ -76,7 +76,6 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
 
   const pagination = usePagination({
     items: data,
-    itemsPerPage: 10,
   });
 
   if (!siteInfo || !data) return <DeploysCardLoader />;

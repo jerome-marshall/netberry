@@ -5,8 +5,9 @@ const usePagination = <T>({
   itemsPerPage,
 }: {
   items: T[] | undefined;
-  itemsPerPage: number;
+  itemsPerPage?: number;
 }) => {
+  itemsPerPage ||= 10;
   const [currentPage, setCurrentPage] = useState(1);
 
   // Get current items

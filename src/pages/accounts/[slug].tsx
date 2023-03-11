@@ -7,6 +7,8 @@ import Card from "../../components/Card";
 import SitesListItemDetail from "../../components/SitesListItemDetail";
 import { api } from "../../utils/api";
 import { SitesListItemDetailLoader } from "../../components/SitesListItemDetail";
+import Pagination from "../../components/Pagination";
+import usePagination from "../../hooks/usePagination";
 
 const AccountsDetailPage: FC = () => {
   const router = useRouter();
@@ -20,23 +22,31 @@ const AccountsDetailPage: FC = () => {
   const account = data?.account;
   const sites = data?.sites;
 
+  const pagination = usePagination({
+    items: sites,
+    itemsPerPage: 8,
+  });
+
   return (
-    <div>
-      {account && sites ? (
-        <AccountInfoCard account={account} sitesCount={sites.length} />
-      ) : (
-        <LoadingAccountInfoCard />
-      )}
-      <Card title="Sites" className="mt-6">
-        {sites ? (
-          sites.map((site) => (
-            <SitesListItemDetail site={{ ...site }} key={site.id} />
-          ))
+    <>
+      <div>
+        {account && sites ? (
+          <AccountInfoCard account={account} sitesCount={sites.length} />
         ) : (
-          <SitesListItemDetailLoader />
+          <LoadingAccountInfoCard />
         )}
-      </Card>
-    </div>
+        <Card title="Sites" className="mt-6">
+          {sites ? (
+            pagination.currentItems.map((site) => (
+              <SitesListItemDetail site={{ ...site }} key={site.id} />
+            ))
+          ) : (
+            <SitesListItemDetailLoader />
+          )}
+        </Card>
+      </div>
+      <Pagination {...pagination} />
+    </>
   );
 };
 
