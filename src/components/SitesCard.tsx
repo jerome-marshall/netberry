@@ -14,7 +14,7 @@ const SitesCard: FC = () => {
   return (
     <div className="col-span-8">
       <Card title="Sites" titleLink={SitesLandingURL}>
-        {sites.map((site) => (
+        {sites.slice(0, 10).map((site) => (
           <Link
             href={`${site.account.slug}/${site.id}`}
             key={site.id + site.name}

@@ -1,9 +1,12 @@
 import { useRouter } from "next/router";
 import type { FC } from "react";
-import AccountInfoCard from "../../components/AccountInfoCard";
+import AccountInfoCard, {
+  LoadingAccountInfoCard,
+} from "../../components/AccountInfoCard";
 import Card from "../../components/Card";
 import SitesListItemDetail from "../../components/SitesListItemDetail";
 import { api } from "../../utils/api";
+import { SitesListItemDetailLoader } from "../../components/SitesListItemDetail";
 
 const AccountsDetailPage: FC = () => {
   const router = useRouter();
@@ -14,17 +17,24 @@ const AccountsDetailPage: FC = () => {
     account_slug,
   });
 
-  if (!data || isLoading) return <div>Loading...</div>;
-
-  const { account, sites } = data;
+  const account = data?.account;
+  const sites = data?.sites;
 
   return (
     <div>
-      <AccountInfoCard account={account} sitesCount={sites.length} />
+      {account && sites ? (
+        <AccountInfoCard account={account} sitesCount={sites.length} />
+      ) : (
+        <LoadingAccountInfoCard />
+      )}
       <Card title="Sites" className="mt-6">
-        {sites.map((site) => (
-          <SitesListItemDetail site={{ ...site }} key={site.id} />
-        ))}
+        {sites ? (
+          sites.map((site) => (
+            <SitesListItemDetail site={{ ...site }} key={site.id} />
+          ))
+        ) : (
+          <SitesListItemDetailLoader />
+        )}
       </Card>
     </div>
   );

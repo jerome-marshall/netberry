@@ -4,7 +4,7 @@ import React from "react";
 
 type Props = {
   height?: "sm" | "md" | "lg" | "xl";
-  width?: "sm" | "md" | "lg" | "xl";
+  width?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
 };
 
@@ -16,6 +16,7 @@ const varients = {
     xl: "h-7",
   },
   width: {
+    xs: "w-[20%]",
     sm: "w-[40%]",
     md: "w-[60%]",
     lg: "w-[80%]",

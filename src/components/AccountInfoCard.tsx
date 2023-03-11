@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import type { AccountNoToken } from "../types";
+import Shimmer from "./Shimmer";
 
 type Props = {
   account: AccountNoToken;
@@ -25,3 +26,14 @@ const AccountInfoCard: FC<Props> = ({ account, sitesCount }) => {
 };
 
 export default AccountInfoCard;
+
+export const LoadingAccountInfoCard: FC = () => (
+  <div className="account-info-card max-w-xl rounded-medium bg-background-secondary p-card_pad">
+    <div className="flex justify-between gap-20">
+      <Shimmer height="lg" width="md" />
+      <Shimmer height="sm" width="xs" className="mt-2" />
+    </div>
+
+    <Shimmer height="md" width="sm" className="mt-3" />
+  </div>
+);
