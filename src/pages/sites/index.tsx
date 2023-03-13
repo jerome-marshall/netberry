@@ -56,15 +56,17 @@ const SitesPage: NextPage = () => {
       <div className="sites-page bg-background-secondary py-card_pad">
         <div className="flex items-center justify-between gap-20 px-card_pad pb-card_pad">
           <h1>Sites</h1>
-          <div className="search-section">
-            <input
-              type="text"
-              placeholder="Start typing to search"
-              value={searchText}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="rounded-medium bg-gray px-4 py-2 outline-none focus:outline-none focus-visible:outline-none"
-            />
-          </div>
+          {sites && (
+            <div className="search-section">
+              <input
+                type="text"
+                placeholder="Start typing to search"
+                value={searchText}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="rounded-medium bg-gray px-4 py-2 outline-none focus:outline-none focus-visible:outline-none"
+              />
+            </div>
+          )}
         </div>
         <div>
           {sites && resultItems ? (
