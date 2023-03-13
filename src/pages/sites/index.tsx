@@ -9,17 +9,22 @@ import usePagination from "../../hooks/usePagination";
 import useSites from "../../hooks/useSites";
 import Fuse from "fuse.js";
 import { SiteWithAccount } from "../../types";
+import { CgSearch } from "react-icons/cg";
 
 const SitesPage: NextPage = () => {
   const { sites } = useSites();
 
   const [fuse, setFuse] = useState<Fuse<SiteWithAccount> | null>(null);
   const [searchText, setSearchText] = useState("");
-  const [resultItems, setResultItems] = useState(sites);
+  const [resultItems, setResultItems] = useState<SiteWithAccount[] | undefined>(
+    undefined
+  );
 
   useEffect(() => {
-    if (!sites) return;
+    if (!sites || resultItems) return;
+
     setResultItems(sites);
+    console.log("🚀 ~ file: index.tsx:34 ~ useEffect");
 
     const fuse = new Fuse(sites, {
       keys: ["name", "url"],
@@ -29,7 +34,7 @@ const SitesPage: NextPage = () => {
     });
 
     setFuse(fuse);
-  }, [sites]);
+  }, [sites, resultItems]);
 
   const handleSearch = (val: string) => {
     if (!sites && !fuse) return;
@@ -50,6 +55,7 @@ const SitesPage: NextPage = () => {
   });
 
   const { currentItems } = paginationProps;
+  console.log("🚀 ~ file: index.tsx:54 ~ currentItems:", resultItems);
 
   return (
     <>
@@ -57,25 +63,34 @@ const SitesPage: NextPage = () => {
         <div className="flex items-center justify-between gap-20 px-card_pad pb-card_pad">
           <h1>Sites</h1>
           {sites && (
-            <div className="search-section">
+            <div className="search-section flex items-center gap-4 rounded-medium bg-gray px-4 py-2">
+              <CgSearch className="h-5 w-5" />
               <input
                 type="text"
                 placeholder="Start typing to search"
                 value={searchText}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="rounded-medium bg-gray px-4 py-2 outline-none focus:outline-none focus-visible:outline-none"
+                className=" bg-gray  outline-none focus:outline-none focus-visible:outline-none"
               />
             </div>
           )}
         </div>
         <div>
           {sites && resultItems ? (
-            currentItems.map((site, index) => (
-              <SitesListItemDetail
-                key={site.id + index.toString()}
-                site={site}
-              />
-            ))
+            currentItems.length === 0 ? (
+              <div className="card-item hover:cursor-default">
+                <p className="text-base font-semibold text-white">
+                  No results found
+                </p>
+              </div>
+            ) : (
+              currentItems.map((site, index) => (
+                <SitesListItemDetail
+                  key={site.id + index.toString()}
+                  site={site}
+                />
+              ))
+            )
           ) : (
             <SitesListItemDetailLoader />
           )}
