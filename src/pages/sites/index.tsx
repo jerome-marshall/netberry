@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next";
-import { useState } from "react";
-import { CgSearch } from "react-icons/cg";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import SitesListItemDetail, {

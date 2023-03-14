@@ -2,23 +2,31 @@ import Link from "next/link";
 import type { FC } from "react";
 import Pagination from "../../components/Pagination";
 import RightArrow from "../../components/RightArrow";
+import Search from "../../components/Search";
 import Shimmer from "../../components/Shimmer";
 import usePagination from "../../hooks/usePagination";
+import useSearch from "../../hooks/useSearch";
 import { api } from "../../utils/api";
 
 const AccountsPage: FC = () => {
   const { data, isLoading } = api.sites.getAll.useQuery();
 
-  const pagination = usePagination({
+  const { resultItems, ...searchProps } = useSearch({
     items: data,
+    keys: ["account.name"],
+  });
+  console.log("🚀 ~ file: index.tsx:18 ~ resultItems:", resultItems);
+
+  const pagination = usePagination({
+    items: resultItems,
   });
 
   return (
     <>
       <div className="sites-page bg-background-secondary py-card_pad">
-        <div className="px-card_pad pb-card_pad">
+        <div className="flex items-center justify-between gap-20 px-card_pad pb-card_pad">
           <h1>Accounts</h1>
-          <div className="search-section"></div>
+          {data && <Search {...searchProps} />}
         </div>
         <div>
           {data

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 interface SearchParams<T> {
   items: T[] | undefined;
-  keys: Array<keyof T & string>;
+  keys: Fuse.FuseOptionKey<T>[];
 }
 
 const useSearch = <T>({ items, keys }: SearchParams<T>) => {
