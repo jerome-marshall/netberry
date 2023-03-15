@@ -107,6 +107,23 @@ export const triggerBuild = async ({
   return res.data;
 };
 
+export const cancelDeploy = async ({
+  deploy_id,
+  account_token,
+}: {
+  deploy_id: string;
+  account_token: string;
+}) => {
+  const res = await axiosInstance.post<BuildTriggerRes>(
+    `/deploys/${deploy_id}/cancel`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${account_token}` },
+    }
+  );
+  return res.data;
+};
+
 export const handleError = (error: unknown) => {
   if (axios.isAxiosError(error)) {
     if (error.response) {

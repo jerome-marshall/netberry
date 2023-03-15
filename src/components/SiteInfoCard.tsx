@@ -57,7 +57,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
             render: "Something went wrong",
             type: "error",
             isLoading: false,
-            autoClose: 2000,
+            autoClose: 3000,
           });
 
         toastId = null;

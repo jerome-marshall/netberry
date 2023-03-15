@@ -15,7 +15,7 @@ import Card from "./Card";
 import RightArrow from "./RightArrow";
 import Shimmer from "./Shimmer";
 
-import { AiOutlineLink } from "react-icons/ai";
+import { AiOutlineLink, AiOutlineStop } from "react-icons/ai";
 import usePagination from "../hooks/usePagination";
 import {
   Dialog,
@@ -39,6 +39,9 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
 
   const site_id = siteInfo?.site_id as string;
   const slug = siteInfo?.account?.slug as string;
+
+  const { mutate, data: cancelData } = api.deploys.cancelDeploy.useMutation();
+  console.log("🚀 ~ file: DeploysCard.tsx:44 ~ cancelData:", cancelData);
 
   const { data, refetch } = api.deploys.getAll.useQuery(
     { site_id, account_slug: slug },
@@ -77,6 +80,14 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
   const pagination = usePagination({
     items: data,
   });
+
+  useEffect(() => {
+    if (cancelData) {
+      refetch().finally(() => {
+        setRefetchInterval(0);
+      });
+    }
+  }, [cancelData, refetch]);
 
   if (!siteInfo || !data) return <DeploysCardLoader />;
 
@@ -164,17 +175,31 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
                             Error message: {getDeployMessage(deploy)}
                           </p>
                         )}
-                        {links?.permalink && deployStatus === "published" && (
-                          <a
-                            href={links?.permalink}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="button-teal mt-6 flex w-fit items-center text-base"
-                          >
-                            <span>Open permalink</span>
-                            <AiOutlineLink className="ml-3 !h-5 !w-5" />
-                          </a>
-                        )}
+                        <div className="flex gap-6">
+                          {links?.permalink && deployStatus === "published" && (
+                            <a
+                              href={links?.permalink}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="button-teal mt-6 flex w-fit items-center text-base"
+                            >
+                              <span>Open permalink</span>
+                              <AiOutlineLink className="ml-3 !h-5 !w-5" />
+                            </a>
+                          )}
+                          {theme === "gold" && (
+                            <button
+                              className="button-red mt-6 flex w-fit items-center text-base"
+                              onClick={() => {
+                                mutate({ account_slug: slug, deploy_id: id });
+                              }}
+                              disabled={cancelData?.id === id}
+                            >
+                              <AiOutlineStop className="mr-3 !h-5 !w-5" />
+                              <span>Cancel build</span>
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </DialogDescription>
                   </DialogHeader>

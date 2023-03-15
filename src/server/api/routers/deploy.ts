@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { handleError } from "../../serverUtils";
+import { cancelDeploy, handleError } from "../../serverUtils";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
   getAccountBySlug,
@@ -38,6 +38,28 @@ export const deployRouter = createTRPCRouter({
         const res = await triggerBuild({
           clear_cache,
           site_id,
+          account_token,
+        });
+        return res;
+      } catch (error) {
+        handleError(error);
+      }
+    }),
+
+  cancelDeploy: publicProcedure
+    .input(
+      z.object({
+        deploy_id: z.string(),
+        account_slug: z.string(),
+      })
+    )
+    .mutation(async ({ input: { deploy_id, account_slug } }) => {
+      try {
+        const { account_token } = await getAccountBySlug({
+          slug: account_slug,
+        });
+        const res = await cancelDeploy({
+          deploy_id,
           account_token,
         });
         return res;
