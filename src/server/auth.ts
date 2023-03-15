@@ -38,9 +38,6 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  **/
 export const authOptions: NextAuthOptions = {
-  theme: {
-    logo: "https://netberry.vercel.app/netberry.png",
-  },
   callbacks: {
     session({ session, user }) {
       if (session.user) {
@@ -50,7 +47,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     signIn({ account, profile }) {
-      if (account?.procvider === "google") {
+      if (account?.provider === "google") {
         return !!(profile?.email && profile.email.endsWith("@gmail.com"));
       }
       return false;
