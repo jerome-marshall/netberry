@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import axios from "axios";
 import _ from "lodash";
+import type { GetServerSidePropsContext } from "next";
 import _slugify from "slugify";
 import type {
   AccountCustom,
@@ -11,6 +12,7 @@ import type {
 } from "../types";
 import type { AccountNoToken } from "./../types.d";
 import { axiosInstance } from "./api/trpc";
+import { getServerAuthSession } from "./auth";
 import { prisma } from "./db";
 
 export const getAllAccounts = async () => {
@@ -207,4 +209,25 @@ export const formatAccount = (account: AccountCustom): AccountNoToken => {
   const accountNoToken = exclude(_.cloneDeep(account), ["token"]);
   // return addSlug(accountNoToken, "name");
   return accountNoToken;
+};
+
+export const getServerSidePropsHelper = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const session = await getServerAuthSession(ctx);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
 };

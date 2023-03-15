@@ -6,6 +6,7 @@ import Search from "../../components/Search";
 import Shimmer from "../../components/Shimmer";
 import usePagination from "../../hooks/usePagination";
 import useSearch from "../../hooks/useSearch";
+import { getServerSidePropsHelper } from "../../server/serverUtils";
 import { api } from "../../utils/api";
 
 const AccountsPage: FC = () => {
@@ -76,3 +77,5 @@ const AccountsPage: FC = () => {
 };
 
 export default AccountsPage;
+
+export const getServerSideProps = getServerSidePropsHelper;

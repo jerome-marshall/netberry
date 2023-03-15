@@ -8,6 +8,7 @@ import SitesListItemDetail, {
 import usePagination from "../../hooks/usePagination";
 import useSearch from "../../hooks/useSearch";
 import useSites from "../../hooks/useSites";
+import { getServerSidePropsHelper } from "../../server/serverUtils";
 
 const SitesPage: NextPage = () => {
   const { sites } = useSites();
@@ -56,3 +57,5 @@ const SitesPage: NextPage = () => {
 };
 
 export default SitesPage;
+
+export const getServerSideProps = getServerSidePropsHelper;

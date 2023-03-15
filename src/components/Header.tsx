@@ -20,9 +20,7 @@ const Header: FC = () => {
     setLocation(window.location);
   }, []);
 
-  const { data, status } = useSession();
-
-  const isAuthenticated = status === "authenticated";
+  const { data } = useSession();
 
   const userImage = data?.user?.image;
 
@@ -62,51 +60,35 @@ const Header: FC = () => {
             Accounts
           </Link>
           <div className="relative">
-            {isAuthenticated ? (
-              <Menu>
-                <Menu.Button>
-                  {userImage ? (
-                    <img
-                      src={userImage}
-                      alt="user"
-                      className="h-10 w-10 rounded-full"
-                    />
-                  ) : (
-                    <div className="h-10 w-10 rounded-full bg-gray" />
-                  )}
-                </Menu.Button>
-                <Menu.Items
-                  className={
-                    "absolute top-14 right-0 bg-background-active_hover"
-                  }
-                >
-                  <Menu.Item>
-                    <button
-                      onClick={() => {
-                        signOut()
-                          .then(() => console.log("Signed out"))
-                          .catch((err) => console.log(err));
-                      }}
-                      className="button"
-                    >
-                      Logout
-                    </button>
-                  </Menu.Item>
-                </Menu.Items>
-              </Menu>
-            ) : (
-              <button
-                className="button-teal"
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                onClick={() => {
-                  signOut()
-                    .then(() => console.log("Signed out"))
-                    .catch((err) => console.log(err));
-                }}
+            <Menu>
+              <Menu.Button>
+                {userImage ? (
+                  <img
+                    src={userImage}
+                    alt="user"
+                    className="h-10 w-10 rounded-full"
+                  />
+                ) : (
+                  <div className="h-10 w-10 rounded-full bg-gray" />
+                )}
+              </Menu.Button>
+              <Menu.Items
+                className={"absolute top-14 right-0 bg-background-active_hover"}
               >
-                {"Sign In"}
-              </button>
-            )}
+                <Menu.Item>
+                  <button
+                    onClick={() => {
+                      signOut()
+                        .then(() => console.log("Signed out"))
+                        .catch((err) => console.log(err));
+                    }}
+                    className="button"
+                  >
+                    Logout
+                  </button>
+                </Menu.Item>
+              </Menu.Items>
+            </Menu>
           </div>
         </div>
       )}

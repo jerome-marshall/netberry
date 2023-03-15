@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import AccountsCard from "../components/AccountsCard";
 import SitesCard from "../components/SitesCard";
+import { getServerSidePropsHelper } from "../server/serverUtils";
 
 const Home: NextPage = () => {
   return (
@@ -12,5 +13,7 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export const getServerSideProps = getServerSidePropsHelper;
 
 export default Home;

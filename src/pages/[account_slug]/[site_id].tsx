@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import DeploysCard from "../../components/DeploysCard";
 import SiteInfoCard from "../../components/SiteInfoCard";
+import { getServerSidePropsHelper } from "../../server/serverUtils";
 import { api } from "../../utils/api";
 
 const SiteDetailPage = () => {
@@ -28,3 +29,5 @@ const SiteDetailPage = () => {
 };
 
 export default SiteDetailPage;
+
+export const getServerSideProps = getServerSidePropsHelper;
