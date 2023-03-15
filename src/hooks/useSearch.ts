@@ -37,7 +37,6 @@ const useSearch = <T>({ items, keys }: SearchParams<T>) => {
     if (searchText === "") return setResultItems(items);
 
     const result = fuse.search(searchText);
-    console.log("🚀 ~ file: useSearch.ts:40 ~ useEffect ~ result:", result);
     const finalResult = result.map((item) => item.item);
 
     setResultItems(finalResult);

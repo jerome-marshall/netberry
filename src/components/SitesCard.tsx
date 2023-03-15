@@ -9,7 +9,6 @@ import Shimmer from "./Shimmer";
 
 const SitesCard: FC = () => {
   const { sites, isLoading, error } = useSites();
-  console.log("🚀 ~ file: SitesCard.tsx:12 ~ sites:", sites);
   if (isLoading || !sites) return <LoadingSitesCard />;
 
   return (
