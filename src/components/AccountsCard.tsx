@@ -8,10 +8,11 @@ import RightArrow from "./RightArrow";
 const AccountsCard: FC = () => {
   const { data, isLoading } = api.accounts.getAll.useQuery();
   if (!data || isLoading) return <LoadingAccountsCard />;
+
   return (
     <div className="col-span-4">
       <Card title="Accounts" titleLink={AccountsLandingURL}>
-        {data.map((account) => (
+        {data.slice(0, 5).map((account) => (
           <Link
             href={AccountsLandingURL + "/" + account.slug}
             key={account.id}

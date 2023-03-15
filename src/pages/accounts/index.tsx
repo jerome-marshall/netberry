@@ -15,7 +15,6 @@ const AccountsPage: FC = () => {
     items: data,
     keys: ["account.name"],
   });
-  console.log("🚀 ~ file: index.tsx:18 ~ resultItems:", resultItems);
 
   const pagination = usePagination({
     items: resultItems,
