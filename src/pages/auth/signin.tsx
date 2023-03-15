@@ -19,7 +19,7 @@ export default function SignIn({
         alt="site-img"
         height={160}
         width={160}
-        className="h-24 w-24"
+        className="h-22 w-24"
       />
       <p className="mt-4 text-sm">Please sign in to continue</p>
       {Object.values(providers).map((provider) => (
