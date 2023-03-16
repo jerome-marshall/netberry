@@ -1,6 +1,9 @@
 import clsx from "clsx";
 import Link from "next/link";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import type { Dispatch, FC, SetStateAction } from "react";
+import { useEffect, useState } from "react";
+import { AiOutlineLink, AiOutlineStop } from "react-icons/ai";
+import usePagination from "../hooks/usePagination";
 import type { NetlifyDeploy, SiteWithAccount } from "../types";
 import { api } from "../utils/api";
 import {
@@ -12,20 +15,10 @@ import {
   getStatusTheme,
 } from "../utils/deployUtils";
 import Card from "./Card";
+import Modal from "./Modal";
+import Pagination from "./Pagination";
 import RightArrow from "./RightArrow";
 import Shimmer from "./Shimmer";
-
-import { AiOutlineLink, AiOutlineStop } from "react-icons/ai";
-import usePagination from "../hooks/usePagination";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./Dialog";
-import Pagination from "./Pagination";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
@@ -39,9 +32,6 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
 
   const site_id = siteInfo?.site_id as string;
   const slug = siteInfo?.account?.slug as string;
-
-  const { mutate, data: cancelData } = api.deploys.cancelDeploy.useMutation();
-  console.log("🚀 ~ file: DeploysCard.tsx:44 ~ cancelData:", cancelData);
 
   const { data, refetch } = api.deploys.getAll.useQuery(
     { site_id, account_slug: slug },
@@ -81,132 +71,152 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
     items: data,
   });
 
-  useEffect(() => {
-    if (cancelData) {
-      refetch().finally(() => {
-        setRefetchInterval(0);
-      });
-    }
-  }, [cancelData, refetch]);
-
   if (!siteInfo || !data) return <DeploysCardLoader />;
+
+  const DeployCardItem = ({ deploy }: { deploy: NetlifyDeploy }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    console.log(
+      "🚀 ~ file: DeploysCard.tsx:78 ~ DeployCardItem ~ isOpen:",
+      isOpen
+    );
+    const openModal = () => setIsOpen(true);
+    const closeModal = () => setIsOpen(false);
+
+    const { mutate, data: cancelData } = api.deploys.cancelDeploy.useMutation();
+    console.log(
+      "🚀 ~ file: DeploysCard.tsx:86 ~ DeployCardItem ~ cancelData:",
+      cancelData
+    );
+    useEffect(() => {
+      if (cancelData) {
+        refetch().finally(() => {
+          setRefetchInterval(0);
+        });
+      }
+    }, [cancelData]);
+
+    const { status: deployStatus, theme } = getDeployStatus(deploy);
+
+    const showStatus =
+      (siteInfo.published_deploy?.id === deploy.id &&
+        deployStatus === "published") ||
+      deployStatus !== "published";
+
+    const { id, created_at, published_at, links } = deploy;
+
+    return (
+      <div
+        className={clsx(
+          "card-item group w-full cursor-pointer justify-between gap-6 even:bg-background-active",
+          published_at && "card-item-muted"
+        )}
+        onClick={openModal}
+        key={id}
+      >
+        <div className="flex flex-col">
+          <div className="flex gap-2">
+            <GitInfo deploy={deploy} className="text-sm" />
+            {showStatus && (
+              <p className={getStatusTheme(theme)}>{deployStatus}</p>
+            )}{" "}
+          </div>
+          <p className=" text-left text-sm text-text-muted">
+            {getDeployMessage(deploy)}
+          </p>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col items-end justify-center">
+            <p
+              className={clsx(
+                "text-sm  ",
+                published_at
+                  ? "font-bold text-white"
+                  : "font-normal text-text-muted"
+              )}
+            >
+              {getDeployTime(created_at)}
+            </p>
+            {published_at && (
+              <p className="mt-1 text-xs text-text-muted">
+                Deployed in {getDeployDuration(created_at, published_at)}
+              </p>
+            )}
+          </div>
+          <RightArrow />
+        </div>
+
+        {isOpen && (
+          <Modal
+            content={
+              <div className="p-card_pad pt-2">
+                <div className="flex justify-between">
+                  <p className="text-2xl">
+                    Deploy {getDeplayStatusText(deployStatus)}
+                  </p>
+                  <p className=" text-text-muted">
+                    {getDeployTime(created_at)}
+                  </p>
+                </div>
+                {deployStatus === "published" && (
+                  <p className="mt-2 text-base text-text-muted">
+                    Deployed in {getDeployDuration(created_at, published_at)}
+                  </p>
+                )}
+
+                <GitInfo deploy={deploy} className="mt-2 text-text-muted" />
+                {deployStatus === "failed" && (
+                  <p className="mt-2 text-base text-text-muted">
+                    Error message: {getDeployMessage(deploy)}
+                  </p>
+                )}
+                <div className="flex gap-6">
+                  {links?.permalink && deployStatus === "published" && (
+                    <a
+                      href={links?.permalink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="button-teal mt-6 flex w-fit items-center text-base"
+                    >
+                      <span>Open permalink</span>
+                      <AiOutlineLink className="ml-3 !h-5 !w-5" />
+                    </a>
+                  )}
+                  {theme === "gold" && (
+                    <button
+                      className="button-red mt-6 flex w-fit items-center text-base"
+                      onClick={() => {
+                        mutate({
+                          account_slug: slug,
+                          deploy_id: id,
+                        });
+                      }}
+                      disabled={cancelData?.id === id}
+                    >
+                      <AiOutlineStop className="mr-3 !h-5 !w-5" />
+                      <span>Cancel build</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            }
+            isOpen={isOpen}
+            onClose={closeModal}
+            title={"Deploy details"}
+          />
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
       <div className="mt-6">
         <Card title="Production Deploys" titleLink="">
-          {pagination.currentItems.map((deploy) => {
-            const { status: deployStatus, theme } = getDeployStatus(deploy);
-
-            const showStatus =
-              (siteInfo.published_deploy?.id === deploy.id &&
-                deployStatus === "published") ||
-              deployStatus !== "published";
-
-            const { id, created_at, published_at, links } = deploy;
-
-            return (
-              <Dialog key={id}>
-                <DialogTrigger
-                  className={clsx(
-                    "card-item group w-full cursor-pointer justify-between gap-6",
-                    published_at && "card-item-muted"
-                  )}
-                >
-                  <div className="flex flex-col">
-                    <div className="flex gap-2">
-                      <GitInfo deploy={deploy} className="text-sm" />
-                      {showStatus && (
-                        <p className={getStatusTheme(theme)}>{deployStatus}</p>
-                      )}{" "}
-                    </div>
-                    <p className=" text-left text-sm text-text-muted">
-                      {getDeployMessage(deploy)}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-col items-end justify-center">
-                      <p
-                        className={clsx(
-                          "text-sm  ",
-                          published_at
-                            ? "font-bold text-white"
-                            : "font-normal text-text-muted"
-                        )}
-                      >
-                        {getDeployTime(created_at)}
-                      </p>
-                      {published_at && (
-                        <p className="mt-1 text-xs text-text-muted">
-                          Deployed in{" "}
-                          {getDeployDuration(created_at, published_at)}
-                        </p>
-                      )}
-                    </div>
-                    <RightArrow />
-                  </div>
-                </DialogTrigger>
-                <DialogContent className="w-auto min-w-[500px] !max-w-[900px]">
-                  <DialogHeader>
-                    <DialogTitle>Deploy Details</DialogTitle>
-                    <DialogDescription>
-                      <div className="mt-4">
-                        <div className="flex justify-between">
-                          <p className="text-2xl">
-                            Deploy {getDeplayStatusText(deployStatus)}
-                          </p>
-                          <p className=" text-text-muted">
-                            {getDeployTime(created_at)}
-                          </p>
-                        </div>
-                        {deployStatus === "published" && (
-                          <p className="mt-2 text-base text-text-muted">
-                            Deployed in{" "}
-                            {getDeployDuration(created_at, published_at)}
-                          </p>
-                        )}
-
-                        <GitInfo
-                          deploy={deploy}
-                          className="mt-2 text-text-muted"
-                        />
-                        {deployStatus === "failed" && (
-                          <p className="mt-2 text-base text-text-muted">
-                            Error message: {getDeployMessage(deploy)}
-                          </p>
-                        )}
-                        <div className="flex gap-6">
-                          {links?.permalink && deployStatus === "published" && (
-                            <a
-                              href={links?.permalink}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="button-teal mt-6 flex w-fit items-center text-base"
-                            >
-                              <span>Open permalink</span>
-                              <AiOutlineLink className="ml-3 !h-5 !w-5" />
-                            </a>
-                          )}
-                          {theme === "gold" && (
-                            <button
-                              className="button-red mt-6 flex w-fit items-center text-base"
-                              onClick={() => {
-                                mutate({ account_slug: slug, deploy_id: id });
-                              }}
-                              disabled={cancelData?.id === id}
-                            >
-                              <AiOutlineStop className="mr-3 !h-5 !w-5" />
-                              <span>Cancel build</span>
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-            );
-          })}
+          {pagination.currentItems.map(
+            (deploy: NetlifyDeploy, index: number) => (
+              <DeployCardItem deploy={deploy} key={index} />
+            )
+          )}
         </Card>
       </div>
       <Pagination {...pagination} />
@@ -223,7 +233,7 @@ const GitInfo = ({
   deploy: NetlifyDeploy;
   className?: string;
 }) => {
-  const { id, context, branch, created_at, published_at, deploy_url } = deploy;
+  const { context, branch, published_at, deploy_url } = deploy;
 
   return (
     <p className={className}>
