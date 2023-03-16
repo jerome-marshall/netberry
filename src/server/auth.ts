@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
     },
     signIn({ account, profile }) {
       if (account?.provider === "google") {
-        return !!(profile?.email && profile.email.endsWith("@gmail.com"));
+        return !!(profile?.email && profile.email.endsWith("@starberry.tv"));
       }
       return false;
     },
