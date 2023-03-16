@@ -75,18 +75,12 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
 
   const DeployCardItem = ({ deploy }: { deploy: NetlifyDeploy }) => {
     const [isOpen, setIsOpen] = useState(false);
-    console.log(
-      "🚀 ~ file: DeploysCard.tsx:78 ~ DeployCardItem ~ isOpen:",
-      isOpen
-    );
+
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
     const { mutate, data: cancelData } = api.deploys.cancelDeploy.useMutation();
-    console.log(
-      "🚀 ~ file: DeploysCard.tsx:86 ~ DeployCardItem ~ cancelData:",
-      cancelData
-    );
+
     useEffect(() => {
       if (cancelData) {
         refetch().finally(() => {

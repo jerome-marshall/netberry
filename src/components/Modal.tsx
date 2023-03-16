@@ -13,7 +13,6 @@ export default function Modal({
   title: string;
   content: ReactElement;
 }) {
-  console.log("🚀 ~ file: Modal.tsx:16 ~ content:", content);
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="z-10" onClose={onClose}>
