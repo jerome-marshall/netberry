@@ -134,7 +134,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
             {formatedDate ? (
               <>Last published on {formatedDate}.</>
             ) : (
-              <>No deploys yet.</>
+              <>No published deploys yet.</>
             )}
           </p>
         </div>
