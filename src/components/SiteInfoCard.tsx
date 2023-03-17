@@ -84,13 +84,13 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     build_settings,
     account,
   } = siteInfo;
+  console.log("🚀 ~ file: SiteInfoCard.tsx:87 ~ siteInfo:", siteInfo);
 
   const repoUrl = build_settings?.repo_url || repo_url;
 
-  const formatedDate = format(
-    new Date(published_deploy?.published_at),
-    "LLL dd"
-  );
+  const formatedDate =
+    published_deploy?.published_at &&
+    format(new Date(published_deploy?.published_at), "LLL dd");
 
   const triggerBuild = ({ clearCache }: { clearCache: boolean }) => {
     mutate({
@@ -130,7 +130,13 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
             </p>
           )}
           <p className=" text-text-muted">Hosted at {account.email}. </p>
-          <p className=" text-text-muted">Last published on {formatedDate}.</p>
+          <p className=" text-text-muted">
+            {formatedDate ? (
+              <>Last published on {formatedDate}.</>
+            ) : (
+              <>No deploys yet.</>
+            )}
+          </p>
         </div>
         <Link
           href={url}
