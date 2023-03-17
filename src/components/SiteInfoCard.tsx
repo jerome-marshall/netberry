@@ -14,7 +14,7 @@ import { SiNetlify } from "react-icons/si";
 import type { Id } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SiteImg from "../assets/netlify-site.png";
+import SiteImg from "../assets/netlify-site.webp";
 import { getRepoProviderText } from "../common/utils";
 import type { SiteWithAccount } from "../types";
 import { api } from "../utils/api";

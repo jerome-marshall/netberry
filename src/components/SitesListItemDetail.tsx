@@ -3,30 +3,44 @@ import Link from "next/link";
 import type { FC } from "react";
 import type { SiteWithAccount } from "../types";
 import Shimmer from "./Shimmer";
+import SiteImg from "../assets/netlify-site.webp";
+import Image from "next/image";
 
 type Props = {
   site: SiteWithAccount;
 };
 
 const SitesListItemDetail: FC<Props> = ({ site }) => {
+  const { account, id, name, screenshot_url, url, ssl_url } = site;
+
   return (
     <Link
-      href={`/${site.account.slug}/${site.id}`}
-      key={site.id + site.name}
+      href={`/${account.slug}/${id}`}
+      key={id + name}
       className="card-item cursor-pointer gap-6"
     >
-      <img
-        src={site.screenshot_url}
-        alt=""
-        className="max-h-16 rounded-medium"
-      />
+      {screenshot_url ? (
+        <img
+          src={screenshot_url}
+          alt=""
+          className="max-h-16 max-w-[104px] rounded-medium"
+        />
+      ) : (
+        <Image
+          src={SiteImg}
+          alt="site-img"
+          height={104}
+          width={168}
+          className="max-h-16 max-w-[104px] rounded-medium"
+        />
+      )}
       <div className="flex flex-col justify-center">
-        <p className="text-base font-semibold text-white">{site.name}</p>
+        <p className="text-base font-semibold text-white">{name}</p>
         <Link
-          href={site.url}
+          href={ssl_url || url}
           className="text-sm text-text-muted hover:underline "
         >
-          {site.url}
+          {url}
         </Link>
       </div>
     </Link>

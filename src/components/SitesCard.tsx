@@ -6,6 +6,8 @@ import { SitesLandingURL } from "../utils/urls";
 import Card from "./Card";
 import RightArrow from "./RightArrow";
 import Shimmer from "./Shimmer";
+import SiteImg from "../assets/netlify-site.webp";
+import Image from "next/image";
 
 const SitesCard: FC = () => {
   const { sites, isLoading, error } = useSites();
@@ -21,11 +23,19 @@ const SitesCard: FC = () => {
             className="card-item group justify-between"
           >
             <div className="flex gap-6">
-              {site.screenshot_url && (
+              {site.screenshot_url ? (
                 <img
                   src={site.screenshot_url}
                   alt=""
-                  className="max-h-16 rounded-medium"
+                  className="max-h-16 max-w-[104px] rounded-medium"
+                />
+              ) : (
+                <Image
+                  src={SiteImg}
+                  alt="site-img"
+                  height={104}
+                  width={168}
+                  className="max-h-16 max-w-[104px] rounded-medium"
                 />
               )}
               <div className="flex flex-col justify-center">
