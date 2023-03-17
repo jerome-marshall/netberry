@@ -8,7 +8,7 @@ import {
 import type { NetlifyDeploy } from "./../types";
 
 export const STATUS_THEME = {
-  teal: "teal",
+  green: "green",
   red: "red",
   grey: "grey",
   gold: "gold",
@@ -42,7 +42,7 @@ export const DEPLOY_STATUS = {
 export const DEPLOY_STATUS_THEME = {
   published: {
     status: DEPLOY_STATUS.published,
-    theme: STATUS_THEME.teal,
+    theme: STATUS_THEME.green,
   },
   building: {
     status: DEPLOY_STATUS.building,
@@ -152,7 +152,7 @@ export const getStatusTheme = (theme: string) => {
   if (theme === STATUS_THEME.gold) return "status-gold";
   if (theme === STATUS_THEME.red) return "status-red";
   if (theme === STATUS_THEME.grey) return "status-grey";
-  if (theme === STATUS_THEME.teal) return "status-teal";
+  if (theme === STATUS_THEME.green) return "status-green";
 };
 
 export const getDeployTime = (date_str: string) => {

@@ -14,7 +14,7 @@ const Card: FC<CardProps> = ({ children, title, titleLink, className }) => {
   return (
     <div
       className={clsx(
-        "flex flex-col rounded-medium bg-background-secondary py-card_pad",
+        "flex flex-col rounded-medium border border-gray-darkest bg-background-secondary py-card_pad",
         className
       )}
     >

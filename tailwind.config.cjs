@@ -25,15 +25,18 @@ module.exports = {
     colors: {
       background: {
         primary: "#070b0d",
-        secondary: "#151a1e",
-        active: "#1e2327",
-        active_hover: "#21272b",
+        secondary: "#12181f",
+        active: "#191f26",
+        active_hover: "#1d242c",
       },
       white: "#ffffff",
-      gray: "#4c5257",
+      gray: {
+        light: "#4d565f",
+        darkest: "#1e242c",
+      },
       text: {
         primary: "#e7eaed",
-        muted: "#a3a7ac",
+        muted: "#abb5bf",
       },
       blue: {
         lighter: "#a6bffd",
@@ -43,16 +46,20 @@ module.exports = {
       teal: {
         lighter: "#84f3df",
         light: "#30c8c9",
-        dark: "#032b3a",
+        dark: "#0c2a2a",
+      },
+      green: {
+        light: "#93f5a5",
+        dark: "#152a19",
       },
       gold: {
-        light: "#ffcf50",
-        dark: "#4f2f03",
+        light: "#facd6f",
+        dark: "#332213",
       },
       red: {
-        lighter: "#ffc2c2",
+        lighter: "#ffada9",
         light: "#ff9987",
-        dark: "#470a1a",
+        dark: "#3d1c1b",
       },
       transparent: "transparent",
     },

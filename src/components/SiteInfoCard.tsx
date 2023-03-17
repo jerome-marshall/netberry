@@ -31,9 +31,9 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
 
   const [trigerring, setTrigerring] = useState(false);
 
-  const { mutate, data, error } = api.deploys.triggerBuild.useMutation({
-    onMutate(variables) {
-      const id = toast.loading("Please wait...");
+  const { mutate } = api.deploys.triggerBuild.useMutation({
+    onMutate() {
+      const id = toast.loading("Hold on...");
       toastId = id;
     },
     onSuccess() {
@@ -105,7 +105,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
   const envs = siteInfo.build_settings?.env;
 
   return (
-    <div className="site-info-card min-w-[640px] max-w-fit rounded-medium bg-background-secondary p-card_pad">
+    <div className="site-info-card min-w-[640px] max-w-fit rounded-medium border border-gray-darkest bg-background-secondary p-card_pad">
       <div className="flex justify-between gap-32">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-white">{name}</h1>
@@ -166,10 +166,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
           <span>Open in Netlify</span>
         </Link>
         <button
-          className={clsx(
-            "button gap-2",
-            toastId && "cursor-not-allowed bg-blue-light"
-          )}
+          className={clsx("button gap-2", toastId && "cursor-not-allowed")}
           onClick={() => triggerBuild({ clearCache: false })}
           disabled={trigerring}
         >

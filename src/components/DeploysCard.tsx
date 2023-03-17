@@ -97,20 +97,32 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
 
     const { id, created_at, published_at, links } = deploy;
 
+    const muteCard = deployStatus === "skipped";
+
     return (
       <div
         className={clsx(
-          "card-item group w-full cursor-pointer justify-between gap-6 even:bg-background-active",
-          published_at && "card-item-muted"
+          "card-item group w-full cursor-pointer justify-between gap-6",
+          muteCard &&
+            "cursor-default !bg-background-secondary opacity-50 even:!bg-background-active"
         )}
-        onClick={openModal}
+        onClick={muteCard ? () => null : openModal}
         key={id}
       >
         <div className="flex flex-col">
           <div className="flex gap-2">
             <GitInfo deploy={deploy} className="text-sm" />
             {showStatus && (
-              <p className={getStatusTheme(theme)}>{deployStatus}</p>
+              <p
+                className={clsx(
+                  getStatusTheme(theme),
+                  (deployStatus === "building" ||
+                    deployStatus === "publishing") &&
+                    "animate-pulse shadow-gold-light"
+                )}
+              >
+                {deployStatus}
+              </p>
             )}{" "}
           </div>
           <p className=" text-left text-sm text-text-muted">

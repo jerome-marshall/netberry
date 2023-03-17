@@ -69,7 +69,7 @@ const Header: FC = () => {
                     className="h-10 w-10 rounded-full"
                   />
                 ) : (
-                  <div className="h-10 w-10 rounded-full bg-gray" />
+                  <div className="h-10 w-10 rounded-full bg-gray-light" />
                 )}
               </Menu.Button>
               <Menu.Items
