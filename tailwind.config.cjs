@@ -28,6 +28,7 @@ module.exports = {
         secondary: "#12181f",
         active: "#191f26",
         active_hover: "#1d242c",
+        alt_hover: "#272f38",
       },
       white: "#ffffff",
       gray: {

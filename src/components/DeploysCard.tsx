@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import _ from "lodash";
 import Link from "next/link";
 import type { Dispatch, FC, SetStateAction } from "react";
 import { useEffect, useState } from "react";
@@ -272,7 +273,7 @@ const GitInfo = ({
 const LightHouseReport = ({ deploy }: { deploy: NetlifyDeploy }) => {
   const { lighthouse } = deploy;
 
-  if (!lighthouse?.averages) return null;
+  if (!lighthouse || _.isEmpty(lighthouse?.averages)) return null;
 
   const {
     averages: {
@@ -280,7 +281,6 @@ const LightHouseReport = ({ deploy }: { deploy: NetlifyDeploy }) => {
       accessibility,
       "best-practices": bestPractices,
       seo,
-      pwa,
     },
   } = lighthouse;
 
@@ -311,7 +311,7 @@ const LightHouseReport = ({ deploy }: { deploy: NetlifyDeploy }) => {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-2">
+    <div className="flex gap-2">
       <ScoreItem score={performance} label="PERF" />
       <ScoreItem score={accessibility} label="A11Y" />
       <ScoreItem score={bestPractices} label="BP" />

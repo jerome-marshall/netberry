@@ -19,7 +19,9 @@ import { getRepoProviderText } from "../common/utils";
 import type { SiteWithAccount } from "../types";
 import { api } from "../utils/api";
 import EnvModal from "./EnvModal";
+import MenuDropdown from "./MenuDropdown";
 import Shimmer from "./Shimmer";
+import { GrTrigger } from "react-icons/gr";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
@@ -165,22 +167,32 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
           <SiNetlify />
           <span>Open in Netlify</span>
         </Link>
-        <button
-          className={clsx("button gap-2", toastId && "cursor-not-allowed")}
-          onClick={() => triggerBuild({ clearCache: false })}
+
+        <MenuDropdown
+          Button={
+            <div className="flex items-center gap-2 text-white">
+              <FaBolt />
+              Trigger Deploy
+            </div>
+          }
+          dropdownButtons={[
+            <button
+              className={clsx("flex w-full items-center gap-2 text-base")}
+              onClick={() => triggerBuild({ clearCache: false })}
+              key="trigger-build"
+            >
+              <span>Deploy site</span>
+            </button>,
+            <button
+              className={clsx("flex w-full items-center gap-2 text-base")}
+              onClick={() => triggerBuild({ clearCache: true })}
+              key="clear-cache"
+            >
+              <span>Clear cache deploy site</span>
+            </button>,
+          ]}
           disabled={trigerring}
-        >
-          <FaBolt />
-          <span>Trigger build</span>
-        </button>
-        <button
-          className={clsx("button gap-2 ")}
-          onClick={() => triggerBuild({ clearCache: true })}
-          disabled={trigerring}
-        >
-          <MdCleaningServices />
-          <span>Clear cache and build</span>
-        </button>
+        />
         {!_.isEmpty(envs) && <EnvModal envs={envs} />}
       </div>
     </div>
