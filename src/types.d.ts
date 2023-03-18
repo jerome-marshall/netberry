@@ -23,6 +23,15 @@ export type NetlifyDeploy = {
   links?: {
     permalink?: string;
   };
+  lighthouse?: {
+    averages?: {
+      accessibility: number;
+      "best-practices": number;
+      performance: number;
+      seo: number;
+      pwa: number;
+    };
+  };
 };
 
 export type AccountCustom = {

@@ -64,7 +64,17 @@ module.exports = {
       transparent: "transparent",
     },
     fontFamily: {
-      "noto-sans": ["Noto Sans JP", "sans-serif"],
+      sans: [
+        "Noto Sans JP",
+        "Segoe UI",
+        "Roboto",
+        "Helvetica",
+        "Arial",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+      ],
     },
   },
   plugins: [],

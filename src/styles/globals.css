@@ -8,8 +8,7 @@
   body {
     padding: 0;
     margin: 0;
-    font-family: "Noto Sans JP", sans-serif;
-    @apply bg-background-primary text-text-primary;
+    @apply bg-background-primary font-sans text-text-primary;
   }
 
   h1 {
