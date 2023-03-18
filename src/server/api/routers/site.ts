@@ -1,5 +1,6 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import type { SiteWithAccount } from "../../../types";
+import type { FavSite, SiteWithAccount } from "../../../types";
 import {
   getAllAccounts,
   getAllSites,
@@ -85,4 +86,155 @@ export const siteRouter = createTRPCRouter({
         handleError(error);
       }
     }),
+
+  addFavorite: publicProcedure
+    .input(
+      z.object({
+        site_id: z.string(),
+        account_slug: z.string(),
+      })
+    )
+    .mutation(
+      async ({
+        input: { site_id, account_slug },
+        ctx: { session, prisma },
+      }) => {
+        try {
+          const user = await prisma.user.findUnique({
+            where: { id: session?.user.id },
+          });
+
+          if (user) {
+            const { account_token } = await getAccountBySlug({
+              slug: account_slug,
+            });
+
+            const favSites = (user.favSites as FavSite[]) || {};
+
+            const siteExists = favSites.find(
+              (favSite) => favSite.site_id === site_id
+            );
+
+            if (siteExists) {
+              throw new TRPCError({
+                code: "CONFLICT",
+                message: "Site already exists in favorites",
+              });
+            }
+
+            const updateSite = await prisma.user.update({
+              where: { id: user.id },
+              data: {
+                favSites: [
+                  ...favSites,
+                  { site_id, account_token, account_slug },
+                ],
+              },
+            });
+            console.log(
+              "🚀 ~ file: site.ts:110 ~ .mutation ~ updateSite:",
+              updateSite
+            );
+
+            return updateSite;
+          } else {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "User not found",
+            });
+          }
+        } catch (error) {
+          handleError(error);
+        }
+      }
+    ),
+
+  removeFavorite: publicProcedure
+    .input(
+      z.object({
+        site_id: z.string(),
+      })
+    )
+    .mutation(async ({ input: { site_id }, ctx: { session, prisma } }) => {
+      try {
+        const user = await prisma.user.findUnique({
+          where: { id: session?.user.id },
+        });
+
+        if (user) {
+          const favSites = (user.favSites as FavSite[]) || {};
+
+          const siteExists = favSites.find(
+            (favSite) => favSite.site_id === site_id
+          );
+
+          if (!siteExists) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "Site does not exist in favorites",
+            });
+          }
+
+          const updateSite = await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              favSites: favSites.filter(
+                (favSite) => favSite.site_id !== site_id
+              ),
+            },
+          });
+          console.log(
+            "🚀 ~ file: site.ts:110 ~ .mutation ~ updateSite:",
+            updateSite
+          );
+
+          return updateSite;
+        } else {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "User not found",
+          });
+        }
+      } catch (error) {
+        handleError(error);
+      }
+    }),
+
+  getFavorites: publicProcedure.query(async ({ ctx: { session, prisma } }) => {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: session?.user.id },
+      });
+
+      if (user) {
+        const favSites = (user.favSites as FavSite[]) || [];
+
+        const data = await Promise.all(
+          favSites.map(async (favSite) => {
+            const site = await getSiteByID(favSite);
+
+            const account = await getAccountBySlug({
+              slug: favSite.account_slug,
+            });
+
+            const siteWithAccount: SiteWithAccount = {
+              ...site,
+              account: account.accountNoToken,
+            };
+
+            return siteWithAccount;
+          })
+        );
+
+        return data;
+      } else {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  }),
 });

@@ -20,6 +20,21 @@ import { prisma } from "./db";
 export const getAllAccounts = async () => {
   const accounts = await prisma.netlifyAccount.findMany();
 
+  try {
+    const user = await prisma.user.update({
+      where: { email: "jeromemarshall0@gmail.com" },
+      data: {
+        favAccounts: ["213123"],
+      },
+    });
+    console.log("🚀 ~ file: serverUtils.ts:31 ~ getAllAccounts ~ user:", user);
+  } catch (error) {
+    console.log(
+      "🚀 ~ file: serverUtils.ts:32 ~ getAllAccounts ~ error:",
+      error
+    );
+  }
+
   if (!_.isEmpty(accounts)) {
     const accountsNoToken = accounts.map((account) => formatAccount(account));
     return { accounts, accountsNoToken };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../utils/api";
-import { Site, SiteWithAccount } from "./../types.d";
+import type { SiteWithAccount } from "./../types.d";
 
 const useSites = () => {
   const [sites, setSites] = useState<SiteWithAccount[] | undefined>();

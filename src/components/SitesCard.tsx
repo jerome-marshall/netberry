@@ -8,15 +8,19 @@ import RightArrow from "./RightArrow";
 import Shimmer from "./Shimmer";
 import SiteImg from "../assets/netlify-site.webp";
 import Image from "next/image";
+import { api } from "../utils/api";
 
 const SitesCard: FC = () => {
-  const { sites, isLoading, error } = useSites();
-  if (isLoading || !sites) return <LoadingSitesCard />;
+  // const { sites, isLoading } = useSites();
+
+  const { data, isLoading } = api.sites.getFavorites.useQuery();
+  console.log("🚀 ~ file: SitesCard.tsx:17 ~ data:", data);
+  if (isLoading || !data) return <LoadingSitesCard />;
 
   return (
     <div className="col-span-8">
       <Card title="Sites" titleLink={SitesLandingURL}>
-        {sites.slice(0, 10).map((site) => (
+        {data.slice(0, 10).map((site) => (
           <Link
             href={`${site.account.slug}/${site.id}`}
             key={site.id + site.name}

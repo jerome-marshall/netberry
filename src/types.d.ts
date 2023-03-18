@@ -82,3 +82,9 @@ export type SiteEnv = {
   }[];
   updated_at: Date;
 };
+
+export type FavSite = {
+  site_id: string;
+  account_token: string;
+  account_slug: string;
+};

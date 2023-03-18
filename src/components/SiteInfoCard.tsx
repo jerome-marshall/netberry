@@ -69,6 +69,9 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     },
   });
 
+  const { mutate: addFavorite, data: updatedUser } =
+    api.sites.addFavorite.useMutation();
+
   if (!siteInfo) return <SiteInfoLoader />;
 
   const {
@@ -102,8 +105,16 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
 
   const envs = siteInfo.build_settings?.env;
 
+  const handleAddFavorite = () => {
+    addFavorite({
+      site_id: id,
+      account_slug: siteInfo.account.slug,
+    });
+  };
+
   return (
     <div className="site-info-card min-w-[640px] max-w-fit rounded-medium border border-gray-darkest bg-background-secondary p-card_pad">
+      <button onClick={handleAddFavorite}>Fav</button>
       <div className="flex justify-between gap-32">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-white">{name}</h1>
