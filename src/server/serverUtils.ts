@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import "@total-typescript/ts-reset";
 import { TRPCError } from "@trpc/server";
 import axios from "axios";
 import _ from "lodash";
@@ -9,6 +10,7 @@ import type {
   BuildTriggerRes,
   NetlifyDeploy,
   Site,
+  SiteEnv,
 } from "../types";
 import type { AccountNoToken } from "./../types.d";
 import { axiosInstance } from "./api/trpc";
@@ -69,6 +71,48 @@ export const getSiteByID = async ({
     headers: { Authorization: `Bearer ${account_token}` },
   });
   return res.data;
+};
+
+export const getSiteEnv = async ({
+  site_id,
+  account_token,
+  account_slug,
+}: {
+  site_id: string;
+  account_token: string;
+  account_slug: string;
+}) => {
+  const res = await axiosInstance.get<SiteEnv[]>(
+    `/accounts/${account_slug}/env`,
+    {
+      headers: { Authorization: `Bearer ${account_token}` },
+      params: { site_id },
+    }
+  );
+
+  if (res.data) {
+    const envObjArr = res.data.map((env) => ({
+      key: env.key,
+      value: env.values[0]?.value,
+    }));
+
+    // Remove empty values
+    const envObjArrFiltered = envObjArr.filter(
+      (env) => env.value !== undefined
+    );
+
+    // sort alphabetically
+    envObjArrFiltered.sort((a, b) =>
+      a.key < b.key ? -1 : a.key > b.key ? 1 : 0
+    );
+
+    // convert to object
+    const envObj = Object.fromEntries(
+      envObjArrFiltered.map((env) => [env.key, env.value])
+    );
+
+    return envObj;
+  }
 };
 
 export const getAllDeploys = async ({
@@ -189,6 +233,9 @@ export const handleError = (error: unknown) => {
     }
 
     console.error(error.config);
+  }
+  if (error instanceof TRPCError) {
+    throw error;
   }
   throw new TRPCError({
     code: "INTERNAL_SERVER_ERROR",

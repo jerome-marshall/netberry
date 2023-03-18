@@ -1,6 +1,11 @@
 import { z } from "zod";
 import type { SiteWithAccount } from "../../../types";
-import { getAllAccounts, getAllSites, handleError } from "../../serverUtils";
+import {
+  getAllAccounts,
+  getAllSites,
+  getSiteEnv,
+  handleError,
+} from "../../serverUtils";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import type { AccountNoToken } from "./../../../types.d";
 import { getAccountBySlug, getSiteByID } from "./../../serverUtils";
@@ -52,6 +57,30 @@ export const siteRouter = createTRPCRouter({
           account: accountNoToken,
         };
         return { site: siteWithAccount };
+      } catch (error) {
+        handleError(error);
+      }
+    }),
+
+  getEnv: publicProcedure
+    .input(
+      z.object({
+        account_slug: z.string(),
+        site_account_slug: z.string(),
+        site_id: z.string(),
+      })
+    )
+    .query(async ({ input: { account_slug, site_id, site_account_slug } }) => {
+      try {
+        const { account_token } = await getAccountBySlug({
+          slug: account_slug,
+        });
+        const envs = await getSiteEnv({
+          site_id,
+          account_token,
+          account_slug: site_account_slug,
+        });
+        return envs;
       } catch (error) {
         handleError(error);
       }

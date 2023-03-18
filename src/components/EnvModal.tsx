@@ -1,20 +1,43 @@
+import _ from "lodash";
 import type { FC } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlineKey } from "react-icons/hi";
+import type { SiteWithAccount } from "../types";
+import { api } from "../utils/api";
 import Modal from "./Modal";
 
 type Props = {
-  envs: Record<string, string>;
+  envs: Record<string, string | undefined> | undefined;
+  site: SiteWithAccount;
 };
-const EnvModal: FC<Props> = ({ envs }) => {
+
+const EnvModal: FC<Props> = ({ envs, site }) => {
   const [isOpen, setIsOpen] = useState(false);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
+  const [envsObj, setEnvsObj] = useState<
+    Record<string, string | undefined> | undefined
+  >(envs);
+
+  const { data } = api.sites.getEnv.useQuery({
+    site_account_slug: site.account_slug,
+    site_id: site.id,
+    account_slug: site.account.slug,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setEnvsObj(data);
+    }
+  }, [data]);
+
+  if (!envsObj || _.isEmpty(envsObj)) return null;
+
   const EnvContent = () => {
     return (
       <div>
-        {Object.entries(envs).map(([key, value]) => (
+        {Object.entries(envsObj).map(([key, value]) => (
           <div
             key={key}
             className={

@@ -64,8 +64,21 @@ export type Site = {
     id: string;
   };
   admin_url: string;
+  account_slug: string;
 };
 
 export type SiteWithAccount = Site & {
   account: AccountNoToken;
+};
+
+export type SiteEnv = {
+  key: string;
+  scopes: Array<"builds" | "functions" | "post_processing" | "runtime">;
+  values: {
+    id: string;
+    value: string;
+    context: "all" | "dev" | "branch-deploy" | "deploy-preview" | "production";
+    role: string;
+  }[];
+  updated_at: Date;
 };

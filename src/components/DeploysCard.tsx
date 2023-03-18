@@ -41,7 +41,6 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
       enabled: !!siteInfo,
     }
   );
-  console.log("🚀 ~ file: DeploysCard.tsx:43 ~ data:", data);
 
   useEffect(() => {
     if (data) {

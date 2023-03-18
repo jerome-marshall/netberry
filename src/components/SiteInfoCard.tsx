@@ -86,7 +86,6 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     build_settings,
     account,
   } = siteInfo;
-  console.log("🚀 ~ file: SiteInfoCard.tsx:87 ~ siteInfo:", siteInfo);
 
   const repoUrl = build_settings?.repo_url || repo_url;
 
@@ -193,7 +192,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
           ]}
           disabled={trigerring}
         />
-        {!_.isEmpty(envs) && <EnvModal envs={envs} />}
+        <EnvModal envs={envs} site={siteInfo} />
       </div>
     </div>
   );
