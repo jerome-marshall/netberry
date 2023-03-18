@@ -1,17 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import { FC, useEffect } from "react";
-import React from "react";
-import netberryLogo from "../assets/netberry.png";
+import { Menu } from "@headlessui/react";
+import clsx from "clsx";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import type { FC } from "react";
+import React, { useEffect } from "react";
+import netberryLogo from "../assets/netberry.png";
 import { AccountsLandingURL, SitesLandingURL } from "../utils/urls";
-import { useSession, signIn, signOut } from "next-auth/react";
-import clsx from "clsx";
-import { Menu } from "@headlessui/react";
-
-// interface HeaderProps {
-//   children: React.ReactNode;
-// }
 
 const Header: FC = () => {
   const [location, setLocation] = React.useState<Location>();

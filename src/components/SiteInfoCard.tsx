@@ -3,13 +3,11 @@
 /* eslint-disable @next/next/no-img-element */
 import clsx from "clsx";
 import { format } from "date-fns";
-import _ from "lodash";
 import Image from "next/image";
 import Link from "next/link";
 import type { FC } from "react";
 import { useState } from "react";
 import { FaBolt } from "react-icons/fa";
-import { MdCleaningServices } from "react-icons/md";
 import { SiNetlify } from "react-icons/si";
 import type { Id } from "react-toastify";
 import { toast } from "react-toastify";
@@ -21,7 +19,6 @@ import { api } from "../utils/api";
 import EnvModal from "./EnvModal";
 import MenuDropdown from "./MenuDropdown";
 import Shimmer from "./Shimmer";
-import { GrTrigger } from "react-icons/gr";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
