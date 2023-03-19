@@ -69,6 +69,7 @@ export type Site = {
 
 export type SiteWithAccount = Site & {
   account: AccountNoToken;
+  isFavourite?: boolean;
 };
 
 export type SiteEnv = {

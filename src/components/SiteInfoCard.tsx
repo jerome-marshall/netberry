@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
-import type { FC } from "react";
+import { FC, useEffect } from "react";
 import { useState } from "react";
 import { FaBolt } from "react-icons/fa";
 import { SiNetlify } from "react-icons/si";
@@ -19,6 +19,7 @@ import { api } from "../utils/api";
 import EnvModal from "./EnvModal";
 import MenuDropdown from "./MenuDropdown";
 import Shimmer from "./Shimmer";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
@@ -26,7 +27,18 @@ type Props = {
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
+  console.log("🚀 ~ file: SiteInfoCard.tsx:29 ~ siteInfo:", siteInfo);
   let toastId: Id | null = null;
+
+  const [isFav, setIsFav] = useState(siteInfo?.isFavourite || false);
+  const [favLoading, setFavLoading] = useState(!siteInfo);
+
+  useEffect(() => {
+    if (siteInfo) {
+      setIsFav(!!siteInfo.isFavourite);
+    }
+    setFavLoading(!siteInfo);
+  }, [siteInfo]);
 
   const [trigerring, setTrigerring] = useState(false);
 
@@ -69,8 +81,75 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     },
   });
 
-  const { mutate: addFavorite, data: updatedUser } =
-    api.sites.addFavorite.useMutation();
+  const { mutate: addFavorite } = api.sites.addFavorite.useMutation({
+    onMutate() {
+      setFavLoading(true);
+      const id = toast.loading("Adding to favourites...");
+      toastId = id;
+    },
+    onSuccess() {
+      setIsFav(true);
+      setTimeout(() => {
+        toastId &&
+          toast.update(toastId, {
+            render: "Added to favourites",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+      }, 1000);
+    },
+    onError() {
+      setIsFav(false);
+      setTimeout(() => {
+        toastId &&
+          toast.update(toastId, {
+            render: "Failed to favourite",
+            type: "error",
+            isLoading: false,
+            autoClose: 2000,
+          });
+      }, 1000);
+    },
+    onSettled() {
+      setFavLoading(false);
+    },
+  });
+
+  const { mutate: removeFavorite } = api.sites.removeFavorite.useMutation({
+    onMutate() {
+      setFavLoading(true);
+      const id = toast.loading("Removing favourite...");
+      toastId = id;
+    },
+    onSuccess() {
+      setIsFav(false);
+      setTimeout(() => {
+        toastId &&
+          toast.update(toastId, {
+            render: "Removed from favourites",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+      }, 1000);
+    },
+    onError() {
+      setIsFav(true);
+      setTimeout(() => {
+        toastId &&
+          toast.update(toastId, {
+            render: "Failed to unfavourite",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+      }, 1000);
+    },
+    onSettled() {
+      setFavLoading(false);
+    },
+  });
 
   if (!siteInfo) return <SiteInfoLoader />;
 
@@ -105,16 +184,26 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
 
   const envs = siteInfo.build_settings?.env;
 
-  const handleAddFavorite = () => {
-    addFavorite({
-      site_id: id,
-      account_slug: siteInfo.account.slug,
-    });
+  const handleFavourite = (type: "ADD" | "REMOVE") => {
+    switch (type) {
+      case "ADD":
+        addFavorite({
+          site_id: id,
+          account_slug: siteInfo.account.slug,
+        });
+        setIsFav(true);
+        break;
+      case "REMOVE":
+        removeFavorite({
+          site_id: id,
+        });
+        setIsFav(false);
+        break;
+    }
   };
 
   return (
     <div className="site-info-card min-w-[640px] max-w-fit rounded-medium border border-gray-darkest bg-background-secondary p-card_pad">
-      <button onClick={handleAddFavorite}>Fav</button>
       <div className="flex justify-between gap-32">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-white">{name}</h1>
@@ -201,6 +290,25 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
           disabled={trigerring}
         />
         <EnvModal envs={envs} site={siteInfo} />
+        {isFav ? (
+          <button
+            className="button items-center gap-2"
+            onClick={() => handleFavourite("REMOVE")}
+            disabled={favLoading}
+          >
+            <AiFillStar />
+            <span>Remove</span>
+          </button>
+        ) : (
+          <button
+            className="button items-center gap-2"
+            onClick={() => handleFavourite("ADD")}
+            disabled={favLoading}
+          >
+            <AiOutlineStar />
+            <span>Add to Fav</span>
+          </button>
+        )}
       </div>
     </div>
   );

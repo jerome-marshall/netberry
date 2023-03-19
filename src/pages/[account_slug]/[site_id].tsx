@@ -11,7 +11,7 @@ const SiteDetailPage = () => {
   const site_id = query.site_id as string;
   const account_slug = query.account_slug as string;
 
-  const { data, error } = api.sites.getByAccount.useQuery({
+  const { data } = api.sites.getByAccount.useQuery({
     account_slug,
     site_id,
   });

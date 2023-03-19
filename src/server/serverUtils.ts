@@ -20,21 +20,6 @@ import { prisma } from "./db";
 export const getAllAccounts = async () => {
   const accounts = await prisma.netlifyAccount.findMany();
 
-  try {
-    const user = await prisma.user.update({
-      where: { email: "jeromemarshall0@gmail.com" },
-      data: {
-        favAccounts: ["213123"],
-      },
-    });
-    console.log("🚀 ~ file: serverUtils.ts:31 ~ getAllAccounts ~ user:", user);
-  } catch (error) {
-    console.log(
-      "🚀 ~ file: serverUtils.ts:32 ~ getAllAccounts ~ error:",
-      error
-    );
-  }
-
   if (!_.isEmpty(accounts)) {
     const accountsNoToken = accounts.map((account) => formatAccount(account));
     return { accounts, accountsNoToken };
@@ -82,10 +67,22 @@ export const getSiteByID = async ({
   site_id: string;
   account_token: string;
 }) => {
-  const res = await axiosInstance.get<Site>(`/sites/${site_id}`, {
-    headers: { Authorization: `Bearer ${account_token}` },
-  });
-  return res.data;
+  const res = await Promise.all([
+    axiosInstance.get<Site>(`/sites/${site_id}`, {
+      headers: { Authorization: `Bearer ${account_token}` },
+    }),
+  ]);
+
+  const site = res?.[0].data;
+
+  if (site) {
+    return site;
+  } else {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Site not found",
+    });
+  }
 };
 
 export const getSiteEnv = async ({

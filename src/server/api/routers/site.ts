@@ -1,18 +1,18 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import type { FavSite, SiteWithAccount } from "../../../types";
+import type { SiteWithAccount } from "../../../types";
 import {
   getAllAccounts,
   getAllSites,
   getSiteEnv,
   handleError,
 } from "../../serverUtils";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import type { AccountNoToken } from "./../../../types.d";
 import { getAccountBySlug, getSiteByID } from "./../../serverUtils";
 
 export const siteRouter = createTRPCRouter({
-  getAll: publicProcedure.query(async () => {
+  getAll: protectedProcedure.query(async ({ ctx: { session } }) => {
     try {
       const { accounts, accountsNoToken } = await getAllAccounts();
 
@@ -22,10 +22,17 @@ export const siteRouter = createTRPCRouter({
 
           const accountNoToken = accountsNoToken[i] as AccountNoToken;
 
-          const sitesWithAccount: SiteWithAccount[] = sites.map((site) => ({
-            ...site,
-            account: accountNoToken,
-          }));
+          const sitesWithAccount: SiteWithAccount[] = sites.map((site) => {
+            const isFavourite = !!session.user.favSites.find(
+              (favSite) => favSite.site_id === site.site_id
+            );
+
+            return {
+              ...site,
+              account: accountNoToken,
+              isFavourite,
+            };
+          });
 
           return { sites: sitesWithAccount, account: accountNoToken };
         })
@@ -37,14 +44,14 @@ export const siteRouter = createTRPCRouter({
     }
   }),
 
-  getByAccount: publicProcedure
+  getByAccount: protectedProcedure
     .input(
       z.object({
         account_slug: z.string(),
         site_id: z.string(),
       })
     )
-    .query(async ({ input: { account_slug, site_id } }) => {
+    .query(async ({ input: { account_slug, site_id }, ctx: { session } }) => {
       try {
         const { account_token, accountNoToken } = await getAccountBySlug({
           slug: account_slug,
@@ -53,17 +60,24 @@ export const siteRouter = createTRPCRouter({
           site_id,
           account_token,
         });
+
+        const isFavourite = !!session.user.favSites.find(
+          (favSite) => favSite.site_id === site_id
+        );
+
         const siteWithAccount: SiteWithAccount = {
           ...site,
           account: accountNoToken,
+          isFavourite,
         };
+
         return { site: siteWithAccount };
       } catch (error) {
         handleError(error);
       }
     }),
 
-  getEnv: publicProcedure
+  getEnv: protectedProcedure
     .input(
       z.object({
         account_slug: z.string(),
@@ -87,7 +101,7 @@ export const siteRouter = createTRPCRouter({
       }
     }),
 
-  addFavorite: publicProcedure
+  addFavorite: protectedProcedure
     .input(
       z.object({
         site_id: z.string(),
@@ -100,87 +114,27 @@ export const siteRouter = createTRPCRouter({
         ctx: { session, prisma },
       }) => {
         try {
-          const user = await prisma.user.findUnique({
-            where: { id: session?.user.id },
-          });
-
-          if (user) {
-            const { account_token } = await getAccountBySlug({
-              slug: account_slug,
-            });
-
-            const favSites = (user.favSites as FavSite[]) || {};
-
-            const siteExists = favSites.find(
-              (favSite) => favSite.site_id === site_id
-            );
-
-            if (siteExists) {
-              throw new TRPCError({
-                code: "CONFLICT",
-                message: "Site already exists in favorites",
-              });
-            }
-
-            const updateSite = await prisma.user.update({
-              where: { id: user.id },
-              data: {
-                favSites: [
-                  ...favSites,
-                  { site_id, account_token, account_slug },
-                ],
-              },
-            });
-            console.log(
-              "🚀 ~ file: site.ts:110 ~ .mutation ~ updateSite:",
-              updateSite
-            );
-
-            return updateSite;
-          } else {
-            throw new TRPCError({
-              code: "NOT_FOUND",
-              message: "User not found",
-            });
-          }
-        } catch (error) {
-          handleError(error);
-        }
-      }
-    ),
-
-  removeFavorite: publicProcedure
-    .input(
-      z.object({
-        site_id: z.string(),
-      })
-    )
-    .mutation(async ({ input: { site_id }, ctx: { session, prisma } }) => {
-      try {
-        const user = await prisma.user.findUnique({
-          where: { id: session?.user.id },
-        });
-
-        if (user) {
-          const favSites = (user.favSites as FavSite[]) || {};
-
+          const user = session.user;
+          const favSites = user.favSites || [];
           const siteExists = favSites.find(
             (favSite) => favSite.site_id === site_id
           );
 
-          if (!siteExists) {
+          if (siteExists) {
             throw new TRPCError({
               code: "CONFLICT",
-              message: "Site does not exist in favorites",
+              message: "Site already exists in favorites",
             });
           }
+
+          const { account_token } = await getAccountBySlug({
+            slug: account_slug,
+          });
 
           const updateSite = await prisma.user.update({
             where: { id: user.id },
             data: {
-              favSites: favSites.filter(
-                (favSite) => favSite.site_id !== site_id
-              ),
+              favSites: [...favSites, { site_id, account_token, account_slug }],
             },
           });
           console.log(
@@ -189,50 +143,73 @@ export const siteRouter = createTRPCRouter({
           );
 
           return updateSite;
-        } else {
+        } catch (error) {
+          handleError(error);
+        }
+      }
+    ),
+
+  removeFavorite: protectedProcedure
+    .input(
+      z.object({
+        site_id: z.string(),
+      })
+    )
+    .mutation(async ({ input: { site_id }, ctx: { session, prisma } }) => {
+      try {
+        const user = session.user;
+        const favSites = user.favSites || [];
+        const siteExists = favSites.find(
+          (favSite) => favSite.site_id === site_id
+        );
+
+        if (!siteExists) {
           throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "User not found",
+            code: "CONFLICT",
+            message: "Site does not exist in favorites",
           });
         }
+
+        const updateSite = await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            favSites: favSites.filter((favSite) => favSite.site_id !== site_id),
+          },
+        });
+        console.log(
+          "🚀 ~ file: site.ts:110 ~ .mutation ~ updateSite:",
+          updateSite
+        );
+
+        return updateSite;
       } catch (error) {
         handleError(error);
       }
     }),
 
-  getFavorites: publicProcedure.query(async ({ ctx: { session, prisma } }) => {
+  getFavorites: protectedProcedure.query(async ({ ctx: { session } }) => {
     try {
-      const user = await prisma.user.findUnique({
-        where: { id: session?.user.id },
-      });
+      const user = session.user;
+      const favSites = user.favSites || [];
 
-      if (user) {
-        const favSites = (user.favSites as FavSite[]) || [];
+      const data = await Promise.all(
+        favSites.map(async (favSite) => {
+          const site = await getSiteByID(favSite);
 
-        const data = await Promise.all(
-          favSites.map(async (favSite) => {
-            const site = await getSiteByID(favSite);
+          const account = await getAccountBySlug({
+            slug: favSite.account_slug,
+          });
 
-            const account = await getAccountBySlug({
-              slug: favSite.account_slug,
-            });
+          const siteWithAccount: SiteWithAccount = {
+            ...site,
+            account: account.accountNoToken,
+          };
 
-            const siteWithAccount: SiteWithAccount = {
-              ...site,
-              account: account.accountNoToken,
-            };
+          return siteWithAccount;
+        })
+      );
 
-            return siteWithAccount;
-          })
-        );
-
-        return data;
-      } else {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found",
-        });
-      }
+      return data;
     } catch (error) {
       handleError(error);
     }
