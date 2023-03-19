@@ -1,14 +1,14 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import type { GetServerSidePropsContext } from "next";
+import type { DefaultUser } from "next-auth";
 import {
-  DefaultUser,
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { env } from "../env/server.mjs";
-import { FavSite } from "../types.js";
+import type { AccountNoToken, FavSite } from "../types.js";
 import { prisma } from "./db";
 
 /**
@@ -22,14 +22,16 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      favSites: FavSite[];
+      favSites?: FavSite[];
+      favAccounts?: AccountNoToken[];
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
-    favSites: FavSite[];
+    favSites?: FavSite[];
+    favAccounts?: AccountNoToken[];
   }
 }
 
@@ -51,6 +53,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = user.id;
         session.user.favSites = user.favSites;
+        session.user.favAccounts = user.favAccounts;
         // session.user.role = user.role; <-- put other properties on the session here
       }
       return session;

@@ -6,7 +6,8 @@ import Card from "./Card";
 import RightArrow from "./RightArrow";
 
 const AccountsCard: FC = () => {
-  const { data, isLoading } = api.accounts.getAll.useQuery();
+  const { data, isLoading } = api.accounts.getFavorites.useQuery();
+
   if (!data || isLoading) return <LoadingAccountsCard />;
 
   return (

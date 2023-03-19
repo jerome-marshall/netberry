@@ -1,15 +1,65 @@
+import type {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+} from "@tanstack/react-query";
 import type { FC } from "react";
+import { useEffect, useState } from "react";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import type { AccountNoToken } from "../types";
+import { api } from "../utils/api";
 import Shimmer from "./Shimmer";
 
 type Props = {
   account: AccountNoToken;
   sitesCount: number;
+  refetch: <TPageData>(
+    options?: RefetchOptions & RefetchQueryFilters<TPageData>
+  ) => Promise<QueryObserverResult>;
+  isFetching: boolean;
 };
 
-const AccountInfoCard: FC<Props> = ({ account, sitesCount }) => {
-  const { id, name, slug } = account;
+const AccountInfoCard: FC<Props> = ({
+  account,
+  sitesCount,
+  refetch,
+  isFetching,
+}) => {
+  const { name, slug } = account;
   const sitesText = sitesCount === 1 ? "site" : "sites";
+
+  const [isFav, setIsFav] = useState(account.isFavourite || false);
+
+  useEffect(() => {
+    setIsFav(!!account.isFavourite);
+  }, [account, isFetching]);
+
+  const { mutate: addFavorite } = api.accounts.addFavorite.useMutation({
+    onSettled() {
+      refetch().finally(() => null);
+    },
+  });
+
+  const { mutate: removeFavorite } = api.accounts.removeFavorite.useMutation({
+    onSettled() {
+      refetch().finally(() => null);
+    },
+  });
+
+  const handleFavourite = (action: "ADD" | "REMOVE") => {
+    switch (action) {
+      case "ADD":
+        addFavorite({
+          account_slug: slug,
+        });
+        break;
+      case "REMOVE":
+        removeFavorite({
+          account_slug: slug,
+        });
+        break;
+    }
+  };
 
   return (
     <div className="account-info-card max-w-xl rounded-medium bg-background-secondary p-card_pad">
@@ -19,8 +69,28 @@ const AccountInfoCard: FC<Props> = ({ account, sitesCount }) => {
           {sitesCount} {sitesText}
         </p>
       </div>
-
-      <p className="mt-3 block text-base text-text-muted">{account.email}</p>
+      <p className="mt-2 block text-base text-text-muted">{account.email}</p>
+      <div className="mt-4 flex gap-4">
+        {isFav ? (
+          <button
+            className="button items-center gap-2"
+            onClick={() => handleFavourite("REMOVE")}
+            disabled={isFetching}
+          >
+            <AiFillStar />
+            <span>Remove</span>
+          </button>
+        ) : (
+          <button
+            className="button items-center gap-2"
+            onClick={() => handleFavourite("ADD")}
+            disabled={isFetching}
+          >
+            <AiOutlineStar />
+            <span>Add to Fav</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 };

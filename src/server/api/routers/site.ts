@@ -23,7 +23,7 @@ export const siteRouter = createTRPCRouter({
           const accountNoToken = accountsNoToken[i] as AccountNoToken;
 
           const sitesWithAccount: SiteWithAccount[] = sites.map((site) => {
-            const isFavourite = !!session.user.favSites.find(
+            const isFavourite = !!session.user.favSites?.find(
               (favSite) => favSite.site_id === site.site_id
             );
 
@@ -61,7 +61,7 @@ export const siteRouter = createTRPCRouter({
           account_token,
         });
 
-        const isFavourite = !!session.user.favSites.find(
+        const isFavourite = !!session.user.favSites?.find(
           (favSite) => favSite.site_id === site_id
         );
 
@@ -165,7 +165,7 @@ export const siteRouter = createTRPCRouter({
 
         if (!siteExists) {
           throw new TRPCError({
-            code: "CONFLICT",
+            code: "NOT_FOUND",
             message: "Site does not exist in favorites",
           });
         }

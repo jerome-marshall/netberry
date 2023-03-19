@@ -89,27 +89,23 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     },
     onSuccess() {
       setIsFav(true);
-      setTimeout(() => {
-        toastId &&
-          toast.update(toastId, {
-            render: "Added to favourites",
-            type: "success",
-            isLoading: false,
-            autoClose: 2000,
-          });
-      }, 1000);
+      toastId &&
+        toast.update(toastId, {
+          render: "Added to favourites",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
     },
     onError() {
       setIsFav(false);
-      setTimeout(() => {
-        toastId &&
-          toast.update(toastId, {
-            render: "Failed to favourite",
-            type: "error",
-            isLoading: false,
-            autoClose: 2000,
-          });
-      }, 1000);
+      toastId &&
+        toast.update(toastId, {
+          render: "Failed to favourite",
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
     },
     onSettled() {
       setFavLoading(false);
@@ -124,27 +120,23 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     },
     onSuccess() {
       setIsFav(false);
-      setTimeout(() => {
-        toastId &&
-          toast.update(toastId, {
-            render: "Removed from favourites",
-            type: "success",
-            isLoading: false,
-            autoClose: 2000,
-          });
-      }, 1000);
+      toastId &&
+        toast.update(toastId, {
+          render: "Removed from favourites",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
     },
     onError() {
       setIsFav(true);
-      setTimeout(() => {
-        toastId &&
-          toast.update(toastId, {
-            render: "Failed to unfavourite",
-            type: "success",
-            isLoading: false,
-            autoClose: 2000,
-          });
-      }, 1000);
+      toastId &&
+        toast.update(toastId, {
+          render: "Failed to unfavourite",
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
     },
     onSettled() {
       setFavLoading(false);

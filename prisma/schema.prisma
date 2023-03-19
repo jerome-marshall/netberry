@@ -22,11 +22,12 @@ model Example {
 }
 
 model NetlifyAccount {
-  id    String @id @default(cuid())
-  name  String
-  email String @unique
-  slug  String @unique
-  token String
+  id          String  @id @default(cuid())
+  name        String
+  email       String  @unique
+  slug        String  @unique
+  token       String
+  isFavourite Boolean @default(false)
 }
 
 // Necessary for Next auth

@@ -16,7 +16,7 @@ const AccountsDetailPage: FC = () => {
   const query = router.query;
   const account_slug = query.slug as string;
 
-  const { data, error, isLoading } = api.accounts.getSites.useQuery({
+  const { data, refetch, isRefetching } = api.accounts.getSites.useQuery({
     account_slug,
   });
 
@@ -32,7 +32,12 @@ const AccountsDetailPage: FC = () => {
     <>
       <div>
         {account && sites ? (
-          <AccountInfoCard account={account} sitesCount={sites.length} />
+          <AccountInfoCard
+            account={account}
+            sitesCount={sites.length}
+            refetch={refetch}
+            isFetching={isRefetching}
+          />
         ) : (
           <LoadingAccountInfoCard />
         )}

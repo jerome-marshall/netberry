@@ -40,6 +40,7 @@ export type AccountCustom = {
   email: string;
   slug: string;
   token?: string;
+  isFavourite: boolean;
 };
 
 export type AccountNoToken = Omit<AccountCustom, "token">;
