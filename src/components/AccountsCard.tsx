@@ -1,35 +1,57 @@
+import _ from "lodash";
 import Link from "next/link";
 import type { FC } from "react";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import usePagination from "../hooks/usePagination";
 import { api } from "../utils/api";
 import { AccountsLandingURL } from "../utils/urls";
 import Card from "./Card";
+import Pagination from "./Pagination";
 import RightArrow from "./RightArrow";
 
 const AccountsCard: FC = () => {
   const { data, isLoading } = api.accounts.getFavorites.useQuery();
+
+  const pagination = usePagination({
+    items: data,
+    itemsPerPage: 8,
+  });
 
   if (!data || isLoading) return <LoadingAccountsCard />;
 
   return (
     <div className="col-span-4">
       <Card title="Accounts" titleLink={AccountsLandingURL}>
-        {data.slice(0, 5).map((account) => (
+        {_.isEmpty(data) ? (
           <Link
-            href={AccountsLandingURL + "/" + account.slug}
-            key={account.id}
-            className="card-item group justify-between gap-6"
+            href={AccountsLandingURL}
+            className="flex flex-col justify-center px-card_pad text-text-muted transition-all duration-200 hover:text-white/90"
           >
-            <div className="">
-              <p className="text-base font-semibold text-white">
-                {account.name}
-              </p>
-              <p className="mt-1 text-sm text-text-muted">{account.email}</p>
-            </div>
-
-            <RightArrow />
+            <AiOutlineUsergroupAdd className="h-full max-h-40 w-full" />
+            <p className="mt-4 text-center text-base font-semibold">
+              Your favorite accounts will appear here.
+            </p>
           </Link>
-        ))}
+        ) : (
+          pagination.currentItems.map((account) => (
+            <Link
+              href={AccountsLandingURL + "/" + account.slug}
+              key={account.id}
+              className="card-item group justify-between gap-6"
+            >
+              <div className="">
+                <p className="text-base font-semibold text-white">
+                  {account.name}
+                </p>
+                <p className="mt-1 text-sm text-text-muted">{account.email}</p>
+              </div>
+
+              <RightArrow />
+            </Link>
+          ))
+        )}
       </Card>
+      <Pagination {...pagination} />
     </div>
   );
 };
