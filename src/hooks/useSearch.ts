@@ -36,10 +36,13 @@ const useSearch = <T>({ items, keys }: SearchParams<T>) => {
 
     if (searchText === "") return setResultItems(items);
 
-    const result = fuse.search(searchText);
-    const finalResult = result.map((item) => item.item);
+    const timeout = setTimeout(() => {
+      const result = fuse.search(searchText);
+      const finalResult = result.map((item) => item.item);
+      setResultItems(finalResult);
+    }, 400);
 
-    setResultItems(finalResult);
+    return () => clearTimeout(timeout);
   }, [fuse, items, searchText]);
 
   return {
