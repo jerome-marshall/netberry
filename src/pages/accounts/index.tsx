@@ -78,4 +78,4 @@ const AccountsPage: FC = () => {
 
 export default AccountsPage;
 
-export const getServerSideProps = getServerSidePropsHelper;
+// export const getServerSideProps = getServerSidePropsHelper;

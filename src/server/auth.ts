@@ -54,7 +54,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id;
         session.user.favSites = user.favSites;
         session.user.favAccounts = user.favAccounts;
-        // session.user.role = user.role; <-- put other properties on the session here
       }
       return session;
     },

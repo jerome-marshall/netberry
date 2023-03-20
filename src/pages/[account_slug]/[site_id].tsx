@@ -30,4 +30,4 @@ const SiteDetailPage = () => {
 
 export default SiteDetailPage;
 
-export const getServerSideProps = getServerSidePropsHelper;
+// export const getServerSideProps = getServerSidePropsHelper;
