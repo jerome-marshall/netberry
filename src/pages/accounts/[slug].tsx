@@ -11,6 +11,7 @@ import Pagination from "../../components/Pagination";
 import usePagination from "../../hooks/usePagination";
 import { getServerSidePropsHelper } from "../../server/serverUtils";
 import { NextSeo } from "next-seo";
+import { sortSites } from "../../common/utils";
 
 const AccountsDetailPage: FC = () => {
   const router = useRouter();
@@ -23,6 +24,8 @@ const AccountsDetailPage: FC = () => {
 
   const account = data?.account;
   const sites = data?.sites;
+
+  sites?.sort(sortSites);
 
   const pagination = usePagination({
     items: sites,

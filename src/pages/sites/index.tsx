@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
+import { sortSites } from "../../common/utils";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import SitesListItemDetail, {
@@ -13,6 +14,7 @@ import { getServerSidePropsHelper } from "../../server/serverUtils";
 
 const SitesPage: NextPage = () => {
   const { sites } = useSites();
+  sites?.sort(sortSites);
 
   const { resultItems, ...searchProps } = useSearch({
     items: sites,
@@ -22,23 +24,6 @@ const SitesPage: NextPage = () => {
   const { currentItems, ...paginationProps } = usePagination({
     items: resultItems,
     itemsPerPage: 8,
-  });
-
-  sites?.sort((a, b) => {
-    const aPublishedAt = a.published_deploy?.published_at;
-    const bPublishedAt = b.published_deploy?.published_at;
-    if (aPublishedAt && bPublishedAt) {
-      return (
-        new Date(bPublishedAt).getTime() - new Date(aPublishedAt).getTime()
-      );
-    }
-    if (!aPublishedAt && bPublishedAt) {
-      return 1;
-    }
-    if (aPublishedAt && !bPublishedAt) {
-      return -1;
-    }
-    return -1;
   });
 
   return (

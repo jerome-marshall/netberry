@@ -1,5 +1,6 @@
 import { SiGatsby, SiNextdotjs, SiReact, SiVuedotjs } from "react-icons/si";
 import { TbBrandNextjs } from "react-icons/tb";
+import { SiteWithAccount } from "../types";
 
 export const getRepoProviderText = (provider: string | undefined) => {
   switch (provider) {
@@ -41,6 +42,21 @@ export const getFrameworkInfo = (framework: string | undefined) => {
   }
 
   return frameworkInfo;
+};
+
+export const sortSites = (a: SiteWithAccount, b: SiteWithAccount) => {
+  const aPublishedAt = a.published_deploy?.published_at;
+  const bPublishedAt = b.published_deploy?.published_at;
+  if (aPublishedAt && bPublishedAt) {
+    return new Date(bPublishedAt).getTime() - new Date(aPublishedAt).getTime();
+  }
+  if (!aPublishedAt && bPublishedAt) {
+    return 1;
+  }
+  if (aPublishedAt && !bPublishedAt) {
+    return -1;
+  }
+  return -1;
 };
 
 export const brand = "NetBerry";
