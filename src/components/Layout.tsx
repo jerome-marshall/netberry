@@ -14,20 +14,19 @@ interface LayoutProps {
 }
 
 const Layout: FC<LayoutProps> = ({ children }) => {
+  const { pathname } = useRouter();
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
 
-  const { pathname } = useRouter();
-  const [isLoading, setIsLoading] = React.useState(true);
-
   const isPageLoading = usePageLoading();
+  const [isLoading, setIsLoading] = React.useState(true);
 
   // debounce page loading
   React.useEffect(() => {
     if (isPageLoading) {
       const timeout = setTimeout(() => {
         setIsLoading(true);
-      }, 200);
+      }, 500);
 
       return () => {
         clearTimeout(timeout);
