@@ -22,9 +22,9 @@ export default function SignIn({
         className="h-22 w-24"
       />
       <p className="mt-4 text-sm">Please sign in to continue</p>
-      {Object.values(providers).map((provider) => (
-        <>
-          {provider.name === "Google" && (
+      {Object.values(providers).map(
+        (provider) =>
+          provider.name === "Google" && (
             <div key={provider.name} className="mt-6">
               <button
                 type="button"
@@ -35,9 +35,8 @@ export default function SignIn({
                 Sign in with Google
               </button>
             </div>
-          )}
-        </>
-      ))}
+          )
+      )}
     </div>
   );
 }

@@ -230,6 +230,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
         </div>
         <Link
           href={url}
+          target="_blank"
           className="image-section relative h-[104px] w-[168px] overflow-hidden rounded-medium"
         >
           {screenshot_url ? (

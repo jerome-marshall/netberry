@@ -10,6 +10,8 @@ import Layout from "../components/Layout";
 import "../styles/globals.css";
 import usePageLoading from "../hooks/usePageLoading";
 import netberryImg from "../assets/netberry.png";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,25 +19,30 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   const isPageLoading = usePageLoading();
 
-  if (isPageLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <img
-          src={netberryImg.src}
-          alt="Netberry"
-          className="h-32 w-32 animate-bounce"
-        />
-      </div>
-    );
-  }
-
   return (
     <SessionProvider session={session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <ToastContainer theme="dark" />
+      <AnimatePresence mode="wait" initial={false}>
+        {isPageLoading ? (
+          <motion.div
+            className="flex h-screen w-full items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Image
+              src={netberryImg}
+              alt="Netberry"
+              className="h-32 w-32 animate-bounce"
+            />
+          </motion.div>
+        ) : (
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        )}
+        <ReactQueryDevtools initialIsOpen={false} />
+        <ToastContainer theme="dark" />
+      </AnimatePresence>
     </SessionProvider>
   );
 };
