@@ -13,7 +13,7 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
+  const isAuthenticated = status === "authenticated" || status === "loading";
 
   useEffect(() => {
     if (!isAuthenticated && router.pathname !== "/auth/signin") {

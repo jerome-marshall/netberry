@@ -27,7 +27,6 @@ type Props = {
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
-  console.log("🚀 ~ file: SiteInfoCard.tsx:29 ~ siteInfo:", siteInfo);
   let toastId: Id | null = null;
 
   const [isFav, setIsFav] = useState(siteInfo?.isFavourite || false);
