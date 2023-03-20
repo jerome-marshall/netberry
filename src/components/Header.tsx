@@ -16,25 +16,29 @@ const Header: FC = () => {
     setLocation(window.location);
   }, []);
 
-  const { data } = useSession();
+  const { data, status } = useSession();
 
   const userImage = data?.user?.image;
 
   return (
     <div className="header flex items-center justify-between py-8">
-      <Link href="/" className="flex items-center gap-4">
-        <Image
-          src={netberryLogo}
-          alt="site-img"
-          height={40}
-          width={40}
-          className="h-10 w-10"
-        />{" "}
-        <p className="text-2xl">
-          <span className="font-bold">Net</span>Berry
-        </p>
-      </Link>
-      {location && (
+      {status === "authenticated" ? (
+        <Link href="/" className="flex items-center gap-4">
+          <Image
+            src={netberryLogo}
+            alt="site-img"
+            height={40}
+            width={40}
+            className="h-10 w-10"
+          />{" "}
+          <p className="text-2xl">
+            <span className="font-bold">Net</span>Berry
+          </p>
+        </Link>
+      ) : (
+        <div className="h-11"></div>
+      )}
+      {location && status === "authenticated" && (
         <div className="flex items-center gap-8">
           <Link
             href={SitesLandingURL}

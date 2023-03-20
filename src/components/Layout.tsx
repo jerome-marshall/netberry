@@ -37,7 +37,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="container flex min-h-screen flex-col">
-      {isAuthenticated && <Header />}
+      <Header />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           className="flex flex-1 flex-col"
@@ -45,14 +45,13 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           initial="initial"
           animate="animate"
           exit="exit"
-          transition={{ duration: 0.1 }}
+          transition={{ duration: 0.15 }}
           key={router.pathname}
         >
           {children}
         </motion.div>
       </AnimatePresence>
-
-      {isAuthenticated && <Footer />}
+      <Footer />
     </div>
   );
 };
