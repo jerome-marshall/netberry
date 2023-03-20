@@ -24,17 +24,11 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   // debounce page loading
   React.useEffect(() => {
     if (isPageLoading) {
-      const timeout = setTimeout(() => {
-        setIsLoading(true);
-      }, 200);
-
-      return () => {
-        clearTimeout(timeout);
-      };
+      setIsLoading(true);
     } else {
       const timeout = setTimeout(() => {
         setIsLoading(false);
-      }, 200);
+      }, 1000);
 
       return () => {
         clearTimeout(timeout);
@@ -58,21 +52,21 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     <div className="container flex min-h-screen flex-col">
       {isAuthenticated && <Header />}
       <AnimatePresence mode="wait" initial={false}>
-        {isLoading ? (
+        {isPageLoading ? (
           <motion.div
             className="flex h-full w-full flex-1 items-center justify-center"
             variants={pageVairants}
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ duration: 0.1 }}
+            transition={{ duration: 0.2 }}
             key={"loading"}
           >
-            <Image
+            {/* <Image
               src={netberryImg}
               alt="Netberry"
               className="h-20 w-20 animate-bounce"
-            />
+            /> */}
           </motion.div>
         ) : (
           <motion.div
