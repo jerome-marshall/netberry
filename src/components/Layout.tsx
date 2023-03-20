@@ -1,13 +1,10 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
-import { FC, useEffect } from "react";
-import React from "react";
+import { useRouter } from "next/router";
+import type { FC } from "react";
+import React, { useEffect } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
-import { motion, AnimatePresence } from "framer-motion";
-import usePageLoading from "../hooks/usePageLoading";
-import Image from "next/image";
-import netberryImg from "../assets/netberry.png";
-import { useRouter } from "next/router";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -48,7 +45,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           initial="initial"
           animate="animate"
           exit="exit"
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.1 }}
           key={router.pathname}
         >
           {children}
