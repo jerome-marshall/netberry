@@ -24,6 +24,16 @@ const SitesPage: NextPage = () => {
     itemsPerPage: 8,
   });
 
+  sites?.sort((a, b) => {
+    if (a.published_deploy?.published_at && b.published_deploy?.published_at) {
+      return (
+        new Date(b.published_deploy.published_at).getTime() -
+        new Date(a.published_deploy.published_at).getTime()
+      );
+    }
+    return 0;
+  });
+
   return (
     <>
       <NextSeo title="Sites" />

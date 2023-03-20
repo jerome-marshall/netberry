@@ -109,9 +109,11 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
             {account.name}
           </Link>
         </p>
-        <div className="text-sm text-text-muted">
-          Last published at {formatedDate} ({timeInterval})
-        </div>
+        {formatedDate && (
+          <div className="text-sm text-text-muted">
+            Last published at {formatedDate} ({timeInterval})
+          </div>
+        )}
       </div>
       <RightArrow />
       <Tooltip id="my-tooltip" />
