@@ -25,13 +25,20 @@ const SitesPage: NextPage = () => {
   });
 
   sites?.sort((a, b) => {
-    if (a.published_deploy?.published_at && b.published_deploy?.published_at) {
+    const aPublishedAt = a.published_deploy?.published_at;
+    const bPublishedAt = b.published_deploy?.published_at;
+    if (aPublishedAt && bPublishedAt) {
       return (
-        new Date(b.published_deploy.published_at).getTime() -
-        new Date(a.published_deploy.published_at).getTime()
+        new Date(bPublishedAt).getTime() - new Date(aPublishedAt).getTime()
       );
     }
-    return 0;
+    if (!aPublishedAt && bPublishedAt) {
+      return 1;
+    }
+    if (aPublishedAt && !bPublishedAt) {
+      return -1;
+    }
+    return -1;
   });
 
   return (

@@ -44,7 +44,7 @@ export const siteRouter = createTRPCRouter({
                 new Date(a.published_deploy.published_at).getTime()
               );
             }
-            return 0;
+            return -1;
           });
 
           return { sites: sitesWithAccount, account: accountNoToken };
