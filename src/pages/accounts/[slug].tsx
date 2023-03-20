@@ -10,6 +10,7 @@ import { SitesListItemDetailLoader } from "../../components/SitesListItemDetail"
 import Pagination from "../../components/Pagination";
 import usePagination from "../../hooks/usePagination";
 import { getServerSidePropsHelper } from "../../server/serverUtils";
+import { NextSeo } from "next-seo";
 
 const AccountsDetailPage: FC = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ const AccountsDetailPage: FC = () => {
 
   return (
     <>
+      <NextSeo title={account?.name} />
       <div>
         {account && sites ? (
           <AccountInfoCard

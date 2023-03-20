@@ -1,5 +1,7 @@
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { brand } from "../../common/utils";
 import DeploysCard from "../../components/DeploysCard";
 import SiteInfoCard from "../../components/SiteInfoCard";
 import { getServerSidePropsHelper } from "../../server/serverUtils";
@@ -22,6 +24,7 @@ const SiteDetailPage = () => {
 
   return (
     <div>
+      <NextSeo title={site?.name} />
       <SiteInfoCard siteInfo={site} refetchDeploys={refetchDeploys} />
       <DeploysCard siteInfo={site} setRefetchDeploys={setRefetchDeploys} />
     </div>

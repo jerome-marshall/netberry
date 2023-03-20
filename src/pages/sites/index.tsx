@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next";
+import { NextSeo } from "next-seo";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import SitesListItemDetail, {
@@ -25,6 +26,7 @@ const SitesPage: NextPage = () => {
 
   return (
     <>
+      <NextSeo title="Sites" />
       <div className="sites-page bg-background-secondary py-card_pad">
         <div className="flex items-center justify-between gap-20 px-card_pad pb-card_pad">
           <h1>Sites</h1>

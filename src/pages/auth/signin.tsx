@@ -8,12 +8,14 @@ import { getServerAuthSession } from "../../server/auth";
 import netberryLogo from "../../assets/netberry.png";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
+import { NextSeo } from "next-seo";
 
 export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div className="card m-auto flex w-fit flex-col items-center rounded-medium bg-background-secondary py-6 px-10 ring ring-background-active">
+      <NextSeo title="SignIn" />
       <Image
         src={netberryLogo}
         alt="site-img"

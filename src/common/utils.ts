@@ -10,3 +10,5 @@ export const getRepoProviderText = (provider: string | undefined) => {
       return "Here";
   }
 };
+
+export const brand = "NetBerry";

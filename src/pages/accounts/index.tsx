@@ -1,3 +1,4 @@
+import { NextSeo } from "next-seo";
 import Link from "next/link";
 import type { FC } from "react";
 import Pagination from "../../components/Pagination";
@@ -23,6 +24,7 @@ const AccountsPage: FC = () => {
 
   return (
     <>
+      <NextSeo title={"Accounts"} />
       <div className="sites-page bg-background-secondary py-card_pad">
         <div className="flex items-center justify-between gap-20 px-card_pad pb-card_pad">
           <h1>Accounts</h1>
