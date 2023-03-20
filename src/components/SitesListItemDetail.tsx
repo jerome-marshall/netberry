@@ -66,7 +66,7 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
         <div className=" flex min-w-[340px] flex-col justify-center">
           <p className="text-base font-semibold text-white">{name}</p>
           {(repoUrl || framework) && (
-            <div className="text-sm text-text-muted">
+            <div className="mt-0.5 text-sm text-text-muted">
               Deploys
               {repoUrl && (
                 <>
@@ -110,7 +110,7 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
           </Link>
         </p>
         {formatedDate && (
-          <div className="text-sm text-text-muted">
+          <div className="mt-0.5 text-sm text-text-muted">
             Last published at {formatedDate} ({timeInterval})
           </div>
         )}
