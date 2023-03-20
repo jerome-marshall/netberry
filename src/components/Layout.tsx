@@ -40,7 +40,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       {isAuthenticated && <Header />}
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
-          className="flex-1"
+          className="flex flex-1 flex-col"
           variants={pageVairants}
           initial="initial"
           animate="animate"
