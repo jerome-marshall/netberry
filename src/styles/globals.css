@@ -35,7 +35,7 @@
 
   .status {
     line-height: normal !important;
-    @apply rounded-medium px-1 text-xs font-bold capitalize leading-loose shadow-sm;
+    @apply rounded-medium px-1 text-xs font-bold capitalize leading-loose;
   }
 
   .status-grey {
@@ -45,7 +45,7 @@
     @apply status bg-gold-dark text-gold-light;
   }
   .status-green {
-    @apply status bg-green-dark text-green-light  shadow-green-light;
+    @apply status bg-green-dark text-green-light;
   }
   .status-red {
     @apply status bg-red-dark text-red-lighter;

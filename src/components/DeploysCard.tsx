@@ -119,7 +119,7 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
                   getStatusTheme(theme),
                   (deployStatus === "building" ||
                     deployStatus === "publishing") &&
-                    "animate-pulse shadow-gold-light"
+                    "animate-pulse"
                 )}
               >
                 {deployStatus}
