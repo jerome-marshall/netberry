@@ -57,13 +57,14 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     <div className="container flex min-h-screen flex-col">
       {isAuthenticated && <Header />}
       <AnimatePresence mode="wait" initial={false}>
-        {isLoading ? (
+        {true ? (
           <div className="flex flex-1 items-center justify-center">
             <Image
               src={netberryImg}
-              width={200}
-              height={200}
+              width={80}
+              height={80}
               alt="netberry-logo"
+              className="animate-bounce"
             />
           </div>
         ) : (
