@@ -14,6 +14,6 @@ const Home: NextPage = () => {
   );
 };
 
-export const getServerSideProps = getServerSidePropsHelper;
+// export const getServerSideProps = getServerSidePropsHelper;
 
 export default Home;
