@@ -26,21 +26,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     }
   }, [isAuthenticated, router]);
 
-  const isPageLoading = usePageLoading();
-  const [isLoading, setIsLoading] = React.useState(true);
-
-  // debounce the loading state
-  React.useEffect(() => {
-    if (isPageLoading) {
-      const timeout = setTimeout(() => {
-        setIsLoading(true);
-      }, 300);
-      return () => clearTimeout(timeout);
-    } else {
-      setIsLoading(false);
-    }
-  }, [isPageLoading]);
-
   const pageVairants = {
     initial: {
       opacity: 0,
@@ -57,29 +42,17 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     <div className="container flex min-h-screen flex-col">
       {isAuthenticated && <Header />}
       <AnimatePresence mode="wait" initial={false}>
-        {isLoading ? (
-          <div className="flex flex-1 items-center justify-center">
-            <Image
-              src={netberryImg}
-              width={80}
-              height={80}
-              alt="netberry-logo"
-              className="animate-bounce"
-            />
-          </div>
-        ) : (
-          <motion.div
-            className="flex-1"
-            variants={pageVairants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.2 }}
-            key={router.pathname}
-          >
-            {children}
-          </motion.div>
-        )}
+        <motion.div
+          className="flex-1"
+          variants={pageVairants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={{ duration: 0.2 }}
+          key={router.pathname}
+        >
+          {children}
+        </motion.div>
       </AnimatePresence>
 
       {isAuthenticated && <Footer />}
