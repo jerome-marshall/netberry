@@ -18,9 +18,24 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const isAuthenticated = status === "authenticated";
 
   const { pathname } = useRouter();
-  console.log("🚀 ~ file: Layout.tsx:21 ~ pathname:", pathname);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const isPageLoading = usePageLoading();
+
+  // debounce page loading
+  React.useEffect(() => {
+    if (isPageLoading) {
+      const timeout = setTimeout(() => {
+        setIsLoading(true);
+      }, 200);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    } else {
+      setIsLoading(false);
+    }
+  }, [isPageLoading]);
 
   const pageVairants = {
     initial: {
@@ -38,13 +53,14 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     <div className="container flex min-h-screen flex-col">
       {isAuthenticated && <Header />}
       <AnimatePresence mode="wait" initial={false}>
-        {isPageLoading ? (
+        {isLoading ? (
           <motion.div
             className="flex h-full w-full flex-1 items-center justify-center"
             variants={pageVairants}
             initial="initial"
             animate="animate"
             exit="exit"
+            transition={{ duration: 0.1 }}
             key={"loading"}
           >
             <Image
@@ -60,6 +76,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
             initial="initial"
             animate="animate"
             exit="exit"
+            transition={{ duration: 0.2 }}
+            key={pathname}
           >
             {children}
           </motion.div>
