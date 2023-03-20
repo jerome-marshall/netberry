@@ -26,13 +26,19 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     if (isPageLoading) {
       const timeout = setTimeout(() => {
         setIsLoading(true);
-      }, 500);
+      }, 200);
 
       return () => {
         clearTimeout(timeout);
       };
     } else {
-      setIsLoading(false);
+      const timeout = setTimeout(() => {
+        setIsLoading(false);
+      }, 200);
+
+      return () => {
+        clearTimeout(timeout);
+      };
     }
   }, [isPageLoading]);
 
