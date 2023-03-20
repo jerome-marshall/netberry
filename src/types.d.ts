@@ -63,6 +63,7 @@ export type Site = {
   published_deploy: {
     published_at: string;
     id: string;
+    framework?: string;
   };
   admin_url: string;
   account_slug: string;

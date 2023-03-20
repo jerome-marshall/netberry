@@ -34,6 +34,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
     "react-toastify": "^9.1.1",
+    "react-tooltip": "^5.10.0",
     "slugify": "^1.6.5",
     "superjson": "1.9.1",
     "voca": "^1.4.0",

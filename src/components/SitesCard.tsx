@@ -48,7 +48,7 @@ const SitesCard: FC = () => {
                   <img
                     src={site.screenshot_url}
                     alt=""
-                    className="max-h-16 max-w-[104px] rounded-medium"
+                    className="h-16 w-[104px] rounded-medium"
                   />
                 ) : (
                   <Image
@@ -56,7 +56,7 @@ const SitesCard: FC = () => {
                     alt="site-img"
                     height={104}
                     width={168}
-                    className="max-h-16 max-w-[104px] rounded-medium"
+                    className="h-16 w-[104px] rounded-medium"
                   />
                 )}
                 <div className="flex flex-col justify-center">

@@ -5,44 +5,116 @@ import type { SiteWithAccount } from "../types";
 import Shimmer from "./Shimmer";
 import SiteImg from "../assets/netlify-site.webp";
 import Image from "next/image";
+import { getFrameworkInfo, getRepoProviderText } from "../common/utils";
+import { format, formatDistanceToNow } from "date-fns";
+import RightArrow from "./RightArrow";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 type Props = {
   site: SiteWithAccount;
 };
 
 const SitesListItemDetail: FC<Props> = ({ site }) => {
-  const { account, id, name, screenshot_url, url, ssl_url } = site;
+  const {
+    account,
+    id,
+    name,
+    screenshot_url,
+    build_settings,
+    repo_url,
+    published_deploy,
+  } = site;
+  console.log("🚀 ~ file: SitesListItemDetail.tsx:15 ~ site:", site);
+
+  const repoUrl = build_settings?.repo_url || repo_url;
+  const framework = getFrameworkInfo(published_deploy?.framework);
+
+  const formatedDate =
+    published_deploy?.published_at &&
+    format(new Date(published_deploy?.published_at), "LLL dd");
+  const timeInterval =
+    published_deploy?.published_at &&
+    formatDistanceToNow(new Date(published_deploy?.published_at), {
+      addSuffix: true,
+    })
+      .replace("about", "")
+      .trim();
 
   return (
     <Link
       href={`/${account.slug}/${id}`}
       key={id + name}
-      className="card-item cursor-pointer gap-6"
+      className="card-item group cursor-pointer "
     >
-      {screenshot_url ? (
-        <img
-          src={screenshot_url}
-          alt=""
-          className="max-h-16 max-w-[104px] rounded-medium"
-        />
-      ) : (
-        <Image
-          src={SiteImg}
-          alt="site-img"
-          height={104}
-          width={168}
-          className="max-h-16 max-w-[104px] rounded-medium"
-        />
-      )}
-      <div className="flex flex-col justify-center">
-        <p className="text-base font-semibold text-white">{name}</p>
-        <Link
-          href={ssl_url || url}
-          className="text-sm text-text-muted hover:underline "
-        >
-          {url}
-        </Link>
+      <div className="flex gap-6">
+        {screenshot_url ? (
+          <img
+            src={screenshot_url}
+            alt=""
+            className="h-16 w-[104px] rounded-medium bg-gray-darkest"
+          />
+        ) : (
+          <Image
+            src={SiteImg}
+            alt="site-img"
+            height={104}
+            width={168}
+            className="h-16 w-[104px] rounded-medium bg-gray-darkest"
+          />
+        )}
+        <div className=" flex min-w-[340px] flex-col justify-center">
+          <p className="text-base font-semibold text-white">{name}</p>
+          {(repoUrl || framework) && (
+            <div className="text-sm text-text-muted">
+              Deploys
+              {repoUrl && (
+                <>
+                  {" "}
+                  from{" "}
+                  <Link
+                    href={repoUrl}
+                    target="_blank"
+                    className="relative z-10 underline hover:text-white"
+                    data-tooltip-id="my-tooltip"
+                    data-tooltip-content="ctrl + click to open"
+                  >
+                    {getRepoProviderText(build_settings?.provider)}
+                  </Link>
+                </>
+              )}
+              {framework && (
+                <>
+                  {" "}
+                  with
+                  <span className="relative top-[1px] inline-flex items-center">
+                    <framework.icon className="mx-1 h-3.5 w-3.5" />{" "}
+                    {framework.name}
+                  </span>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+      <div className="ml-24 mr-auto flex min-w-[340px] flex-col justify-center">
+        <p className="text-base text-white">
+          Hosted at{" "}
+          <Link
+            href={`/accounts/${account.slug}`}
+            className="font-semibold hover:underline"
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="ctrl + click to open"
+          >
+            {account.name}
+          </Link>
+        </p>
+        <div className="text-sm text-text-muted">
+          Last published at {formatedDate} ({timeInterval})
+        </div>
+      </div>
+      <RightArrow />
+      <Tooltip id="my-tooltip" />
     </Link>
   );
 };
