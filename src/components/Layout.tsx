@@ -21,21 +21,6 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const isPageLoading = usePageLoading();
   const [isLoading, setIsLoading] = React.useState(true);
 
-  // debounce page loading
-  React.useEffect(() => {
-    if (isPageLoading) {
-      setIsLoading(true);
-    } else {
-      const timeout = setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
-  }, [isPageLoading]);
-
   const pageVairants = {
     initial: {
       opacity: 0,
@@ -52,35 +37,17 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     <div className="container flex min-h-screen flex-col">
       {isAuthenticated && <Header />}
       <AnimatePresence mode="wait" initial={false}>
-        {isPageLoading ? (
-          <motion.div
-            className="flex h-full w-full flex-1 items-center justify-center"
-            variants={pageVairants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.2 }}
-            key={"loading"}
-          >
-            {/* <Image
-              src={netberryImg}
-              alt="Netberry"
-              className="h-20 w-20 animate-bounce"
-            /> */}
-          </motion.div>
-        ) : (
-          <motion.div
-            className="flex-1"
-            variants={pageVairants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.2 }}
-            key={pathname}
-          >
-            {children}
-          </motion.div>
-        )}
+        <motion.div
+          className="flex-1"
+          variants={pageVairants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={{ duration: 0.2 }}
+          key={pathname}
+        >
+          {children}
+        </motion.div>
       </AnimatePresence>
 
       {isAuthenticated && <Footer />}
