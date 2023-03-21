@@ -5,13 +5,13 @@ import clsx from "clsx";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, useEffect } from "react";
+import type { FC } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { FaBolt } from "react-icons/fa";
 import { SiNetlify } from "react-icons/si";
 import type { Id } from "react-toastify";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import SiteImg from "../assets/netlify-site.webp";
 import { getRepoProviderText } from "../common/utils";
 import type { SiteWithAccount } from "../types";
@@ -20,6 +20,7 @@ import EnvModal from "./EnvModal";
 import MenuDropdown from "./MenuDropdown";
 import Shimmer from "./Shimmer";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { AccountsLandingURL } from "../utils/urls";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
@@ -50,7 +51,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
       setTimeout(() => {
         toastId &&
           toast.update(toastId, {
-            render: "Build triggered successfully",
+            render: "Deploy triggered successfully",
             type: "success",
             isLoading: false,
             autoClose: 2000,
@@ -218,7 +219,16 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
               .
             </p>
           )}
-          <p className=" text-text-muted">Hosted at {account.email}. </p>
+          <p className=" text-text-muted">
+            Hosted at{" "}
+            <Link
+              href={`${AccountsLandingURL}/${account.slug}`}
+              className="underline hover:text-white"
+            >
+              {account.name}
+            </Link>
+            .{" "}
+          </p>
           <p className=" text-text-muted">
             {formatedDate ? (
               <>Last published on {formatedDate}.</>
@@ -230,8 +240,9 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
         <Link
           href={url}
           target="_blank"
-          className="image-section relative h-[104px] w-[168px] overflow-hidden rounded-medium"
+          className="image-section group relative h-[104px] w-[168px] overflow-hidden rounded-medium"
         >
+          <div className="image-overlay"></div>
           {screenshot_url ? (
             <img
               src={screenshot_url}
@@ -247,7 +258,6 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
               className="h-full w-full"
             />
           )}
-          <div className="absolute inset-0 h-full w-full bg-background-primary opacity-10 transition-all duration-200 hover:opacity-0"></div>
         </Link>
       </div>
       <div className="mt-6 flex gap-4">
