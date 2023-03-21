@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+
 import Link from "next/link";
 import type { FC } from "react";
 import type { SiteWithAccount } from "../types";
@@ -25,7 +26,6 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
     repo_url,
     published_deploy,
   } = site;
-  console.log("🚀 ~ file: SitesListItemDetail.tsx:15 ~ site:", site);
 
   const repoUrl = build_settings?.repo_url || repo_url;
   const framework = getFrameworkInfo(published_deploy?.framework);
@@ -48,21 +48,24 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
       className="card-item group cursor-pointer "
     >
       <div className="flex gap-6">
-        {screenshot_url ? (
-          <img
-            src={screenshot_url}
-            alt=""
-            className="h-16 w-[104px] rounded-medium bg-gray-darkest"
-          />
-        ) : (
-          <Image
-            src={SiteImg}
-            alt="site-img"
-            height={104}
-            width={168}
-            className="h-16 w-[104px] rounded-medium bg-gray-darkest"
-          />
-        )}
+        <div className="relative overflow-hidden rounded-medium">
+          <div className="image-overlay"></div>
+          {screenshot_url ? (
+            <img
+              src={screenshot_url}
+              alt=""
+              className="h-16 w-[104px] rounded-medium bg-gray-darkest"
+            />
+          ) : (
+            <Image
+              src={SiteImg}
+              alt="site-img"
+              height={104}
+              width={168}
+              className="h-16 w-[104px] rounded-medium bg-gray-darkest"
+            />
+          )}
+        </div>
         <div className=" flex min-w-[340px] flex-col justify-center">
           <p className="text-base font-semibold text-white">{name}</p>
           {(repoUrl || framework) && (
@@ -76,7 +79,7 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
                     href={repoUrl}
                     target="_blank"
                     className="relative z-10 underline hover:text-white"
-                    data-tooltip-id="my-tooltip"
+                    data-tooltip-id="main-tooltip"
                     data-tooltip-content="ctrl + click to open"
                   >
                     {getRepoProviderText(build_settings?.provider)}
@@ -102,8 +105,8 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
           Hosted at{" "}
           <Link
             href={`/accounts/${account.slug}`}
-            className="font-semibold hover:underline"
-            data-tooltip-id="my-tooltip"
+            className="text-[15px] font-semibold hover:underline"
+            data-tooltip-id="main-tooltip"
             data-tooltip-content="ctrl + click to open"
           >
             {account.name}
@@ -116,7 +119,6 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
         )}
       </div>
       <RightArrow />
-      <Tooltip id="my-tooltip" />
     </Link>
   );
 };

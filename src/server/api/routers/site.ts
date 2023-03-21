@@ -150,10 +150,6 @@ export const siteRouter = createTRPCRouter({
               favSites: [...favSites, { site_id, account_token, account_slug }],
             },
           });
-          console.log(
-            "🚀 ~ file: site.ts:110 ~ .mutation ~ updateSite:",
-            updateSite
-          );
 
           return updateSite;
         } catch (error) {
@@ -189,10 +185,6 @@ export const siteRouter = createTRPCRouter({
             favSites: favSites.filter((favSite) => favSite.site_id !== site_id),
           },
         });
-        console.log(
-          "🚀 ~ file: site.ts:110 ~ .mutation ~ updateSite:",
-          updateSite
-        );
 
         return updateSite;
       } catch (error) {

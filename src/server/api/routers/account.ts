@@ -100,10 +100,6 @@ export const accountRouter = createTRPCRouter({
             ],
           },
         });
-        console.log(
-          "🚀 ~ file: account.ts:86 ~ .mutation ~ updateAccount:",
-          updateAccount
-        );
 
         return updateAccount;
       } catch (error) {
@@ -141,10 +137,6 @@ export const accountRouter = createTRPCRouter({
           ),
         },
       });
-      console.log(
-        "🚀 ~ file: account.ts:123 ~ .mutation ~ updateAccount:",
-        updateAccount
-      );
 
       return updateAccount;
     }),
