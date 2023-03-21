@@ -100,6 +100,9 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
 
     const muteCard = deployStatus === "skipped";
 
+    const isBuilding =
+      deployStatus === "building" || deployStatus === "publishing";
+
     return (
       <div
         className={clsx(
@@ -117,9 +120,7 @@ const DeploysCard: FC<Props> = ({ siteInfo, setRefetchDeploys }) => {
               <p
                 className={clsx(
                   getStatusTheme(theme),
-                  (deployStatus === "building" ||
-                    deployStatus === "publishing") &&
-                    "animate-pulse"
+                  isBuilding && "animate-pulse"
                 )}
               >
                 {deployStatus}
@@ -248,7 +249,6 @@ const GitInfo = ({
   className?: string;
   siteInfo: SiteWithAccount;
 }) => {
-  console.log("🚀 ~ file: DeploysCard.tsx:250 ~ siteInfo:", siteInfo);
   const { context, branch, published_at, deploy_url } = deploy;
 
   const repoUrl = siteInfo?.build_settings?.repo_url;

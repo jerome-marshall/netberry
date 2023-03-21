@@ -6,6 +6,8 @@ import type {
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import type { Id } from "react-toastify";
+import { toast } from "react-toastify";
 import type { AccountNoToken } from "../types";
 import { api } from "../utils/api";
 import Shimmer from "./Shimmer";
@@ -30,19 +32,47 @@ const AccountInfoCard: FC<Props> = ({
 
   const [isFav, setIsFav] = useState(account.isFavourite || false);
 
+  let toastId: Id | null = null;
+
   useEffect(() => {
     setIsFav(!!account.isFavourite);
   }, [account, isFetching]);
 
   const { mutate: addFavorite } = api.accounts.addFavorite.useMutation({
+    onMutate() {
+      toastId = toast.loading("Hold on...");
+    },
     onSettled() {
-      refetch().finally(() => null);
+      refetch().finally(() => {
+        toastId &&
+          toast.update(toastId, {
+            render: "Added to favourites",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+
+        toastId = null;
+      });
     },
   });
 
   const { mutate: removeFavorite } = api.accounts.removeFavorite.useMutation({
+    onMutate() {
+      toastId = toast.loading("Hold on...");
+    },
     onSettled() {
-      refetch().finally(() => null);
+      refetch().finally(() => {
+        toastId &&
+          toast.update(toastId, {
+            render: "Removed from favourites",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+
+        toastId = null;
+      });
     },
   });
 
