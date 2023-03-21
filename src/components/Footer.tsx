@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { FC } from "react";
 import starberryLogo from "../assets/starberry-landscape-logo-white.png";
-import { Tooltip } from "react-tooltip";
+// import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { tootTipStyle } from "../common/utils";
 
@@ -44,7 +44,7 @@ const Footer: FC = () => {
           </Link>
         </div>
       </div>
-      <Tooltip id="footer-tooltip" style={tootTipStyle} />
+      {/* <Tooltip id="footer-tooltip" style={tootTipStyle} /> */}
     </div>
   );
 };
