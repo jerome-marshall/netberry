@@ -43,22 +43,25 @@ const SitesCard: FC = () => {
               key={site.id + site.name}
               className="card-item group justify-between"
             >
-              <div className="flex gap-6">
-                {site.screenshot_url ? (
-                  <img
-                    src={site.screenshot_url}
-                    alt=""
-                    className="h-16 w-[104px] rounded-medium"
-                  />
-                ) : (
-                  <Image
-                    src={SiteImg}
-                    alt="site-img"
-                    height={104}
-                    width={168}
-                    className="h-16 w-[104px] rounded-medium"
-                  />
-                )}
+              <div className=" flex gap-6">
+                <div className="relative overflow-hidden rounded-medium">
+                  <div className="image-overlay"></div>
+                  {site.screenshot_url ? (
+                    <img
+                      src={site.screenshot_url}
+                      alt=""
+                      className="h-16 w-[104px] rounded-medium"
+                    />
+                  ) : (
+                    <Image
+                      src={SiteImg}
+                      alt="site-img"
+                      height={104}
+                      width={168}
+                      className="h-16 w-[104px] rounded-medium"
+                    />
+                  )}
+                </div>
                 <div className="flex flex-col justify-center">
                   <p className="text-base font-semibold text-white">
                     {site.name}
@@ -67,6 +70,8 @@ const SitesCard: FC = () => {
                     href={site.ssl_url || site.url}
                     target="_blank"
                     className="text-sm text-text-muted hover:underline "
+                    data-tooltip-id="main-tooltip"
+                    data-tooltip-content="ctrl + click to open"
                   >
                     {site.ssl_url || site.url}
                   </Link>
