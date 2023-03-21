@@ -7,9 +7,12 @@ import { api } from "../utils/api";
 
 import { ToastContainer } from "react-toastify";
 import Layout from "../components/Layout";
+import "react-toastify/dist/ReactToastify.css";
+import "react-tooltip/dist/react-tooltip.css";
 import "../styles/globals.css";
 import { DefaultSeo } from "next-seo";
-import { brand } from "../common/utils";
+import { brand, tootTipStyle } from "../common/utils";
+// import { Tooltip } from "react-tooltip";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -26,7 +29,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <Component {...pageProps} />
       </Layout>
       <ReactQueryDevtools initialIsOpen={false} />
-      <ToastContainer theme="dark" />
+      <ToastContainer theme="dark" toastClassName={"toastify-toast"} />
+      {/* <Tooltip id="main-tooltip" style={tootTipStyle} delayShow={300} />  */}
     </SessionProvider>
   );
 };
