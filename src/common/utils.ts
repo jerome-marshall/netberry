@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { SiGatsby, SiNextdotjs, SiReact, SiVuedotjs } from "react-icons/si";
 import { TbBrandNextjs } from "react-icons/tb";
 import { SiteWithAccount } from "../types";
@@ -57,6 +58,14 @@ export const sortSites = (a: SiteWithAccount, b: SiteWithAccount) => {
     return -1;
   }
   return -1;
+};
+
+export const tootTipStyle: CSSProperties = {
+  backgroundColor: "#272f38",
+  border: "1px solid #4d565f",
+  padding: "5px 10px",
+  fontSize: "12px",
+  opacity: 1,
 };
 
 export const brand = "NetBerry";
