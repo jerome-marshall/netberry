@@ -14,31 +14,33 @@ export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <div className="card m-auto flex w-fit flex-col items-center rounded-medium bg-background-secondary py-6 px-10 ring ring-background-active">
-      <NextSeo title="SignIn" />
-      <Image
-        src={netberryLogo}
-        alt="site-img"
-        height={160}
-        width={160}
-        className="h-22 w-24"
-      />
-      <p className="mt-4 text-sm">Please sign in to continue</p>
-      {Object.values(providers).map(
-        (provider) =>
-          provider.name === "Google" && (
-            <div key={provider.name} className="mt-6">
-              <button
-                type="button"
-                onClick={() => signIn(provider.id)}
-                className="flex items-center gap-2 rounded-medium bg-background-primary py-3 px-4 ring ring-background-active_hover hover:bg-background-active_hover"
-              >
-                <FcGoogle className="mr-1 h-6 w-6" />
-                Sign in with Google
-              </button>
-            </div>
-          )
-      )}
+    <div className="flex h-full min-h-screen w-full items-center">
+      <div className="card m-auto flex w-fit flex-col items-center rounded-medium bg-background-secondary py-6 px-10 ring ring-background-active">
+        <NextSeo title="SignIn" />
+        <Image
+          src={netberryLogo}
+          alt="site-img"
+          height={160}
+          width={160}
+          className="h-22 w-24"
+        />
+        <p className="mt-4 text-sm">Please sign in to continue</p>
+        {Object.values(providers).map(
+          (provider) =>
+            provider.name === "Google" && (
+              <div key={provider.name} className="mt-6">
+                <button
+                  type="button"
+                  onClick={() => signIn(provider.id)}
+                  className="flex items-center gap-2 rounded-medium bg-background-primary py-3 px-4 ring ring-background-active_hover hover:bg-background-active_hover"
+                >
+                  <FcGoogle className="mr-1 h-6 w-6" />
+                  Sign in with Google
+                </button>
+              </div>
+            )
+        )}
+      </div>
     </div>
   );
 }

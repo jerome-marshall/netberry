@@ -1,17 +1,20 @@
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import type { FC } from "react";
+import Layout from "../../components/Layout";
 import Pagination from "../../components/Pagination";
 import RightArrow from "../../components/RightArrow";
 import Search from "../../components/Search";
 import Shimmer from "../../components/Shimmer";
+import TRPCErrorComponent from "../../components/TRPCErrorComponent";
 import usePagination from "../../hooks/usePagination";
 import useSearch from "../../hooks/useSearch";
-import { getServerSidePropsHelper } from "../../server/serverUtils";
 import { api } from "../../utils/api";
+import type { NextPageWithLayout } from "../_app";
 
-const AccountsPage: FC = () => {
-  const { data, isLoading } = api.sites.getAll.useQuery();
+const AccountsPage: NextPageWithLayout = () => {
+  const { data, error } = api.sites.getAll.useQuery(undefined, {
+    retry: 2,
+  });
 
   const { resultItems, ...searchProps } = useSearch({
     items: data,
@@ -22,6 +25,9 @@ const AccountsPage: FC = () => {
     items: resultItems,
   });
 
+  if (error) {
+    return <TRPCErrorComponent error={error} />;
+  }
   return (
     <>
       <NextSeo title={"Accounts"} />
@@ -78,6 +84,6 @@ const AccountsPage: FC = () => {
   );
 };
 
-export default AccountsPage;
+AccountsPage.getLayout = (page) => <Layout>{page}</Layout>;
 
-// export const getServerSideProps = getServerSidePropsHelper;
+export default AccountsPage;

@@ -7,7 +7,14 @@ import Link from "next/link";
 import type { FC } from "react";
 import React, { useEffect } from "react";
 import netberryLogo from "../assets/netberry.png";
-import { AccountsLandingURL, SitesLandingURL } from "../utils/urls";
+import {
+  AccountsLandingURL,
+  CreateSiteURL,
+  SitesLandingURL,
+} from "../utils/urls";
+import { IoIosArrowBack } from "react-icons/io";
+import { useRouter } from "next/router";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Header: FC = () => {
   const [location, setLocation] = React.useState<Location>();
@@ -16,25 +23,46 @@ const Header: FC = () => {
     setLocation(window.location);
   }, []);
 
+  const router = useRouter();
   const { data, status } = useSession();
 
   const userImage = data?.user?.image;
+  const role = data?.user?.role;
+  const isAdmin = role?.name === "admin";
+
+  const isHomePage = router.pathname === "/";
 
   return (
     <div className="header flex items-center justify-between py-8">
       {status === "authenticated" ? (
-        <Link href="/" className="flex items-center gap-4">
-          <Image
-            src={netberryLogo}
-            alt="site-img"
-            height={40}
-            width={40}
-            className="h-10 w-10"
-          />{" "}
-          <p className="text-2xl">
-            <span className="font-bold">Net</span>Berry
-          </p>
-        </Link>
+        <AnimatePresence>
+          <motion.div className="flex items-center gap-4">
+            {!isHomePage && (
+              <motion.button
+                className="cursor-pointer rounded-medium border border-gray-light p-2 transition-all duration-200 hover:bg-gray-light"
+                onClick={router.back}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                key="back-button"
+              >
+                <IoIosArrowBack className="h-6 w-6" />
+              </motion.button>
+            )}
+            <Link href="/" className="flex items-center gap-4">
+              <Image
+                src={netberryLogo}
+                alt="site-img"
+                height={40}
+                width={40}
+                className="h-10 w-10"
+              />{" "}
+              <p className="text-2xl">
+                <span className="font-bold">Net</span>Berry
+              </p>
+            </Link>
+          </motion.div>
+        </AnimatePresence>
       ) : (
         <div className="h-11"></div>
       )}
@@ -59,6 +87,17 @@ const Header: FC = () => {
           >
             Accounts
           </Link>
+          {isAdmin && (
+            <Link
+              href={CreateSiteURL}
+              className={clsx(
+                "nav-item",
+                location?.pathname?.includes(CreateSiteURL) && "nav-item-active"
+              )}
+            >
+              Admin
+            </Link>
+          )}
           <div className="relative">
             <Menu>
               <Menu.Button>

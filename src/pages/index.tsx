@@ -1,19 +1,20 @@
-import { type NextPage } from "next";
-import AccountsCard from "../components/AccountsCard";
+import FavouriteSitesCard from "../components/FavouriteSitesCard";
+import Layout from "../components/Layout";
 import SitesCard from "../components/SitesCard";
-import { getServerSidePropsHelper } from "../server/serverUtils";
+import type { NextPageWithLayout } from "./_app";
 
-const Home: NextPage = () => {
+const Home: NextPageWithLayout = () => {
   return (
     <div className="landing-page">
       <div className="grid grid-cols-12 gap-6 ">
         <SitesCard />
-        <AccountsCard />
+        {/* <AccountsCard /> */}
+        <FavouriteSitesCard />
       </div>
     </div>
   );
 };
 
-// export const getServerSideProps = getServerSidePropsHelper;
+Home.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default Home;

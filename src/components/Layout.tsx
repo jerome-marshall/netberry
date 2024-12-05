@@ -13,13 +13,13 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const { status } = useSession();
-  const isAuthenticated = status === "authenticated" || status === "loading";
+  const isAuthenticated = status === "authenticated";
 
   useEffect(() => {
-    if (!isAuthenticated && router.pathname !== "/auth/signin") {
-      void router.push("/auth/signin");
-    } else if (isAuthenticated && router.pathname === "/auth/signin") {
-      void router.push("/");
+    if (router.isReady) {
+      if (!isAuthenticated && router.pathname === "/") {
+        void router.replace("/auth/signin");
+      }
     }
   }, [isAuthenticated, router]);
 
@@ -34,6 +34,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       opacity: 0,
     },
   };
+
+  if (status === "loading") return <></>;
 
   return (
     <div className="container flex min-h-screen flex-col">

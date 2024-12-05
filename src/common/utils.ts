@@ -1,7 +1,7 @@
-import { CSSProperties } from "react";
+import { format, formatDistanceToNow } from "date-fns";
+import type { CSSProperties } from "react";
 import { SiGatsby, SiNextdotjs, SiReact, SiVuedotjs } from "react-icons/si";
-import { TbBrandNextjs } from "react-icons/tb";
-import { SiteWithAccount } from "../types";
+import type { SiteWithAccount } from "../types";
 
 export const getRepoProviderText = (provider: string | undefined) => {
   switch (provider) {
@@ -66,6 +66,27 @@ export const tootTipStyle: CSSProperties = {
   padding: "5px 10px",
   fontSize: "12px",
   opacity: 1,
+};
+
+export const getPublishedDate = (pDate: string | number | Date | undefined) => {
+  if (!pDate) return { formatedDate: null, timeInterval: null };
+
+  const date = new Date(pDate);
+
+  const formatedDate = format(date, "LLL dd");
+
+  const timeInterval =
+    pDate &&
+    formatDistanceToNow(date, {
+      addSuffix: true,
+    })
+      .replace("about", "")
+      .trim();
+
+  return {
+    formatedDate,
+    timeInterval,
+  };
 };
 
 export const brand = "NetBerry";

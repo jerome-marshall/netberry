@@ -20,9 +20,11 @@ export type NetlifyDeploy = {
   branch: string;
   context: string;
   deploy_url: string;
+  deploy_time?: number;
   links?: {
     permalink?: string;
   };
+  locked?: boolean;
   lighthouse?: {
     averages?: {
       accessibility: number;
@@ -32,6 +34,15 @@ export type NetlifyDeploy = {
       pwa: number;
     };
   };
+};
+
+export type NetlifyHook = {
+  id: string;
+  title: string;
+  branch: string;
+  url: string;
+  site_id: string;
+  created_at: string;
 };
 
 export type AccountCustom = {
@@ -48,6 +59,7 @@ export type AccountNoToken = Omit<AccountCustom, "token">;
 export type Site = {
   id: string;
   site_id: string;
+  account_id: string;
   name: string;
   screenshot_url?: string;
   url: string;
@@ -64,6 +76,7 @@ export type Site = {
     published_at: string;
     id: string;
     framework?: string;
+    locked?: boolean;
   };
   admin_url: string;
   account_slug: string;
@@ -91,3 +104,39 @@ export type FavSite = {
   account_token: string;
   account_slug: string;
 };
+
+export interface GithubRes {
+  total_count: number;
+  incomplete_results: boolean;
+  items: GitHubRepo[];
+}
+
+export interface GitHubRepo {
+  id: number;
+  node_id: string;
+  name: string;
+  full_name: string;
+  private: boolean;
+  owner: GitHubOwner;
+  html_url: string;
+  description: null | string;
+  url: string;
+}
+
+export interface GitHubOwner {
+  login: string;
+  id: number;
+  node_id: string;
+  avatar_url: string;
+  gravatar_id: string;
+  url: string;
+  html_url: string;
+  repos_url: string;
+  type: string;
+  site_admin: boolean;
+}
+
+interface ENVKeyValue {
+  key: string;
+  values: { value: string; context: string }[];
+}

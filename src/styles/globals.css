@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,19 +18,85 @@
 
 @layer components {
   .button {
-    @apply flex cursor-pointer items-center rounded-medium bg-gray-light px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-teal-dark disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-gray-light;
+    @apply relative flex cursor-pointer items-center justify-center overflow-hidden rounded-medium bg-gray-light px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-teal-dark hover:ring-1 hover:ring-background-alt_hover disabled:pointer-events-none disabled:opacity-50;
 
     svg {
       @apply h-4 w-4;
     }
+
+    &.loading {
+      pointer-events: none;
+      opacity: 0.5;
+      span,
+      svg {
+        @apply relative;
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          60deg,
+          theme("colors.gray.light") 0,
+          theme("colors.gray.light") 12px,
+          theme("colors.gray.darkest") 12px,
+          theme("colors.gray.darkest") 24px
+        );
+        animation: load 1s infinite linear;
+      }
+    }
+
+    @keyframes load {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(56px);
+      }
+    }
   }
 
   .button-teal {
-    @apply button bg-teal-light px-4 py-2 text-teal-dark hover:bg-teal-dark hover:text-teal-lighter;
+    @apply button bg-teal-light px-4 py-2 text-teal-dark hover:bg-teal-dark hover:text-teal-lighter hover:ring-1 hover:ring-teal-lighter;
+
+    &.loading::before {
+      background: repeating-linear-gradient(
+        60deg,
+        theme("colors.teal.light") 0,
+        theme("colors.teal.light") 12px,
+        theme("colors.teal.lighter") 12px,
+        theme("colors.teal.lighter") 24px
+      );
+    }
   }
 
   .button-red {
-    @apply button bg-red-light px-4 py-2 text-red-dark hover:bg-red-dark hover:text-red-lighter;
+    @apply button bg-red-light px-4 py-2 text-red-dark hover:bg-red-dark hover:text-red-lighter hover:ring-1 hover:ring-red-light;
+
+    &.loading::before {
+      background: repeating-linear-gradient(
+        60deg,
+        theme("colors.red.light") 0,
+        theme("colors.red.light") 12px,
+        theme("colors.red.alt") 12px,
+        theme("colors.red.alt") 24px
+      );
+    }
+  }
+
+  .button-ghost {
+    @apply button bg-transparent text-text-muted;
+
+    &.active {
+      @apply bg-background-active text-teal-lighter;
+    }
+
+    &:hover {
+      @apply bg-teal-dark text-teal-lighter;
+    }
   }
 
   .status {
@@ -39,7 +105,7 @@
   }
 
   .status-grey {
-    @apply status bg-gray-light text-white;
+    @apply status bg-gray-light/50 text-white/90;
   }
   .status-gold {
     @apply status bg-gold-dark text-gold-light;
@@ -81,7 +147,46 @@
   }
 
   .image-overlay {
-    @apply absolute inset-0 z-10 h-full w-full bg-white/20 transition-all duration-200 group-hover:bg-white/0;
+    @apply absolute inset-0 h-full w-full bg-white/20 transition-all duration-200 group-hover:bg-white/0;
+  }
+
+  .site-info-modal {
+    .modal-content-wrap {
+      @apply flex flex-col;
+
+      .info-item {
+        @apply flex items-center gap-4 px-card_pad py-2;
+
+        &:nth-child(even) {
+          @apply bg-background-active_hover;
+        }
+
+        .info-label {
+          min-width: 150px;
+        }
+
+        .site-info-value {
+          @apply flex items-center gap-2 text-text-muted;
+        }
+        a {
+          @apply underline;
+
+          &:hover {
+            @apply text-teal-lighter;
+          }
+        }
+      }
+    }
+  }
+}
+
+@layer utilities {
+  .divider {
+    @apply h-[2px] w-full bg-gray-darkest;
+  }
+
+  .transition-custom {
+    @apply transition-all duration-100 ease-in-out;
   }
 }
 
@@ -96,12 +201,171 @@
   }
 }
 
-@layer utilities {
-  .divider {
-    @apply h-[2px] w-full bg-gray-darkest;
+.tooltip {
+  @apply whitespace-nowrap border border-gray-light !bg-background-active_hover !py-1 !px-2;
+
+  .nextui-tooltip {
+    @apply text-sm !text-white/80;
+
+    span {
+      @apply border-r border-b border-gray-light bg-background-active_hover;
+    }
+  }
+}
+
+@layer components {
+  .react-select {
+    position: relative;
+    width: 100%;
+
+    .react-select__control {
+      min-height: auto;
+      border: none;
+      @apply flex h-10 w-full rounded-md border border-solid border-input bg-transparent px-3 py-1 text-sm text-white ring-offset-background-active_hover file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50;
+
+      &:hover {
+        @apply border-border;
+      }
+
+      &.react-select__control--is-focused {
+        @apply outline-none ring-1 ring-ring;
+      }
+
+      .react-select__value-container {
+        padding: 0px;
+
+        .react-select__placeholder,
+        .react-select__single-value {
+          margin: 0px;
+          font-size: 14px;
+          color: white;
+        }
+
+        .react-select__placeholder {
+          @apply text-muted-foreground;
+        }
+
+        .react-select__input-container {
+          padding: 0px;
+          margin: 0px;
+
+          .react-select__input {
+            &:focus {
+              outline: none;
+              box-shadow: none;
+            }
+          }
+        }
+      }
+
+      .react-select__indicators {
+        .react-select__indicator {
+          padding: 0px;
+          margin-left: 10px;
+
+          svg {
+            path {
+              fill: theme(colors.gray.light);
+            }
+          }
+        }
+      }
+    }
+
+    .react-select__menu {
+      min-width: 100%;
+      width: fit-content;
+      z-index: 10;
+      background-color: theme(colors.background.alt_hover);
+
+      .react-select__menu-list {
+        .react-select__option {
+          white-space: nowrap;
+          font-size: 14px;
+          color: theme(colors.white);
+
+          &--is-focused {
+            background-color: theme(colors.background.active_hover);
+          }
+        }
+
+        .react-select__option--is-selected {
+          color: theme(colors.teal.lighter);
+          background-color: theme(colors.background.active);
+        }
+      }
+    }
   }
 
-  .transition-custom {
-    @apply transition-all duration-100 ease-in-out;
+  .env-grid-row {
+    @apply relative grid grid-cols-[250px_minmax(0,_1fr)] px-card_pad py-2 even:bg-background-active;
+
+    .context-section {
+      @apply pointer-events-none visible opacity-0 transition-all duration-300 ease-in-out;
+
+      .context-item {
+        @apply flex cursor-pointer items-center rounded-full border border-transparent bg-background-primary p-2;
+
+        &:hover {
+          @apply border border-background-alt_hover bg-background-active;
+
+          svg {
+            @apply text-white;
+          }
+        }
+        svg {
+          @apply h-3 w-3 text-text-muted;
+        }
+      }
+    }
+
+    &:hover {
+      .context-section {
+        @apply pointer-events-auto visible opacity-100;
+      }
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+    --input: 0, 0%, 69%;
+    --ring: 180, 63%, 37%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    /* @apply border-border; */
+  }
+  body {
+    /* @apply bg-background1 text-foreground; */
   }
 }

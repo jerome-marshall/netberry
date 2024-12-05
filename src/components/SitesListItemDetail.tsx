@@ -6,11 +6,14 @@ import type { SiteWithAccount } from "../types";
 import Shimmer from "./Shimmer";
 import SiteImg from "../assets/netlify-site.webp";
 import Image from "next/image";
-import { getFrameworkInfo, getRepoProviderText } from "../common/utils";
-import { format, formatDistanceToNow } from "date-fns";
+import {
+  getFrameworkInfo,
+  getPublishedDate,
+  getRepoProviderText,
+} from "../common/utils";
 import RightArrow from "./RightArrow";
-import { Tooltip } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
+import Tooltip from "./Tooltip";
+import { AccountsLandingURL } from "../utils/urls";
 
 type Props = {
   site: SiteWithAccount;
@@ -30,20 +33,13 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
   const repoUrl = build_settings?.repo_url || repo_url;
   const framework = getFrameworkInfo(published_deploy?.framework);
 
-  const formatedDate =
-    published_deploy?.published_at &&
-    format(new Date(published_deploy?.published_at), "LLL dd");
-  const timeInterval =
-    published_deploy?.published_at &&
-    formatDistanceToNow(new Date(published_deploy?.published_at), {
-      addSuffix: true,
-    })
-      .replace("about", "")
-      .trim();
+  const { formatedDate, timeInterval } = getPublishedDate(
+    published_deploy?.published_at
+  );
 
   return (
     <Link
-      href={`/${account.slug}/${id}`}
+      href={`${AccountsLandingURL}/${account.slug}/${id}`}
       key={id + name}
       className="card-item group cursor-pointer "
     >
@@ -72,7 +68,7 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
             <div className="mt-0.5 text-sm text-text-muted">
               Deploys
               {repoUrl && (
-                <>
+                <Tooltip delay>
                   {" "}
                   from{" "}
                   <Link
@@ -84,7 +80,7 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
                   >
                     {getRepoProviderText(build_settings?.provider)}
                   </Link>
-                </>
+                </Tooltip>
               )}
               {framework && (
                 <>
@@ -112,11 +108,15 @@ const SitesListItemDetail: FC<Props> = ({ site }) => {
             {account.name}
           </Link>
         </p>
-        {formatedDate && (
-          <div className="mt-0.5 text-sm text-text-muted">
-            Last published at {formatedDate} ({timeInterval})
-          </div>
-        )}
+        <div className="mt-0.5 text-sm text-text-muted">
+          {formatedDate ? (
+            <>
+              Last published at {formatedDate} ({timeInterval})
+            </>
+          ) : (
+            "Not published yet"
+          )}
+        </div>
       </div>
       <RightArrow />
     </Link>

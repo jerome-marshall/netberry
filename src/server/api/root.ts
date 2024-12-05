@@ -1,4 +1,5 @@
 import { accountRouter } from "./routers/account";
+import { adminRouter } from "./routers/admin";
 import { deployRouter } from "./routers/deploy";
 import { siteRouter } from "./routers/site";
 import { createTRPCRouter } from "./trpc";
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   sites: siteRouter,
   deploys: deployRouter,
   accounts: accountRouter,
+  admin: adminRouter,
 });
 
 // export type definition of API

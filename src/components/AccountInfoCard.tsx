@@ -100,7 +100,7 @@ const AccountInfoCard: FC<Props> = ({
         </p>
       </div>
       <p className="mt-2 block text-base text-text-muted">{account.email}</p>
-      <div className="mt-4 flex gap-4">
+      {/* <div className="mt-4 flex gap-4">
         {isFav ? (
           <button
             className="button items-center gap-2"
@@ -120,7 +120,7 @@ const AccountInfoCard: FC<Props> = ({
             <span>Add to Fav</span>
           </button>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

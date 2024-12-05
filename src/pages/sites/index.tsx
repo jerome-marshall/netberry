@@ -1,19 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
-import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
 import { sortSites } from "../../common/utils";
+import Layout from "../../components/Layout";
 import Pagination from "../../components/Pagination";
 import Search from "../../components/Search";
 import SitesListItemDetail, {
   SitesListItemDetailLoader,
 } from "../../components/SitesListItemDetail";
+import TRPCErrorComponent from "../../components/TRPCErrorComponent";
 import usePagination from "../../hooks/usePagination";
 import useSearch from "../../hooks/useSearch";
 import useSites from "../../hooks/useSites";
-import { getServerSidePropsHelper } from "../../server/serverUtils";
+import type { NextPageWithLayout } from "../_app";
 
-const SitesPage: NextPage = () => {
-  const { sites } = useSites();
+const SitesPage: NextPageWithLayout = () => {
+  const { sites, error } = useSites();
   sites?.sort(sortSites);
 
   const { resultItems, ...searchProps } = useSearch({
@@ -25,6 +26,10 @@ const SitesPage: NextPage = () => {
     items: resultItems,
     itemsPerPage: 8,
   });
+
+  if (error) {
+    return <TRPCErrorComponent error={error} />;
+  }
 
   return (
     <>
@@ -60,6 +65,6 @@ const SitesPage: NextPage = () => {
   );
 };
 
-export default SitesPage;
+SitesPage.getLayout = (page) => <Layout>{page}</Layout>;
 
-// export const getServerSideProps = getServerSidePropsHelper;
+export default SitesPage;

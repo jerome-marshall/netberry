@@ -40,7 +40,7 @@ const useSearch = <T>({ items, keys }: SearchParams<T>) => {
       const result = fuse.search(searchText);
       const finalResult = result.map((item) => item.item);
       setResultItems(finalResult);
-    }, 400);
+    }, 300);
 
     return () => clearTimeout(timeout);
   }, [fuse, items, searchText]);

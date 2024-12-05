@@ -1,28 +1,28 @@
-# Create T3 App
+# Netberry
+Netberry is a dashboard built using the [T3 Stack](https://create.t3.gg/). It is designed to help users manage deployments across multiple Netlify accounts. With Netberry, you get a single dashboard to access all your sites hosted on different Netlify accounts.
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+### Features
+- User authentication: Any person with a "starberry" organization account can log in.
+- Site overview: You can view all your live or development sites under one interface.
+- Environment variables: You can view and download environment variables.
+- Manual builds: Netberry offers the ability to trigger manual builds, clear cache builds, and cancel any ongoing deploys.
+- Site favorites: Users can favorite specific sites for quick access.
+- Permalinks: Netberry gives access to a permalink for each successful deploy.
+- Lock/Unlock Deployments: Allows users to lock or unlock deployments, either to lock onto a specific deploy or to avoid accidental deploys.
 
-## What's next? How do I make an app with this?
+### Tech Stack - [T3 Stack](https://create.t3.gg/)
+- [Next.js](https://nextjs.org/)
+- [tRPC](https://trpc.io/)
+- [Auth.js](https://authjs.dev/)
+- [Prisma ORM](https://www.prisma.io/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Netlify API](https://open-api.netlify.com/)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### Setup
+1. Clone the repository.
+2. Install dependencies using npm install.
+3. Create a .env file with the necessary environment variables as in the .env.example file.
+4. Start the development server using npm run dev.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

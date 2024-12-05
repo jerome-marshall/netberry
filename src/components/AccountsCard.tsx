@@ -10,7 +10,9 @@ import Pagination from "./Pagination";
 import RightArrow from "./RightArrow";
 
 const AccountsCard: FC = () => {
-  const { data, isLoading } = api.accounts.getFavorites.useQuery();
+  const { data, isLoading } = api.accounts.getFavorites.useQuery(undefined, {
+    retry: 2,
+  });
 
   const pagination = usePagination({
     items: data,

@@ -21,6 +21,10 @@ export const serverSchema = z.object({
   ),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  AXIOM_TOKEN: z.string(),
+  AXIOM_ORG: z.string(),
+  GITHUB_TOKEN: z.string(),
+  GITHUB_INSTALLATION_ID: z.string(),
 });
 
 /**
@@ -35,6 +39,10 @@ export const serverEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  AXIOM_TOKEN: process.env.AXIOM_TOKEN,
+  AXIOM_ORG: process.env.AXIOM_ORG,
+  GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+  GITHUB_INSTALLATION_ID: process.env.GITHUB_INSTALLATION_ID,
 };
 
 /**

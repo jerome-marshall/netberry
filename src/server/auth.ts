@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import type { GetServerSidePropsContext } from "next";
-import type { DefaultUser } from "next-auth";
+import type { DefaultUser, Role } from "next-auth";
 import {
   getServerSession,
   type DefaultSession,
@@ -19,11 +19,18 @@ import { prisma } from "./db";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  **/
 declare module "next-auth" {
+  interface Role {
+    id: string;
+    name: "user" | "admin" | "developer";
+  }
+
   interface Session extends DefaultSession {
     user: {
       id: string;
       favSites?: FavSite[];
       favAccounts?: AccountNoToken[];
+      roleId?: string;
+      role?: Role | null;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -32,6 +39,8 @@ declare module "next-auth" {
   interface User extends DefaultUser {
     favSites?: FavSite[];
     favAccounts?: AccountNoToken[];
+    roleId?: string;
+    role?: Role | null;
   }
 }
 
@@ -49,12 +58,39 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
   },
   callbacks: {
-    session({ session, user }) {
+    session: async ({ session, user }) => {
+      const dbUser = await prisma.user.findFirst({
+        where: {
+          email: user.email,
+        },
+      });
+
+      if (!dbUser) {
+        throw new Error("User not found");
+      }
+
+      let role: Role;
+
+      if (dbUser.roleId) {
+        role = (await prisma.role.findFirst({
+          where: {
+            id: dbUser.roleId,
+          },
+        })) as Role;
+      } else {
+        role = {
+          id: "cllai59u90000w4ksy549pw7u",
+          name: "user",
+        };
+      }
+
       if (session.user) {
         session.user.id = user.id;
         session.user.favSites = user.favSites;
         session.user.favAccounts = user.favAccounts;
+        session.user.role = role;
       }
+
       return session;
     },
     signIn({ account, profile }) {

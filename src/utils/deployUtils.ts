@@ -23,7 +23,10 @@ export const DEPLOY_STATE = {
   ready: "ready",
   enqueued: "enqueued",
   uploading: "uploading",
+  preparing: "preparing",
   processing: "processing",
+  rejected: "rejected",
+  prepared: "prepared",
 } as const;
 
 // deploy status to display
@@ -33,10 +36,13 @@ export const DEPLOY_STATUS = {
   unknown: "unknown",
   new: "new",
   published: "published",
+  processing: "processing",
   publishing: "publishing",
   building: "building",
   waiting: "waiting",
   skipped: "skipped",
+  rejected: "rejected",
+  prepared: "build ready",
 } as const;
 
 export const DEPLOY_STATUS_THEME = {
@@ -68,8 +74,20 @@ export const DEPLOY_STATUS_THEME = {
     status: DEPLOY_STATUS.publishing,
     theme: STATUS_THEME.gold,
   },
+  processing: {
+    status: DEPLOY_STATUS.processing,
+    theme: STATUS_THEME.gold,
+  },
+  prepared: {
+    status: DEPLOY_STATUS.prepared,
+    theme: STATUS_THEME.gold,
+  },
   skipped: {
     status: DEPLOY_STATUS.skipped,
+    theme: STATUS_THEME.grey,
+  },
+  rejected: {
+    status: DEPLOY_STATUS.rejected,
     theme: STATUS_THEME.grey,
   },
   unknown: {
@@ -80,8 +98,8 @@ export const DEPLOY_STATUS_THEME = {
 
 export const getDeployStatus = (deploy: NetlifyDeploy) => {
   let status: {
-    status: keyof typeof DEPLOY_STATUS;
-    theme: keyof typeof STATUS_THEME;
+    status: typeof DEPLOY_STATUS[keyof typeof DEPLOY_STATUS];
+    theme: typeof STATUS_THEME[keyof typeof STATUS_THEME];
   } = DEPLOY_STATUS_THEME.unknown;
 
   const { state, error_message } = deploy;
@@ -112,7 +130,16 @@ export const getDeployStatus = (deploy: NetlifyDeploy) => {
       status = DEPLOY_STATUS_THEME.uploading;
       break;
     case DEPLOY_STATE.processing:
-      status = DEPLOY_STATUS_THEME.uploading;
+      status = DEPLOY_STATUS_THEME.processing;
+      break;
+    case DEPLOY_STATE.preparing:
+      status = DEPLOY_STATUS_THEME.processing;
+      break;
+    case DEPLOY_STATE.prepared:
+      status = DEPLOY_STATUS_THEME.prepared;
+      break;
+    case DEPLOY_STATE.rejected:
+      status = DEPLOY_STATUS_THEME.rejected;
       break;
 
     default:
@@ -170,11 +197,12 @@ export const getDeployTime = (date_str: string) => {
   return result;
 };
 
-export const getDeployDuration = (start: string, end: string) => {
+export const getDeployDuration = (deploy_time: number) => {
   const interval = intervalToDuration({
-    start: new Date(start),
-    end: new Date(end),
+    start: 0,
+    end: deploy_time * 1000,
   });
+
   const duration = formatDuration(interval, { zero: false })
     .replace(" years", "y")
     .replace(" year", "y")

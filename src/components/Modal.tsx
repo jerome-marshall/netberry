@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, ReactElement } from "react";
+import type { ReactElement } from "react";
+import { Fragment } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 
 export default function Modal({
@@ -10,7 +11,7 @@ export default function Modal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
+  title: string | ReactElement;
   content: ReactElement;
 }) {
   return (
@@ -42,7 +43,7 @@ export default function Modal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full min-w-[500px] max-w-3xl transform overflow-hidden overflow-y-auto rounded-medium border-[2px] border-gray-darkest bg-background-secondary text-left align-middle transition-all">
+              <Dialog.Panel className="w-full min-w-[500px] max-w-4xl transform overflow-hidden overflow-y-auto rounded-medium border-[2px] border-gray-darkest bg-background-secondary text-left align-middle transition-all">
                 <Dialog.Title
                   as="div"
                   className={

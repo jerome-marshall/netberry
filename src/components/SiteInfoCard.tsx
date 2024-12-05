@@ -6,21 +6,20 @@ import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import type { FC } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { FaBolt } from "react-icons/fa";
-import { SiNetlify } from "react-icons/si";
+import { IoSettingsSharp } from "react-icons/io5";
 import type { Id } from "react-toastify";
 import { toast } from "react-toastify";
 import SiteImg from "../assets/netlify-site.webp";
 import { getRepoProviderText } from "../common/utils";
 import type { SiteWithAccount } from "../types";
 import { api } from "../utils/api";
+import { AccountsLandingURL, getSiteSettingsEnvURL } from "../utils/urls";
 import EnvModal from "./EnvModal";
 import MenuDropdown from "./MenuDropdown";
 import Shimmer from "./Shimmer";
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import { AccountsLandingURL } from "../utils/urls";
 
 type Props = {
   siteInfo: SiteWithAccount | undefined;
@@ -28,7 +27,7 @@ type Props = {
 };
 
 const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
-  let toastId: Id | null = null;
+  const toastId = useRef<Id | null>(null);
 
   const [isFav, setIsFav] = useState(siteInfo?.isFavourite || false);
   const [favLoading, setFavLoading] = useState(!siteInfo);
@@ -45,39 +44,32 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
   const { mutate } = api.deploys.triggerBuild.useMutation({
     onMutate() {
       const id = toast.loading("Hold on...");
-      toastId = id;
+      toastId.current = id;
     },
     onSuccess() {
-      setTimeout(() => {
-        toastId &&
-          toast.update(toastId, {
-            render: "Deploy triggered successfully",
-            type: "success",
-            isLoading: false,
-            autoClose: 2000,
-          });
-
-        toastId = null;
-        setTrigerring(false);
-      }, 1000);
+      toastId.current &&
+        toast.update(toastId.current, {
+          render: "Deploy triggered successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+      setTrigerring(false);
     },
     onError() {
-      setTimeout(() => {
-        toastId &&
-          toast.update(toastId, {
-            render: "Something went wrong",
-            type: "error",
-            isLoading: false,
-            autoClose: 3000,
-          });
-
-        toastId = null;
-        setTrigerring(false);
-      }, 1000);
+      toastId.current &&
+        toast.update(toastId.current, {
+          render: "Something went wrong",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      setTrigerring(false);
     },
 
     onSettled() {
       refetchDeploys?.();
+      toastId.current = null;
     },
   });
 
@@ -85,12 +77,12 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     onMutate() {
       setFavLoading(true);
       const id = toast.loading("Adding to favourites...");
-      toastId = id;
+      toastId.current = id;
     },
     onSuccess() {
       setIsFav(true);
-      toastId &&
-        toast.update(toastId, {
+      toastId.current &&
+        toast.update(toastId.current, {
           render: "Added to favourites",
           type: "success",
           isLoading: false,
@@ -99,8 +91,8 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     },
     onError() {
       setIsFav(false);
-      toastId &&
-        toast.update(toastId, {
+      toastId.current &&
+        toast.update(toastId.current, {
           render: "Failed to favourite",
           type: "error",
           isLoading: false,
@@ -109,6 +101,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     },
     onSettled() {
       setFavLoading(false);
+      toastId.current = null;
     },
   });
 
@@ -116,12 +109,12 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     onMutate() {
       setFavLoading(true);
       const id = toast.loading("Removing favourite...");
-      toastId = id;
+      toastId.current = id;
     },
     onSuccess() {
       setIsFav(false);
-      toastId &&
-        toast.update(toastId, {
+      toastId.current &&
+        toast.update(toastId.current, {
           render: "Removed from favourites",
           type: "success",
           isLoading: false,
@@ -130,8 +123,8 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     },
     onError() {
       setIsFav(true);
-      toastId &&
-        toast.update(toastId, {
+      toastId.current &&
+        toast.update(toastId.current, {
           render: "Failed to unfavourite",
           type: "error",
           isLoading: false,
@@ -140,6 +133,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     },
     onSettled() {
       setFavLoading(false);
+      toastId.current = null;
     },
   });
 
@@ -168,6 +162,7 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
     mutate({
       clear_cache: clearCache,
       site_id: id,
+      site_name: name,
       account_slug: siteInfo.account.slug,
     });
 
@@ -260,17 +255,20 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
           )}
         </Link>
       </div>
-      <div className="mt-6 flex gap-4">
-        <Link href={admin_url} target="_blank" className={clsx("button gap-2")}>
-          <SiNetlify />
-          <span>Open in Netlify</span>
+      <div className="mt-6 flex items-center gap-4">
+        <Link
+          href={getSiteSettingsEnvURL(siteInfo.account.slug, id)}
+          className={clsx("button gap-2")}
+        >
+          <IoSettingsSharp />
+          <span>Settings</span>
         </Link>
-
+        <EnvModal envs={envs} site={siteInfo} />
         <MenuDropdown
           Button={
             <div className="flex items-center gap-2 text-white">
               <FaBolt />
-              Trigger Deploy
+              <span>Trigger Deploy</span>
             </div>
           }
           dropdownButtons={[
@@ -289,28 +287,17 @@ const SiteInfoCard: FC<Props> = ({ siteInfo, refetchDeploys }) => {
               <span>Clear cache deploy site</span>
             </button>,
           ]}
-          disabled={trigerring}
+          loading={trigerring}
         />
-        <EnvModal envs={envs} site={siteInfo} />
-        {isFav ? (
-          <button
-            className="button items-center gap-2"
-            onClick={() => handleFavourite("REMOVE")}
-            disabled={favLoading}
-          >
-            <AiFillStar />
-            <span>Remove</span>
-          </button>
-        ) : (
-          <button
-            className="button items-center gap-2"
-            onClick={() => handleFavourite("ADD")}
-            disabled={favLoading}
-          >
-            <AiOutlineStar />
-            <span>Add to Fav</span>
-          </button>
-        )}
+        <button
+          className={clsx("button items-center gap-2", favLoading && "loading")}
+          onClick={() =>
+            isFav ? handleFavourite("REMOVE") : handleFavourite("ADD")
+          }
+        >
+          {isFav ? <AiFillStar /> : <AiOutlineStar />}
+          <span>{isFav ? "Remove" : "Add to Fav"}</span>
+        </button>
       </div>
     </div>
   );
